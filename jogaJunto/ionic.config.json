@@ -1,0 +1,7 @@
+{
+  "name": "jogaJunto",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "ionic-angular"
+}
