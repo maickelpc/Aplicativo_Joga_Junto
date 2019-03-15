@@ -1,15 +1,15 @@
 webpackJsonp([3],{
 
-/***/ 331:
+/***/ 332:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MyProfilePageModule", function() { return MyProfilePageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login__ = __webpack_require__(337);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__my_profile__ = __webpack_require__(339);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__ = __webpack_require__(114);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -20,39 +20,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var LoginPageModule = (function () {
-    function LoginPageModule() {
+var MyProfilePageModule = (function () {
+    function MyProfilePageModule() {
     }
-    LoginPageModule = __decorate([
+    MyProfilePageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */],
+                __WEBPACK_IMPORTED_MODULE_2__my_profile__["a" /* MyProfilePage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */]),
-                __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["b" /* TranslateModule */].forChild()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__my_profile__["a" /* MyProfilePage */]),
+                __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__["b" /* TranslateModule */].forChild()
             ],
-            exports: [
-                __WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */]
-            ]
         })
-    ], LoginPageModule);
-    return LoginPageModule;
+    ], MyProfilePageModule);
+    return MyProfilePageModule;
 }());
 
-//# sourceMappingURL=login.module.js.map
+//# sourceMappingURL=my-profile.module.js.map
 
 /***/ }),
 
-/***/ 337:
+/***/ 339:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyProfilePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(113);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(113);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_util_util__ = __webpack_require__(220);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_user__ = __webpack_require__(222);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(221);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -68,55 +65,48 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-var LoginPage = (function () {
-    function LoginPage(http, userProvider, menuCtrl, navCtrl, translateService) {
-        var _this = this;
+/**
+ * Generated class for the MyProfilePage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var MyProfilePage = (function () {
+    function MyProfilePage(http, navCtrl, navParams) {
         this.http = http;
-        this.userProvider = userProvider;
-        this.menuCtrl = menuCtrl;
         this.navCtrl = navCtrl;
-        this.translateService = translateService;
-        // The account fields for the login form.
-        // If you're using the username field with or without email, make
-        // sure to add it to the type
-        this.account = {
-            username: 'yajuve',
-            fullname: 'Mohamed Raouf',
-            email: 'yajuve.25.dz@gmail.com',
-            password: 'demodemo'
-        };
-        this.opt = 'signin';
-        this.menuCtrl.enable(false);
-        this.translateService.get('LOGIN_ERROR').subscribe(function (value) {
-            _this.loginErrorString = value;
-        });
+        this.navParams = navParams;
+        this.Util = __WEBPACK_IMPORTED_MODULE_2__providers_util_util__["a" /* Util */];
+        this.profile = new __WEBPACK_IMPORTED_MODULE_3__models_user__["b" /* User */]();
+        this.isLoading = true;
     }
-    // Attempt to login in through our User service
-    LoginPage.prototype.doLogin = function () {
+    MyProfilePage.prototype.ionViewDidLoad = function () {
         var _this = this;
+        this.isLoading = true;
         this.http.get('my-profile.json').subscribe(function (profile) {
-            _this.userProvider.user = profile;
-            _this.navCtrl.setRoot('ListFriendsPage');
+            _this.isLoading = false;
+            _this.profile = profile;
         }, function (err) {
             console.error(err);
         });
     };
-    LoginPage = __decorate([
+    MyProfilePage.prototype.doSubmit = function () {
+    };
+    MyProfilePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-login',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/`<!--<ion-header>\n\n  <ion-navbar>\n    <ion-title>Temo Chat Theme fo Ionic</ion-title>\n  </ion-navbar>\n\n</ion-header>-->\n\n\n<ion-content padding>\n\n  <div id="logo" padding text-center>\n    <img src="./assets/img/logo.png">\n  </div>\n\n  <div padding>\n    <ion-segment [(ngModel)]="opt" color="light">\n      <ion-segment-button value="signin">\n        Entrar\n      </ion-segment-button>\n      <ion-segment-button value="signup">\n        Inscrever-se\n      </ion-segment-button>\n    </ion-segment>\n  </div>\n\n  <div [ngSwitch]="opt">\n    <form (submit)="doLogin()" *ngSwitchCase="\'signin\'">\n\n          <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>\n\n\n\n          <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>\n\n\n        <div padding text-center>\n          <button ion-button round color="light" icon-right>\n            {{ \'SIGNIN\' | translate }} <ion-icon name="log-in"></ion-icon>\n          </button>\n        </div>\n\n\n    </form>\n\n    <form (submit)="doLogin()" *ngSwitchCase="\'signup\'">\n      <ion-label>{{ \'Username\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="account.username" name="username"></ion-input>\n\n\n      <ion-label float>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="account.fullname" name="fullname"></ion-input>\n\n\n\n          <ion-label float>{{ \'Email\' | translate }}</ion-label>\n          <ion-input type="email" [(ngModel)]="account.email" name="email"></ion-input>\n\n\n          <ion-label float>{{ \'Password\' | translate }}</ion-label>\n          <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>\n\n\n\n          <ion-label float>{{ \'Retry Password\' | translate }}</ion-label>\n          <ion-input type="password" [(ngModel)]="account.password" name="password"></ion-input>\n\n\n        <div padding text-center>\n          <button ion-button round color="light" icon-right>\n            {{ \'SIGNUP\' | translate }} <ion-icon name="person-add"></ion-icon>\n          </button>\n        </div>\n\n\n    </form>\n\n  </div>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/
+            selector: 'page-my-profile',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/my-profile/my-profile.html"*/`<!--\n  Generated template for the MyProfilePage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>My Profile</ion-title>\n    <ion-buttons end>\n      <button (click)="doSubmit()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n\n<ion-content padding-top *ngIf="!isLoading">\n\n  <div text-center>\n    <img id="my-avatar" [src]="Util.pathAvatar(profile.avatar)">\n  </div>\n\n  <form (submit)="doSubmit()">\n    <ion-list>\n\n      <ion-item-divider color="light" text-center> <ion-icon name="information-circle"></ion-icon> Information</ion-item-divider>\n\n      <ion-item>\n        <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="profile.username" name="username"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="profile.fullname" name="fullname"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n        <ion-input type="email" [(ngModel)]="profile.email" name="email"></ion-input>\n      </ion-item>\n\n      <ion-item-divider color="danger" text-center> <ion-icon name="lock"></ion-icon> Change my Password</ion-item-divider>\n\n      <ion-item>\n        <ion-label stacked>{{ \'Password\' | translate }}</ion-label>\n        <ion-input type="password" [(ngModel)]="profile.password" name="password"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>{{ \'Retape PASSWORD\' | translate }}</ion-label>\n        <ion-input type="password" [(ngModel)]="profile.password" name="retry-password"></ion-input>\n      </ion-item>\n\n      <div padding text text-center>\n        <button ion-button color="primary" icon-right>\n          {{ \'BTN.SUBMIT\' | translate }} <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </div>\n\n    </ion-list>\n  </form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/my-profile/my-profile.html"*/,
         })
         /**
          * @author: KMR
          * @email: yajuve.25.dz@gmail.com
          */
         ,
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */], __WEBPACK_IMPORTED_MODULE_3__providers_user_user__["a" /* UserProvider */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* MenuController */], __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["c" /* TranslateService */]])
-    ], LoginPage);
-    return LoginPage;
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]])
+    ], MyProfilePage);
+    return MyProfilePage;
 }());
 
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=my-profile.js.map
 
 /***/ })
 

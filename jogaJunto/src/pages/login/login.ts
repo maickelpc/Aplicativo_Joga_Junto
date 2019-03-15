@@ -3,7 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, MenuController } from 'ionic-angular';
 import {UserProvider} from "../../providers/user/user";
 import {HttpProvider} from "../../providers/http/http";
-import {User} from "../../models/user";
+import {Usuario} from "../../models/usuario";
 
 @IonicPage()
 @Component({
@@ -20,13 +20,10 @@ export class LoginPage {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
-  account = {
-    username: 'yajuve',
-    fullname: 'Mohamed Raouf',
-    email: 'yajuve.25.dz@gmail.com',
-    password: 'demodemo'
-  };
+  usuario : Usuario =  new Usuario();
 
+
+  private cadastro: boolean = false;
   // Our translated text strings
   private loginErrorString: string;
   private opt: string = 'signin';
@@ -40,13 +37,13 @@ export class LoginPage {
   }
 
   // Attempt to login in through our User service
-  doLogin() {
-    this.http.get('my-profile.json').subscribe((profile) => {
-      this.userProvider.user = <User>profile;
-      this.navCtrl.setRoot('ListFriendsPage');
-    }, (err) => {
-      console.error(err);
-    });
+  // doLogin() {
+  //   this.http.get('my-profile.json').subscribe((profile) => {
+  //     this.userProvider.user = <User>profile;
+  //     this.navCtrl.setRoot('ListFriendsPage');
+  //   }, (err) => {
+  //     console.error(err);
+  //   });
 
-  }
+  // }
 }

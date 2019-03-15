@@ -13,7 +13,7 @@ $font-path: "../assets/fonts";
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 $text-color:        #000;
-$background-color:  #fff;
+$background-color:  #74521B;//#fff; 
 
 
 // Named Color Variables
@@ -25,7 +25,7 @@ $background-color:  #fff;
 // The "primary" color is the only required color in the map.
 
 $colors: (
-  primary:    #306dd8, // 488aff 306dd8
+  primary:     #306dd8, // Roxo do site #74521B,//, // 488aff 306dd8
   secondary:  #32db64,
   danger: #f53d3d,
   light: (base: #f7f7f7, contrast: #306dd8),
@@ -34,7 +34,7 @@ $colors: (
 );
 
 $toolbar-background: color($colors, primary);
-$background-color: #f7f7f7;
+$background-color: #74521B; // #f7f7f7;
 $text-color: #5d5d5d;
 $text-input-highlight-color-valid: #5fcfdb;
 // App iOS Variables

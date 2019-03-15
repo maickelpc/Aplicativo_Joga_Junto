@@ -73,7 +73,7 @@ webpackEmptyAsyncContext.id = 129;
 var map = {
 	"../pages/chat-room/chat-room.module": [
 		329,
-		0
+		1
 	],
 	"../pages/list-friends/list-friends.module": [
 		330,
@@ -81,15 +81,15 @@ var map = {
 	],
 	"../pages/login/login.module": [
 		331,
-		3
+		0
 	],
 	"../pages/my-profile/my-profile.module": [
 		332,
-		2
+		3
 	],
 	"../pages/profile-friend/profile-friend.module": [
 		333,
-		1
+		2
 	]
 };
 function webpackAsyncContext(req) {
