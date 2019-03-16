@@ -39,6 +39,7 @@ export class LoginPage {
       this.loginErrorString = value;
     });
 
+
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     this.toast = this.toastCtrl.create({
       message: '',
