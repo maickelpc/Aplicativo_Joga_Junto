@@ -18,6 +18,10 @@ class Usuario {
   longitude: string
 
   posicoes : Posicao[]
+
+  constructor(){
+    this.dataNascimento = new Date()
+  }
 }
 
 
