@@ -13,7 +13,7 @@ $font-path: "../assets/fonts";
 // http://ionicframework.com/docs/v2/theming/overriding-ionic-variables/
 
 $text-color:        #000;
-$background-color:  #74521B;//#fff; 
+$background-color:  #74521B;//#fff;
 
 
 // Named Color Variables
@@ -81,3 +81,9 @@ $text-input-highlight-color-valid: #5fcfdb;
 
 @import "roboto";
 @import "noto-sans";
+
+
+.error {
+
+  $text-color:red;
+}
