@@ -16,3 +16,11 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('/pais', 'PaisController@index')->name('pais.all');
+Route::post('/pais', 'PaisController@store')->name('pais.store');
+Route::get('/pais/{id}', 'PaisController@show')->name('pais.show');
+Route::put('/pais/{id}', 'PaisController@update')->name('pais.update');
+Route::delete('/pais/{id}', 'PaisController@destroy')->name('pais.delete');
+
+Route::post('register', 'Auth\RegisterController@register');

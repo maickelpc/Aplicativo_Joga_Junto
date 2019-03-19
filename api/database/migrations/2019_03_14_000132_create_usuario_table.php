@@ -25,7 +25,7 @@ class CreateUsuarioTable extends Migration
             $table->string('senha');
             $table->string('idFacebook', 100)->nullable();
             $table->string('idGoogle', 100)->nullable();
-            $table->decimal('score', 2, 2)->default(5);
+            $table->decimal('score', 2, 2)->default("5,0");
             $table->string('telefone', 14)->nullable();
             $table->string('latitude', 20)->nullable();
             $table->string('longitude', 20)->nullable();
