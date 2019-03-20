@@ -21,6 +21,7 @@ class CreateEsporteTable extends Migration
             $table->integer('qtdMinimo')->default(1);
             $table->integer('qtdMaximo')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

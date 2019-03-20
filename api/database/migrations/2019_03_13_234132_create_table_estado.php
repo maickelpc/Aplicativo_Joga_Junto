@@ -19,6 +19,7 @@ class CreateTableEstado extends Migration
             $table->string('nome', 100)->unique();
             $table->string('sigla', 2)->unique();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('pais_id')->references('id')->on('paises');
         });

@@ -18,6 +18,7 @@ class CreatePosicaoTable extends Migration
             $table->string('nome', 20);
             $table->integer('esporte_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('esporte_id')->references('id')->on('esportes');
         });

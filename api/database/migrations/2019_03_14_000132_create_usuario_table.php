@@ -29,6 +29,7 @@ class CreateUsuarioTable extends Migration
             $table->string('latitude', 20)->nullable();
             $table->string('longitude', 20)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('endereco_id')->references('id')->on('enderecos');
         });

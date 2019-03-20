@@ -27,6 +27,7 @@ class CreateEventoTable extends Migration
             $table->dateTime('dataCancelamento')->nullable();
             $table->string('justificativaCancelamento')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('local_id')->references('id')->on('locais');
             $table->foreign('usuarioResponsavel_id')->references('id')->on('usuarios');

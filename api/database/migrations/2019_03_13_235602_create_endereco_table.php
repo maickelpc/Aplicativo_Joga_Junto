@@ -23,6 +23,7 @@ class CreateEnderecoTable extends Migration
             $table->string('complemento', 150)->nullable();
             $table->string('referencia', 150)->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('cidade_id')->references('id')->on('cidades');
         });

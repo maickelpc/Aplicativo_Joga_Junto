@@ -19,6 +19,7 @@ class CreateTableCidade extends Migration
             $table->string('nome', 100)->unique();
             $table->string('codigoIbge', 20)->unique()->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('estado_id')->references('id')->on('estados');
 

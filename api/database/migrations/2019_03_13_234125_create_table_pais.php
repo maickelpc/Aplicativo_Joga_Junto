@@ -19,6 +19,7 @@ class CreateTablePais extends Migration
             $table->string('sigla', 3)->unique();
             $table->string('ddi', 3)->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

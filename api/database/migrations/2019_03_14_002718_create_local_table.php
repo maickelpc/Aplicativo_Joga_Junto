@@ -27,6 +27,7 @@ class CreateLocalTable extends Migration
             $table->integer('endereco_id')->unsigned();
             $table->string('comoChegar')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('usuarioResponsavel_id')->references('id')->on('usuarios');
             $table->foreign('endereco_id')->references('id')->on('enderecos');

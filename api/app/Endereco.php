@@ -3,9 +3,12 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Cidade;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Endereco extends Model
 {
+  use SoftDeletes;
   protected $table = 'enderecos';
   protected $fillable = [
     'id',
@@ -17,9 +20,9 @@ class Endereco extends Model
     'complemento',
     'referencia'];
 
-  protected $dates = ['created_at', 'updated_at'];
+  protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
   public function cidade(){
-    return $this->belongsTo('App\Cidade', 'cidade_id');
+    return $this->belongsTo(Cidade, 'cidade_id');
   }
 }

@@ -20,6 +20,7 @@ class CreateAvaliacaoTable extends Migration
             $table->integer('usuarioAvaliado_id')->unsigned();
             $table->integer('usuarioAvaliador_id')->unsigned();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('usuarioAvaliado_id')->references('id')->on('usuarios');
             $table->foreign('usuarioAvaliador_id')->references('id')->on('usuarios');

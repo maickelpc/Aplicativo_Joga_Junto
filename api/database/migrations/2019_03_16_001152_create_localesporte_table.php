@@ -16,7 +16,6 @@ class CreateLocalesporteTable extends Migration
         Schema::create('local_esporte', function (Blueprint $table) {
             $table->integer('local_id')->unsigned();
             $table->integer('esporte_id')->unsigned();
-            $table->timestamps();
 
             $table->foreign('local_id')->references('id')->on('locais');
             $table->foreign('esporte_id')->references('id')->on('esportes');

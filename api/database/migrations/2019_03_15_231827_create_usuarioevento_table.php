@@ -24,6 +24,7 @@ class CreateUsuarioeventoTable extends Migration
             $table->dateTime('dataPagamento')->nullable();
             $table->string('justificativa')->nullable();
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('usuario_id')->references('id')->on('usuarios');
             $table->foreign('evento_id')->references('id')->on('eventos');
