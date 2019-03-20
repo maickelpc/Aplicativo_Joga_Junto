@@ -7,11 +7,11 @@ use App\Estado;
 
 class Pais extends Model
 {
-    protected $table = 'pais';
+    protected $table = 'paises';
     protected $fillable = ['id', 'nome', 'sigla', 'ddi'];
     protected $dates = ['created_at', 'updated_at'];
 
-    public function estads(){
-      return $this->hasMany('App\Estado');
+    public function estados(){
+      return $this->hasMany(Estado);
     }
 }

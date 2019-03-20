@@ -18,7 +18,7 @@ class CreateEnderecoTable extends Migration
             $table->integer('cidade_id')->unsigned();
             $table->string('logradouro', 150);
             $table->string('bairro', 50);
-            $table->string('numero', 6);
+            $table->string('numero', 6)->nullable();
             $table->string('cep', 8);
             $table->string('complemento', 150)->nullable();
             $table->string('referencia', 150)->nullable();
