@@ -13,7 +13,7 @@ class CreateLocalTable extends Migration
      */
     public function up()
     {
-        Schema::create('local', function (Blueprint $table) {
+        Schema::create('locais', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome', 100);
             $table->string('descricao')->nullable();
@@ -27,12 +27,11 @@ class CreateLocalTable extends Migration
             $table->integer('endereco_id')->unsigned();
             $table->string('comoChegar')->nullable();
             $table->timestamps();
+
+            $table->foreign('usuarioResponsavel_id')->references('id')->on('usuarios');
+            $table->foreign('endereco_id')->references('id')->on('enderecos');
         });
 
-        Schema::table('local', function (Blueprint $table) {
-            $table->foreign('usuarioResponsavel_id')->references('id')->on('usuario');
-            $table->foreign('endereco_id')->references('id')->on('endereco');
-        });
     }
 
     /**
@@ -42,6 +41,6 @@ class CreateLocalTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('local');
+        Schema::dropIfExists('locais');
     }
 }

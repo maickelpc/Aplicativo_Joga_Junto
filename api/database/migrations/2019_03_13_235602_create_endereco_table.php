@@ -13,7 +13,7 @@ class CreateEnderecoTable extends Migration
      */
     public function up()
     {
-        Schema::create('endereco', function (Blueprint $table) {
+        Schema::create('enderecos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('cidade_id')->unsigned();
             $table->string('logradouro', 150);
@@ -23,11 +23,10 @@ class CreateEnderecoTable extends Migration
             $table->string('complemento', 150)->nullable();
             $table->string('referencia', 150)->nullable();
             $table->timestamps();
+
+            $table->foreign('cidade_id')->references('id')->on('cidades');
         });
 
-        Schema::table('endereco', function (Blueprint $table) {
-            $table->foreign('cidade_id')->references('id')->on('cidade');
-        });
     }
 
     /**
@@ -37,6 +36,6 @@ class CreateEnderecoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('endereco');
+        Schema::dropIfExists('enderecos');
     }
 }

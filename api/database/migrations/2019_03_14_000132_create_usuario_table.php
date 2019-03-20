@@ -13,9 +13,8 @@ class CreateUsuarioTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuario', function (Blueprint $table) {
+        Schema::create('usuarios', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('posicao_id')->unsigned();
             $table->integer('endereco_id')->nullable();
             $table->string('nome', 50)->nullable();
             $table->string('sobrenome', 150)->nullable();
@@ -30,11 +29,11 @@ class CreateUsuarioTable extends Migration
             $table->string('latitude', 20)->nullable();
             $table->string('longitude', 20)->nullable();
             $table->timestamps();
+
+            $table->foreign('endereco_id')->references('id')->on('enderecos');
         });
 
-        Schema::table('usuario', function (Blueprint $table) {
-            $table->foreign('endereco_id')->references('id')->on('endereco');
-        });
+
     }
 
     /**
@@ -44,6 +43,6 @@ class CreateUsuarioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuario');
+        Schema::dropIfExists('usuarios');
     }
 }

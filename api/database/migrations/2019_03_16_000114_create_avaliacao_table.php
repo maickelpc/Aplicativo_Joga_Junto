@@ -13,13 +13,16 @@ class CreateAvaliacaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('avaliacao', function (Blueprint $table) {
+        Schema::create('avaliacoes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('texto')->nullable();
             $table->integer('score')->default(5);
             $table->integer('usuarioAvaliado_id')->unsigned();
             $table->integer('usuarioAvaliador_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('usuarioAvaliado_id')->references('id')->on('usuarios');
+            $table->foreign('usuarioAvaliador_id')->references('id')->on('usuarios');
         });
     }
 
@@ -30,6 +33,6 @@ class CreateAvaliacaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('avaliacao');
+        Schema::dropIfExists('avaliacoes');
     }
 }

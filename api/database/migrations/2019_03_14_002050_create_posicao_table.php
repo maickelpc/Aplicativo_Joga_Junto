@@ -13,11 +13,13 @@ class CreatePosicaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('posicao', function (Blueprint $table) {
+        Schema::create('posicoes', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nome', 20);
             $table->integer('esporte_id')->unsigned();
             $table->timestamps();
+
+            $table->foreign('esporte_id')->references('id')->on('esportes');
         });
     }
 
@@ -28,6 +30,6 @@ class CreatePosicaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('posicao');
+        Schema::dropIfExists('posicoes');
     }
 }

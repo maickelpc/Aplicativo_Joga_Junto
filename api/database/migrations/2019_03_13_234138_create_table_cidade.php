@@ -13,12 +13,15 @@ class CreateTableCidade extends Migration
      */
     public function up()
     {
-        Schema::create('cidade', function (Blueprint $table) {
+        Schema::create('cidades', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('estado_id')->unsigned();
             $table->string('nome', 100)->unique();
             $table->string('codigoibge', 20)->unique()->nullable();
             $table->timestamps();
+
+            $table->foreign('estado_id')->references('id')->on('estados');
+
         });
     }
 
@@ -29,6 +32,6 @@ class CreateTableCidade extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cidade');
+        Schema::dropIfExists('cidades');
     }
 }

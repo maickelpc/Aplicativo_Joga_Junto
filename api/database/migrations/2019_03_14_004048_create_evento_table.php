@@ -13,7 +13,7 @@ class CreateEventoTable extends Migration
      */
     public function up()
     {
-        Schema::create('evento', function (Blueprint $table) {
+        Schema::create('eventos', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('local_id')->unsigned();
             $table->integer('usuarioResponsavel_id')->unsigned();
@@ -27,14 +27,13 @@ class CreateEventoTable extends Migration
             $table->dateTime('dataCancelamento')->nullable();
             $table->string('justificativaCancelamento')->nullable();
             $table->timestamps();
+
+            $table->foreign('local_id')->references('id')->on('locais');
+            $table->foreign('usuarioResponsavel_id')->references('id')->on('usuarios');
+            $table->foreign('esporte_id')->references('id')->on('esportes');
         });
 
-        Schema::table('evento', function (Blueprint $table) {
-            $table->foreign('local_id')->references('id')->on('local');
-            $table->foreign('usuarioResponsavel_id')->references('id')->on('usuario');
-            $table->foreign('esporte_id')->references('id')->on('esporte');
 
-        });
     }
 
     /**
@@ -44,6 +43,6 @@ class CreateEventoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('evento');
+        Schema::dropIfExists('eventos');
     }
 }

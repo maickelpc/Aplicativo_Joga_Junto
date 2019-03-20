@@ -13,17 +13,16 @@ class CreateTableEstado extends Migration
      */
     public function up()
     {
-        Schema::create('estado', function (Blueprint $table) {
+        Schema::create('estados', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('pais_id')->unsigned();
             $table->string('nome', 100)->unique();
             $table->string('sigla', 2)->unique();
             $table->timestamps();
+
+            $table->foreign('pais_id')->references('id')->on('paises');
         });
 
-        Schema::table('estado', function (Blueprint $table) {
-            $table->foreign('pais_id')->references('id')->on('pais');
-        });
     }
 
     /**
@@ -33,6 +32,6 @@ class CreateTableEstado extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('estado');
+        Schema::dropIfExists('estados');
     }
 }

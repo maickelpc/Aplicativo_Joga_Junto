@@ -13,7 +13,7 @@ class CreateUsuarioeventoTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarioevento', function (Blueprint $table) {
+        Schema::create('usuario_evento', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('usuario_id')->unsigned();
             $table->integer('evento_id')->unsigned();
@@ -24,12 +24,11 @@ class CreateUsuarioeventoTable extends Migration
             $table->dateTime('dataPagamento')->nullable();
             $table->string('justificativa')->nullable();
             $table->timestamps();
+
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->foreign('evento_id')->references('id')->on('eventos');
         });
 
-        Schema::table('usuarioevento', function (Blueprint $table) {
-            $table->foreign('usuario_id')->references('id')->on('usuario');
-            $table->foreign('evento_id')->references('id')->on('evento');
-        });
     }
 
     /**
@@ -39,6 +38,6 @@ class CreateUsuarioeventoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuarioevento');
+        Schema::dropIfExists('usuario_evento');
     }
 }

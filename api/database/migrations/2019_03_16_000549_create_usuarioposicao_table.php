@@ -13,17 +13,15 @@ class CreateUsuarioposicaoTable extends Migration
      */
     public function up()
     {
-        Schema::create('usuarioposicao', function (Blueprint $table) {
+        Schema::create('usuario_posicao', function (Blueprint $table) {
             $table->integer('usuario_id')->unsigned();
             $table->integer('posicao_id')->unsigned();
             $table->timestamps();
-        });
-
-        Schema::table('usuarioposicao', function( Blueprint $table) {
-            $table->foreign('usuario_id')->references('id')->on('usuario');
-            $table->foreign('posicao_id')->references('id')->on('posicao');
+            $table->foreign('usuario_id')->references('id')->on('usuarios');
+            $table->foreign('posicao_id')->references('id')->on('posicoes');
             $table->unique(['usuario_id', 'posicao_id']);
         });
+
     }
 
     /**
@@ -33,6 +31,6 @@ class CreateUsuarioposicaoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('usuarioposicao');
+        Schema::dropIfExists('usuario_posicao');
     }
 }
