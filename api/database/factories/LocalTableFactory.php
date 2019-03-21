@@ -9,14 +9,14 @@ $factory->define(App\Local::class, function (Faker $faker) {
     $enderecos = DB::table('enderecos')->pluck('id');
     return [
         'nome' => $faker->sentence,
-        'descricao' => $faker->sentences,
+        'descricao' => implode('', $faker->sentences),
         'latitude' => $faker->latitude,
         'longitude' => $faker->longitude,
         'imagem' => Str::random(100),
         'telefone' => rand(1111111111, 9999999999),
         'horarioAtendimento' => $faker->time('H:i', 'now'),
         'usuarioResponsavel_id' => $faker->randomElement($usuarios),
-        'valido' => rand(0, 1),
+        'valido' => false,
         'endereco_id' => $faker->randomElement($enderecos),
         'comoChegar' => $faker->sentence
     ];

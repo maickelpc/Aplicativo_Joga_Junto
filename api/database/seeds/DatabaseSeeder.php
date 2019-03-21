@@ -20,10 +20,8 @@ class DatabaseSeeder extends Seeder
             PosicaoTableSeeder::class,
             UsuarioTableSeeder::class,
             LocalTableSeeder::class,
-            LocalEsporteTableSeeder::class,
             EventoTableSeeder::class,
             UsuarioEventoTableSeeder::class,
-            UsuarioPosicaoTableSeeder::class,
             AvaliacaoTableSeeder::class
             ]);
     }

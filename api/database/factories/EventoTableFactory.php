@@ -11,9 +11,12 @@ $factory->define(App\Evento::class, function (Faker $faker) {
     return [
         'data' => $faker->date('Y-m-d', 'now'),
         'horario' => $faker->time('H:i', 'now'),
-        'descricao' => $faker->sentences,
+        'descricao' => implode('', $faker->sentences),
         'vagas' => rand(10, 20),
         'publico' => rand(0, 1),
-        'valorCusto' => rand(100, 200)
+        'valorCusto' => rand(100, 200),
+        'local_id' => $faker->randomElement($locais),
+        'usuarioResponsavel_id' => $faker->randomElement($usuarios),
+        'esporte_id' => $faker->randomElement($esportes)
     ];
 });
