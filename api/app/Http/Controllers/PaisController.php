@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use App\Http\Resources\PaisCollection;
 use App\Pais;
 use Validator;
-use Illuminate\Validation\Rule;
 use App\Http\Requests\PaisRequest;
 use App\Http\Resources\Pais as PaisResource;
 
@@ -126,10 +125,7 @@ class PaisController extends Controller
   private function validar($id, $dados){
 
     $regras = [
-        'nome' => [
-          'required', Rule::unique('paises')->ignore($id),
-          'max:100'
-        ],
+      'nome' => 'required|max:100',
       'sigla' => 'required|max:3',
       'ddi' => 'max:3'
     ];

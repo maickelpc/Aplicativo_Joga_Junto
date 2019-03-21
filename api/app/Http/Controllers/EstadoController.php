@@ -34,7 +34,24 @@ class EstadoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      $dados = $request->json();
+
+      $this->validar(0, $dados->all());
+
+
+
+      $estado = new Estado();
+
+      $estado->nome = $dados->get('nome');
+      $estado->sigla = $dados->get('sigla');
+      $estado->ddi = $dados->get('ddi');
+      $estado->pais_id = $dados->get('pais_id');
+
+      if($estado->save()) {
+        return response()->json($estado, 201);
+      } else {
+        return response()->json($estado, 400);
+      }
     }
 
     /**
