@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Estado;
+use App\Http\Resources\Estado as EstadoResource;
 use Illuminate\Http\Request;
 
 class EstadoController extends Controller
@@ -13,7 +15,7 @@ class EstadoController extends Controller
      */
     public function index()
     {
-        //
+        return EstadoResource::collection(Estado::paginate());
     }
 
     /**

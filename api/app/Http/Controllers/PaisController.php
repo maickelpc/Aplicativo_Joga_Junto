@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Resources\PaisCollection;
 use App\Pais;
 use Validator;
 use App\Http\Requests\PaisRequest;
