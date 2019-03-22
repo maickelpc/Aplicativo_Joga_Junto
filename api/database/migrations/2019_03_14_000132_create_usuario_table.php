@@ -19,15 +19,17 @@ class CreateUsuarioTable extends Migration
             $table->string('nome', 50)->nullable();
             $table->string('sobrenome', 150)->nullable();
             $table->string('email');
+            $table->timestamp('email_verified_at')->nullable();
             $table->date('dataNascimento');
-            $table->string('login', 30);
-            $table->string('senha');
+            $table->string('username', 30);
+            $table->string('password');
             $table->string('idFacebook', 100)->nullable();
             $table->string('idGoogle', 100)->nullable();
             $table->decimal('score', 2, 1)->default("5.0");
             $table->string('telefone', 14)->nullable();
             $table->string('latitude', 20)->nullable();
             $table->string('longitude', 20)->nullable();
+            $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
 
