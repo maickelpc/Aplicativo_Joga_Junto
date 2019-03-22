@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Resources\PaisCollection;
 use App\Pais;
 use Validator;
 use App\Http\Requests\PaisRequest;
@@ -40,9 +41,9 @@ class PaisController extends Controller
   {
 
     $dados = $request->json();
-
-    $this->validar(0, $dados->all());
-
+    $validacao = $this->validar(0, $dados->all());
+    if($validacao != null)
+      return response()->json($validacao, 400);
 
 
     $pais = new Pais();
@@ -89,10 +90,10 @@ class PaisController extends Controller
   */
   public function update(Request $request, $id)
   {
-
     $dados = $request->json();
-
-    $this->validar($id, $dados->all());
+    $validacao = $this->validar($id, $dados->all());
+    if($validacao != null)
+      return response()->json($validacao, 400);
 
     $pais = Pais::findOrFail($id);
     $pais->nome = $dados->get('nome');
@@ -124,14 +125,13 @@ class PaisController extends Controller
   private function validar($id, $dados){
 
     $regras = [
-      'nome' => 'required|max:100',
-      'sigla' => 'required|max:3',
+      'nome' => 'required|max:100|unique:paises,nome,'.$id,
+      'sigla' => 'required|max:3|unique:paises,sigla,'.$id,
       'ddi' => 'max:3'
     ];
 
     $validator = Validator::make($dados, $regras);
-    if ( !$validator->passes())
-      return response()->json([$validator->errors()->all()], 400);
-    return true;
+    return $validator->errors()->all();
+
   }
 }

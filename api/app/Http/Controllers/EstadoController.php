@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Estado;
 use App\Http\Resources\Estado as EstadoResource;
 use Illuminate\Http\Request;
+use Validator;
 
 class EstadoController extends Controller
 {
@@ -37,16 +38,15 @@ class EstadoController extends Controller
     public function store(Request $request)
     {
       $dados = $request->json();
-
-      $this->validar(0, $dados->all());
-
+      $validacao = $this->validar(0, $dados->all());
+      if ($validacao != null)
+        return response()->json($validacao, 400);
 
 
       $estado = new Estado();
 
       $estado->nome = $dados->get('nome');
       $estado->sigla = $dados->get('sigla');
-      $estado->ddi = $dados->get('ddi');
       $estado->pais_id = $dados->get('pais_id');
 
       if($estado->save()) {
@@ -64,7 +64,7 @@ class EstadoController extends Controller
      */
     public function show($id)
     {
-        //
+        return new EstadoResource(Estado::find($id));
     }
 
     /**
@@ -87,7 +87,22 @@ class EstadoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+      $dados = $request->json();
+      $validacao = $this->validar($id, $dados->all());
+      if ($validacao != null)
+        return response()->json($validacao, 400);
+
+        $estado =  Estado::findOrFail($id);
+
+        $estado->nome = $dados->get('nome');
+        $estado->sigla = $dados->get('sigla');
+        $estado->pais_id = $dados->get('pais_id');
+
+        if($estado->save()) {
+          return response()->json($estado, 201);
+        } else {
+          return response()->json($estado, 400);
+        }
     }
 
     /**
@@ -98,6 +113,25 @@ class EstadoController extends Controller
      */
     public function destroy($id)
     {
-        //
+      $estado = Estado::findOrFail($id);
+      if($estado->delete()) {
+        return response()->json($estado, 200);
+      } else {
+        return response()->json($estado, 400);
+      }
+    }
+
+    private function validar($id, $dados){
+
+      $regras = [
+        'nome' => 'required|max:100',
+        'sigla' => 'required|max:2',
+        'pais_id' => 'required|integer|exists:paises,id'
+      ];
+
+      $validator = Validator::make($dados, $regras);
+
+      return $validator->errors()->all();
+
     }
 }

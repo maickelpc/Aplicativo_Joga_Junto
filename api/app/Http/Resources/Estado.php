@@ -2,8 +2,9 @@
 
 namespace App\Http\Resources;
 
-use Illuminate\Http\Resources\Json\JsonResource;
 use App\Pais;
+use App\Cidade;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class Estado extends JsonResource
 {
@@ -21,8 +22,10 @@ class Estado extends JsonResource
         'sigla' => $this->sigla,
         'pais_id' => $this->pais_id,
         'pais' => Pais::find($this->pais_id),
+        'cidades' => Cidade::where('estado_id', $this->id)->get(),
         'created_at' => $this->created_at,
-        'updated_at' => $this->updated_at
+        'updated_at' => $this->updated_at,
+        'deleted_at' => $this->deleted_at
         ];
     }
 }
