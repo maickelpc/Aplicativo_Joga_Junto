@@ -50,9 +50,9 @@ class CidadeController extends Controller
       $cidade->estado_id = $dados->get('estado_id');
 
       if($cidade->save()) {
-        return response()->json($cidade, 201);
+        return response()->json(new CidadeResource($cidade), 201);
       } else {
-        return response()->json($cidade, 400);
+        return response()->json(new CidadeResource($cidade), 400);
       }
     }
 
@@ -99,9 +99,9 @@ class CidadeController extends Controller
         $cidade->estado_id = $dados->get('estado_id');
 
         if($cidade->save()) {
-          return response()->json($cidade, 201);
+          return response()->json(new CidadeResource($cidade), 201);
         } else {
-          return response()->json($cidade, 400);
+          return response()->json(new CidadeResource($cidade), 400);
         }
     }
 
@@ -113,11 +113,11 @@ class CidadeController extends Controller
      */
     public function destroy($id)
     {
-      $estado = Cidade::findOrFail($id);
-      if($estado->delete()) {
-        return response()->json($estado, 200);
+      $cidade = Cidade::findOrFail($id);
+      if($cidade->delete()) {
+        return response()->json(new CidadeResource($cidade), 200);
       } else {
-        return response()->json($estado, 400);
+        return response()->json(new CidadeResource($cidade), 400);
       }
     }
 

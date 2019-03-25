@@ -55,9 +55,9 @@ class EnderecoController extends Controller
 
 
       if($endereco->save()) {
-        return response()->json($endereco, 201);
+        return response()->json(new EnderecoResource($endereco), 201);
       } else {
-        return response()->json($endereco, 400);
+        return response()->json(new EnderecoResource($endereco), 400);
       }
     }
 
@@ -108,9 +108,9 @@ class EnderecoController extends Controller
         $endereco->referencia = $dados->get('referencia');
 
         if($endereco->save()) {
-          return response()->json($endereco, 201);
+          return response()->json(new EnderecoResource($endereco), 201);
         } else {
-          return response()->json($endereco, 400);
+          return response()->json(new EnderecoResource($endereco), 400);
         }
     }
 
@@ -124,9 +124,9 @@ class EnderecoController extends Controller
     {
       $endereco = Endereco::findOrFail($id);
       if($endereco->delete()) {
-        return response()->json($endereco, 200);
+        return response()->json(new EnderecoResource($endereco), 200);
       } else {
-        return response()->json($endereco, 400);
+        return response()->json(new EnderecoResource($endereco), 400);
       }
     }
 

@@ -50,9 +50,9 @@ class EstadoController extends Controller
       $estado->pais_id = $dados->get('pais_id');
 
       if($estado->save()) {
-        return response()->json($estado, 201);
+        return response()->json(new EstadoResource($estado), 201);
       } else {
-        return response()->json($estado, 400);
+        return response()->json(new EstadoResource($estado), 400);
       }
     }
 
@@ -99,9 +99,9 @@ class EstadoController extends Controller
         $estado->pais_id = $dados->get('pais_id');
 
         if($estado->save()) {
-          return response()->json($estado, 201);
+          return response()->json(new EstadoResource($estado), 201);
         } else {
-          return response()->json($estado, 400);
+          return response()->json(new EstadoResource($estado), 400);
         }
     }
 
@@ -115,9 +115,9 @@ class EstadoController extends Controller
     {
       $estado = Estado::findOrFail($id);
       if($estado->delete()) {
-        return response()->json($estado, 200);
+        return response()->json(new EstadoResource($estado), 200);
       } else {
-        return response()->json($estado, 400);
+        return response()->json(new EstadoResource($estado), 400);
       }
     }
 

@@ -53,9 +53,9 @@ class PaisController extends Controller
     $pais->ddi = $dados->get('ddi');
 
     if($pais->save()) {
-      return response()->json($pais, 201);
+      return response()->json(new PaisResource($pais), 201);
     } else {
-      return response()->json($pais, 400);
+      return response()->json(new PaisResource($pais), 400);
     }
   }
 
@@ -100,9 +100,9 @@ class PaisController extends Controller
     $pais->sigla = $dados->get('sigla');
     $pais->ddi = $dados->get('ddi');
     if($pais->save()) {
-      return response()->json($pais, 200);
+      return response()->json(new PaisResource($pais), 200);
     } else {
-      return response()->json($pais, 400);
+      return response()->json(new PaisResource($pais), 400);
     }
   }
 
@@ -116,9 +116,9 @@ class PaisController extends Controller
   {
     $pais = Pais::findOrFail($id);
     if($pais->delete()) {
-      return response()->json($pais, 200);
+      return response()->json(new PaisResource($pais), 200);
     } else {
-      return response()->json($pais, 400);
+      return response()->json(new PaisResource($pais), 400);
     }
   }
 
