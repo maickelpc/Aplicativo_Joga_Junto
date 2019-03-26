@@ -27,9 +27,9 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         '1ca3bc274755662169f9629d5412a1da' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/normalize_uploaded_files.php',
         '40360c0b9b437e69bcbb7f1349ce029e' => __DIR__ . '/..' . '/zendframework/zend-diactoros/src/functions/parse_cookie_header.php',
         '538ca81a9a966a6716601ecf48f4eaef' => __DIR__ . '/..' . '/opis/closure/functions.php',
-        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '0d8253363903f0ac7b0978dcde4e28a0' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/helpers.php',
@@ -159,9 +159,11 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         'B' => 
         array (
             'BeyondCode\\DumpServer\\' => 22,
+            'Barryvdh\\Cors\\' => 14,
         ),
         'A' => 
         array (
+            'Asm89\\Stack\\' => 12,
             'App\\' => 4,
         ),
     );
@@ -414,6 +416,14 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         array (
             0 => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src',
         ),
+        'Barryvdh\\Cors\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/barryvdh/laravel-cors/src',
+        ),
+        'Asm89\\Stack\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack',
+        ),
         'App\\' => 
         array (
             0 => __DIR__ . '/../..' . '/app',
@@ -461,6 +471,7 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         'App\\Estado' => __DIR__ . '/../..' . '/app/Estado.php',
         'App\\Evento' => __DIR__ . '/../..' . '/app/Evento.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
+        'App\\Http\\Controllers\\APILoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/APILoginController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',
         'App\\Http\\Controllers\\Auth\\RegisterController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/RegisterController.php',
@@ -489,6 +500,10 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Http\\Resources\\Avaliacao' => __DIR__ . '/../..' . '/app/Http/Resources/Avaliacao.php',
         'App\\Http\\Resources\\AvaliacaoCollection' => __DIR__ . '/../..' . '/app/Http/Resources/AvaliacaoCollection.php',
+        'App\\Http\\Resources\\Cidade' => __DIR__ . '/../..' . '/app/Http/Resources/Cidade.php',
+        'App\\Http\\Resources\\CidadeCollection' => __DIR__ . '/../..' . '/app/Http/Resources/CidadeCollection.php',
+        'App\\Http\\Resources\\Endereco' => __DIR__ . '/../..' . '/app/Http/Resources/Endereco.php',
+        'App\\Http\\Resources\\EnderecoCollection' => __DIR__ . '/../..' . '/app/Http/Resources/EnderecoCollection.php',
         'App\\Http\\Resources\\Estado' => __DIR__ . '/../..' . '/app/Http/Resources/Estado.php',
         'App\\Http\\Resources\\EstadoCollection' => __DIR__ . '/../..' . '/app/Http/Resources/EstadoCollection.php',
         'App\\Http\\Resources\\Pais' => __DIR__ . '/../..' . '/app/Http/Resources/Pais.php',
@@ -504,7 +519,13 @@ class ComposerStaticInitb0a552b426454c844ff060331786abd2
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\Usuario' => __DIR__ . '/../..' . '/app/Usuario.php',
         'App\\UsuarioEvento' => __DIR__ . '/../..' . '/app/UsuarioEvento.php',
+        'Asm89\\Stack\\Cors' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/Cors.php',
+        'Asm89\\Stack\\CorsService' => __DIR__ . '/..' . '/asm89/stack-cors/src/Asm89/Stack/CorsService.php',
         'AvaliacaoTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AvaliacaoTableSeeder.php',
+        'Barryvdh\\Cors\\HandleCors' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/HandleCors.php',
+        'Barryvdh\\Cors\\HandlePreflight' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/HandlePreflight.php',
+        'Barryvdh\\Cors\\LumenServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/LumenServiceProvider.php',
+        'Barryvdh\\Cors\\ServiceProvider' => __DIR__ . '/..' . '/barryvdh/laravel-cors/src/ServiceProvider.php',
         'BeyondCode\\DumpServer\\DumpServerCommand' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/DumpServerCommand.php',
         'BeyondCode\\DumpServer\\DumpServerServiceProvider' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/DumpServerServiceProvider.php',
         'BeyondCode\\DumpServer\\Dumper' => __DIR__ . '/..' . '/beyondcode/laravel-dump-server/src/Dumper.php',

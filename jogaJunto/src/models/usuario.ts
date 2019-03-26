@@ -2,7 +2,7 @@ import { Endereco } from './endereco'
 import { Posicao } from './esporte'
 
 class Usuario {
-
+  id: number
   nome: string
   sobrenome: string
   email: string
@@ -16,8 +16,13 @@ class Usuario {
   endereco: Endereco
   latitude: string
   longitude: string
-
   posicoes : Posicao[]
+  created_at : Date
+  updated_at : Date
+  deleted_at: Date
+
+  tokenExpire : Number
+  tokenAccess: string
 
   constructor(){
     this.dataNascimento = new Date()

@@ -380,21 +380,43 @@ var LoginService = (function () {
     LoginService.prototype.estaLogado = function () {
         return this.usuario !== undefined;
     };
+    LoginService.prototype.usuarioLogado = function () {
+        this.usuario = JSON.parse(window.localStorage.getItem('loggedUser'));
+        var agora = Date.now() / 1000;
+        if (agora < this.usuario.tokenExpire) {
+            return this.usuario;
+        }
+        else {
+            this.logout();
+        }
+    };
     LoginService.prototype.login = function (login, senha) {
+        var _this = this;
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Content-type', 'application/json');
-        return this.http.post("http://ceasb.maickel.site/api-token-auth/", { username: login, password: senha, grant_type: 'password' }, { headers: headers });
-        // return this.http.post<Usuario>(
-        //   `${API}/auth/`,
-        //   {login: login, senha:senha, grant_type: 'password'},
-        //   {headers: headers});
+        console.log("entrando no login");
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_3__api_config__["a" /* API */] + "/api/auth/login", { username: login, password: senha, grant_type: 'password' }, { headers: headers }).do(function (user) {
+            console.log(user);
+            var data = user.tokenAccess.toString().split('.');
+            var userTemp = JSON.parse(atob(data[1]));
+            _this.usuario = user;
+            _this.usuario.id = userTemp.user_id;
+            _this.usuario.email = userTemp.email;
+            _this.usuario.tokenExpire = userTemp.exp;
+            window.localStorage.setItem('loggedUser', JSON.stringify(user));
+        });
     };
     LoginService.prototype.cadastrar = function (usuario) {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Content-type', 'application/json');
-        console.log(__WEBPACK_IMPORTED_MODULE_3__api_config__["a" /* API */] + "/usuario/");
+        console.log(__WEBPACK_IMPORTED_MODULE_3__api_config__["a" /* API */] + "/api/usuario/");
         console.log(usuario);
-        return this.http.post(__WEBPACK_IMPORTED_MODULE_3__api_config__["a" /* API */] + "/usuario/", { usuario: usuario }, { headers: headers });
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_3__api_config__["a" /* API */] + "/api/usuario/", { usuario: usuario }, { headers: headers });
+    };
+    LoginService.prototype.logout = function () {
+        // window.sessionStorage.removeItem('usuario');
+        window.localStorage.removeItem('loggedUser');
+        this.usuario = null;
     };
     LoginService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
@@ -403,30 +425,6 @@ var LoginService = (function () {
     return LoginService;
 }());
 
-//
-// import { HttpClient } from '@angular/common/http';
-// import { Injectable } from '@angular/core';
-//
-// /*
-//   Generated class for the HttpProvider provider.
-//
-//   See https://angular.io/guide/dependency-injection for more info on providers
-//   and Angular DI.
-// */
-// @Injectable()
-// export class HttpProvider {
-//
-//   url: string = './assets/mocks/';
-//
-//   constructor(public http: HttpClient) {
-//     console.log('Hello HttpProvider Provider');
-//   }
-//
-//   get(path: string) {
-//     return this.http.get(this.url + path);
-//   }
-//
-// }
 //# sourceMappingURL=login.service.js.map
 
 /***/ }),
@@ -553,7 +551,7 @@ var AppModule = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API; });
-var API = 'http://localhsot:3000';
+var API = 'http://localhost:8000';
 //# sourceMappingURL=api.config.js.map
 
 /***/ }),

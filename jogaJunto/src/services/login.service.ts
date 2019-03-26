@@ -11,7 +11,7 @@ import { API } from './api.config'
 @Injectable()
 export class LoginService{
 
-  usuario: Usuario;
+  private usuario: Usuario;
 
   constructor(private http:HttpClient){}
 
@@ -19,60 +19,61 @@ export class LoginService{
     return this.usuario !== undefined;
   }
 
+  usuarioLogado():Usuario{
+    this.usuario = JSON.parse(window.localStorage.getItem('loggedUser'));
+    var agora = Date.now() / 1000;
+    if(agora < this.usuario.tokenExpire){
+      return this.usuario;
+    }else{
+      this.logout();
+    }
+
+  }
+
   login (login: string, senha:string): Observable<Usuario>{
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/json');
-
+    console.log("entrando no login");
     return this.http.post<Usuario>(
-      `http://ceasb.maickel.site/api-token-auth/`,
+      `${API}/api/auth/login`,
       {username: login, password:senha, grant_type: 'password'},
-      {headers: headers});
+      {headers: headers}).do(user => {
+        console.log(user);
 
+        let data = user.tokenAccess.toString().split('.');
+        let userTemp = JSON.parse(atob(data[1]));
 
-    // return this.http.post<Usuario>(
-    //   `${API}/auth/`,
-    //   {login: login, senha:senha, grant_type: 'password'},
-    //   {headers: headers});
+        this.usuario = user;
+        this.usuario.id = userTemp.user_id;
+        this.usuario.email = userTemp.email;
+        this.usuario.tokenExpire = userTemp.exp;
+
+        window.localStorage.setItem('loggedUser', JSON.stringify(user));
+      });
+
     }
 
     cadastrar(usuario: Usuario): Observable<Usuario>{
 
       let headers = new HttpHeaders();
       headers = headers.append('Content-type', 'application/json');
-      console.log(`${API}/usuario/`);
+      console.log(`${API}/api/usuario/`);
       console.log(usuario);
 
 
       return this.http.post<Usuario>(
-        `${API}/usuario/`,
+        `${API}/api/usuario/`,
         {usuario: usuario},
         {headers: headers});
       }
 
-  }
 
-  //
-  // import { HttpClient } from '@angular/common/http';
-  // import { Injectable } from '@angular/core';
-  //
-  // /*
-  //   Generated class for the HttpProvider provider.
-  //
-  //   See https://angular.io/guide/dependency-injection for more info on providers
-  //   and Angular DI.
-  // */
-  // @Injectable()
-  // export class HttpProvider {
-  //
-  //   url: string = './assets/mocks/';
-  //
-  //   constructor(public http: HttpClient) {
-  //     console.log('Hello HttpProvider Provider');
-  //   }
-  //
-  //   get(path: string) {
-  //     return this.http.get(this.url + path);
-  //   }
-  //
-  // }
+      logout(){
+        // window.sessionStorage.removeItem('usuario');
+        window.localStorage.removeItem('loggedUser');
+        this.usuario = null;
+
+      }
+
+  }

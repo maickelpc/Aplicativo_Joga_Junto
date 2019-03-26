@@ -50,16 +50,6 @@ export class LoginPage {
     });
   }
 
-  teste(){
-    let teste =  JSON.parse(localStorage.getItem('currentUser'));
-    console.log(JSON.stringify( teste ));
-
-
-
-    this.toast.present();
-
-  }
-
   today(){
     return new Date();
   }
@@ -70,8 +60,8 @@ export class LoginPage {
     .subscribe(
       function(dados){
           console.log("Deu Certo ");
-          localStorage.setItem('currentUser', JSON.stringify(dados));
-          JSON.stringify(dados);
+
+          console.log(JSON.stringify(dados));
       },
       function(error){
         alert("Deu Merda ");
@@ -79,10 +69,6 @@ export class LoginPage {
       });
   }
 
-  logout(){
-    localStorage.removeItem('currentUser');
-
-  }
 
   cadastrar(){
     this.loginService.cadastrar(this.usuario)
@@ -94,14 +80,5 @@ export class LoginPage {
       });
 
   }
-  // Attempt to login in through our User service
-  // doLogin() {
-  //   this.http.get('my-profile.json').subscribe((profile) => {
-  //     this.userProvider.user = <User>profile;
-  //     this.navCtrl.setRoot('ListFriendsPage');
-  //   }, (err) => {
-  //     console.error(err);
-  //   });
 
-  // }
 }
