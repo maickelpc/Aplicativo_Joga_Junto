@@ -11,7 +11,7 @@ $factory->define(App\Usuario::class, function (Faker $faker) {
         'sobrenome' => $faker->lastName,
         'email' => $faker->freeEmail,
         'dataNascimento' => $faker->date('Y-m-d', 'now'),
-        'username' => strtolower($faker->firstName),
+        'username' => 'admin',
         'password' => bcrypt('admin'),
         'score' => $faker->randomFloat(1, 1, 5),
         'telefone' => rand(1111111111, 9999999999),
