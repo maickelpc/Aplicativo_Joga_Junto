@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, MenuController } from 'ionic-angular';
-import { ToastController } from 'ionic-angular';
-import {UserProvider} from "../../providers/user/user";
-import {HttpProvider} from "../../providers/http/http";
-import {Usuario} from "../../models/usuario";
-import { LoginService} from '../../services/login.service'
+import { UserProvider } from "../../providers/user/user";
+import { HttpProvider } from "../../providers/http/http";
+import { Usuario } from "../../models/usuario";
+import { LoginService } from '../../services/login.service'
+import { ToastService } from '../../services/toast.service'
+
 
 @IonicPage()
 @Component({
@@ -29,46 +30,43 @@ export class LoginPage {
   // Our translated text strings
   private loginErrorString: string;
   private opt: string = 'signin';
-  private toast : any;
 
   constructor(
-    public http:HttpProvider, public userProvider: UserProvider, public menuCtrl: MenuController, public navCtrl: NavController,
-    public translateService: TranslateService, private loginService: LoginService, private toastCtrl: ToastController) {
-    this.menuCtrl.enable(false);
-    this.translateService.get('LOGIN_ERROR').subscribe((value) => {
+    public http:HttpProvider,
+    public userProvider: UserProvider,
+    public menuCtrl: MenuController,
+    public navCtrl: NavController,
+    public translateService: TranslateService,
+    private loginService: LoginService,
+    private toastService : ToastService) {
+      this.menuCtrl.enable(false);
+      this.translateService.get('LOGIN_ERROR').subscribe((value) => {
       this.loginErrorString = value;
     });
 
-
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    this.toast = this.toastCtrl.create({
-      message: '',
-      duration: 3000,
-      position: 'top',
-      showCloseButton: true,
-      closeButtonText: "Fechar"
-    });
   }
 
-  today(){
-    return new Date();
+
+
+  teste(){
+    console.log(this.loginService.getUsuarioLogado());
+    this.toastService.toast("TESTE");
   }
 
   login(){
 
     this.loginService.login(this.usuario.login, this.usuario.senha)
     .subscribe(
-      function(dados){
-          console.log("Deu Certo ");
+      dados =>{
 
-          console.log(JSON.stringify(dados));
+        this.toastService.toast("Bem Vindo " + this.usuario.login );
+
       },
-      function(error){
-        alert("Deu Merda ");
+      error => {
+        this.toastService.toast("Credenciais inválidas");
         console.log(JSON.stringify(error));
       });
   }
-
 
   cadastrar(){
     this.loginService.cadastrar(this.usuario)

@@ -2,6 +2,7 @@
 import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable'
+import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/do'
 
 import { Usuario } from '../models/usuario'
@@ -13,20 +14,21 @@ export class LoginService{
 
   private usuario: Usuario;
 
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient, private storage: Storage){}
 
   estaLogado():boolean{
     return this.usuario !== undefined;
   }
 
-  usuarioLogado():Usuario{
-    this.usuario = JSON.parse(window.localStorage.getItem('loggedUser'));
-    var agora = Date.now() / 1000;
-    if(agora < this.usuario.tokenExpire){
-      return this.usuario;
-    }else{
-      this.logout();
-    }
+  getUsuarioLogado():Usuario{
+    this.storage.get('loggedUser').then(user =>{
+        this.usuario = JSON.parse(user);
+        var agora = Date.now() / 1000;
+        if(this.usuario === null || agora > this.usuario.exp){
+          this.logout();
+        }
+    });
+    return this.usuario;
 
   }
 
@@ -34,22 +36,18 @@ export class LoginService{
 
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/json');
-    console.log("entrando no login");
     return this.http.post<Usuario>(
       `${API}/api/auth/login`,
       {username: login, password:senha, grant_type: 'password'},
       {headers: headers}).do(user => {
-        console.log(user);
 
-        let data = user.tokenAccess.toString().split('.');
+        let data = user.token.toString().split('.');
         let userTemp = JSON.parse(atob(data[1]));
-
-        this.usuario = user;
-        this.usuario.id = userTemp.user_id;
-        this.usuario.email = userTemp.email;
-        this.usuario.tokenExpire = userTemp.exp;
-
-        window.localStorage.setItem('loggedUser', JSON.stringify(user));
+        this.usuario = userTemp;
+        this.usuario.token = user.token.toString();
+        console.log(this.usuario);
+        this.storage.set('loggedUser', JSON.stringify(this.usuario));
+        console.log("Usuario Salvo na localStorage");
       });
 
     }
@@ -58,8 +56,6 @@ export class LoginService{
 
       let headers = new HttpHeaders();
       headers = headers.append('Content-type', 'application/json');
-      console.log(`${API}/api/usuario/`);
-      console.log(usuario);
 
 
       return this.http.post<Usuario>(
@@ -71,7 +67,7 @@ export class LoginService{
 
       logout(){
         // window.sessionStorage.removeItem('usuario');
-        window.localStorage.removeItem('loggedUser');
+        this.storage.remove('loggedUser').then(() => console.log("Deslogado!"));
         this.usuario = null;
 
       }

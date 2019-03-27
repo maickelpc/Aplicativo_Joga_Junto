@@ -15,6 +15,7 @@ import { HttpProvider } from '../providers/http/http';
 import { Util } from '../providers/util/util';
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
+import { ToastService } from '../services/toast.service'
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -54,7 +55,8 @@ export function createTranslateLoader(http: HttpClient) {
     HttpProvider,
     Util,
     UserProvider,
-    LoginService
+    LoginService,
+    ToastService
   ]
 })
 export class AppModule { }

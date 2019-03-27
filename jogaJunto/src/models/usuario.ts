@@ -21,8 +21,8 @@ class Usuario {
   updated_at : Date
   deleted_at: Date
 
-  tokenExpire : Number
-  tokenAccess: string
+  exp : Number
+  token: string
 
   constructor(){
     this.dataNascimento = new Date()
