@@ -56,6 +56,24 @@ Route::group([
     Route::put('/endereco/{id}', 'EnderecoController@update')->name('endereco.update');
     Route::delete('/endereco/{id}', 'EnderecoController@destroy')->name('endereco.delete');
 
+    Route::get('/esporte', 'EsporteController@index')->name('esporte.all');
+    Route::post('/esporte', 'EsporteController@store')->name('esporte.store');
+    Route::get('/esporte/{id}', 'EsporteController@show')->name('esporte.show');
+    Route::put('/esporte/{id}', 'EsporteController@update')->name('esporte.update');
+    Route::delete('/esporte/{id}', 'EsporteController@destroy')->name('esporte.delete');
+
+    Route::get('/posicao', 'PosicaoController@index')->name('posicao.all');
+    Route::post('/posicao', 'PosicaoController@store')->name('posicao.store');
+    Route::get('/posicao/{id}', 'PosicaoController@show')->name('posicao.show');
+    Route::put('/posicao/{id}', 'PosicaoController@update')->name('posicao.update');
+    Route::delete('/posicao/{id}', 'PosicaoController@destroy')->name('posicao.delete');
+
+    Route::get('/local', 'LocalController@index')->name('local.all');
+    Route::post('/local', 'LocalController@store')->name('local.store');
+    Route::get('/local/{id}', 'LocalController@show')->name('local.show');
+    Route::put('/local/{id}', 'LocalController@update')->name('local.update');
+    Route::delete('/local/{id}', 'LocalController@destroy')->name('local.delete');
+
 });
 
 

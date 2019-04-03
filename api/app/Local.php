@@ -27,7 +27,7 @@ class Local extends Model
 
 
   public function endereco(){
-    return $this->belongsTo(Endereco, 'endereco_id');
+    return $this->belongsTo('App\Endereco', 'endereco_id');
   }
 
   public function esportes(){

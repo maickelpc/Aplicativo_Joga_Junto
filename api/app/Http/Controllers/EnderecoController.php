@@ -130,7 +130,7 @@ class EnderecoController extends Controller
       }
     }
 
-    private function validar($id, $dados){
+    public function validar($id, $dados){
 
       $regras = [
         'logradouro' => 'required|max:150',

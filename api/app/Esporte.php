@@ -10,7 +10,13 @@ class Esporte extends Model
 {
   use SoftDeletes;
   protected $table = 'esportes';
-  protected $fillable = ['id', 'nome', 'descricao', 'imagem', 'qtdMinimo', 'qtdMaximo'];
+  protected $fillable = ['
+  id', 
+  'nome', 
+  'descricao', 
+  'imagem', 
+  'qtdMinimo', 
+  'qtdMaximo'];
   protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
   public function posicoes(){

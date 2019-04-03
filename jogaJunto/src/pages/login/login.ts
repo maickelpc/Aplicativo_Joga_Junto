@@ -15,9 +15,9 @@ import { ToastService } from '../../services/toast.service'
 })
 
 /**
- * @author: KMR
- * @email: yajuve.25.dz@gmail.com
- */
+* @author: KMR
+* @email: yajuve.25.dz@gmail.com
+*/
 
 export class LoginPage {
   // The account fields for the login form.
@@ -41,42 +41,44 @@ export class LoginPage {
     private toastService : ToastService) {
       this.menuCtrl.enable(false);
       this.translateService.get('LOGIN_ERROR').subscribe((value) => {
-      this.loginErrorString = value;
-    });
-
-  }
-
-
-
-  teste(){
-    console.log(this.loginService.getUsuarioLogado());
-    this.toastService.toast("TESTE");
-  }
-
-  login(){
-
-    this.loginService.login(this.usuario.login, this.usuario.senha)
-    .subscribe(
-      dados =>{
-
-        this.toastService.toast("Bem Vindo " + this.usuario.login );
-
-      },
-      error => {
-        this.toastService.toast("Credenciais inválidas");
-        console.log(JSON.stringify(error));
-      });
-  }
-
-  cadastrar(){
-    this.loginService.cadastrar(this.usuario)
-    .subscribe(
-      x => console.log("Deu Certo " + JSON.stringify(x)),
-      function(error){
-        alert("Deu Merda ");
-        console.log(JSON.stringify(error));
+        this.loginErrorString = value;
       });
 
-  }
+    }
+    
+    today(){
+      console.log("Faz nada");
+    }
 
-}
+    teste(){
+      console.log(this.loginService.getUsuarioLogado());
+      this.toastService.toast("TESTE");
+    }
+
+    login(){
+
+      this.loginService.login(this.usuario.login, this.usuario.senha)
+      .subscribe(
+        dados =>{
+
+          this.toastService.toast("Bem Vindo " + this.usuario.login );
+
+        },
+        error => {
+          this.toastService.toast("Credenciais inválidas");
+          console.log(JSON.stringify(error));
+        });
+      }
+
+      cadastrar(){
+        this.loginService.cadastrar(this.usuario)
+        .subscribe(
+          x => console.log("Deu Certo " + JSON.stringify(x)),
+          function(error){
+            alert("Deu Merda ");
+            console.log(JSON.stringify(error));
+          });
+
+        }
+
+      }
