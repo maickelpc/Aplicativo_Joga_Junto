@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Evento;
+use App\Usuario;
+use App\UsuarioEvento;
+use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
 use Illuminate\Http\Request;
 
 class EventoController extends Controller
@@ -81,5 +84,12 @@ class EventoController extends Controller
     public function destroy(Evento $evento)
     {
         //
+    }
+
+    public function getEventosProximosUsuario($idUsuario) {
+       return UsuarioEventoResource::collection(
+           UsuarioEvento::where(['usuario_id' => $idUsuario, 'situacao' => 'PENDENTE'])->get()
+       );
+
     }
 }

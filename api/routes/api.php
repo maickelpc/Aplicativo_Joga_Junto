@@ -85,6 +85,14 @@ Route::group([
     Route::get('/usuario/{id}', 'UsuarioController@show')->name('usuario.show');
     Route::put('/usuario/{id}', 'UsuarioController@update')->name('usuario.update');
     Route::delete('/usuario/{id}', 'UsuarioController@destroy')->name('usuario.delete');
+
+
+    Route::get('/evento', 'EventoController@index')->name('evento.all');
+    Route::get('/evento/getEventosUsuario/{idUsuario}', 'EventoController@getEventosProximosUsuario')->name('evento.getEventosUsuario');
+    Route::post('/evento', 'EventoController@store')->name('evento.store');
+    Route::get('/evento/{id}', 'EventoController@show')->name('evento.show');
+    Route::put('/evento/{id}', 'EventoController@update')->name('evento.update');
+    Route::delete('/evento/{id}', 'EventoController@destroy')->name('evento.delete');
 });
 
 

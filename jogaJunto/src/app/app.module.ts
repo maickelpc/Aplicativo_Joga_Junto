@@ -16,6 +16,7 @@ import { Util } from '../providers/util/util';
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
 import { ToastService } from '../services/toast.service'
+import {EventosComponent} from "../components/eventos/eventos";
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -26,7 +27,11 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    MyApp
+    MyApp,
+    EventosComponent
+  ],
+  exports: [
+    EventosComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +48,8 @@ export function createTranslateLoader(http: HttpClient) {
   ],
   bootstrap: [IonicApp],
   entryComponents: [
-    MyApp
+    MyApp,
+    EventosComponent
   ],
   providers: [
     Items,

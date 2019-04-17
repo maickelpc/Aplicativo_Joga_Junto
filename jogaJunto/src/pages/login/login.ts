@@ -6,6 +6,7 @@ import { HttpProvider } from "../../providers/http/http";
 import { Usuario } from "../../models/usuario";
 import { LoginService } from '../../services/login.service'
 import { ToastService } from '../../services/toast.service'
+import {EventosComponent} from "../../components/eventos/eventos";
 
 
 @IonicPage()
@@ -62,7 +63,7 @@ export class LoginPage {
         dados =>{
 
           this.toastService.toast("Bem Vindo " + this.usuario.login );
-
+          this.goToListaEventos();
         },
         error => {
           this.toastService.toast("Credenciais inválidas");
@@ -80,5 +81,10 @@ export class LoginPage {
           });
 
         }
+        goToListaEventos() {
+          this.navCtrl.push(EventosComponent);
+          console.log('Vai pra página de eventos');
+        }
 
       }
+
