@@ -20,6 +20,7 @@ class UsuarioController extends Controller
   */
   public function index()
   {
+    
     return UsuarioResource::collection(Usuario::paginate());
   }
 

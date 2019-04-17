@@ -74,6 +74,17 @@ Route::group([
     Route::put('/local/{id}', 'LocalController@update')->name('local.update');
     Route::delete('/local/{id}', 'LocalController@destroy')->name('local.delete');
 
+    Route::get('/notificacao', 'NotificacaoController@index')->name('notificacao.all');
+    Route::post('/notificacao', 'NotificacaoController@store')->name('notificacao.store');
+    Route::get('/notificacao/{id}', 'NotificacaoController@show')->name('notificacao.show');
+    Route::put('/notificacao/{id}', 'NotificacaoController@update')->name('notificacao.update');
+    Route::delete('/notificacao/{id}', 'NotificacaoController@destroy')->name('notificacao.delete');
+
+    Route::get('/usuario', 'UsuarioController@index')->name('usuario.all');
+    Route::post('/usuario', 'UsuarioController@store')->name('usuario.store');
+    Route::get('/usuario/{id}', 'UsuarioController@show')->name('usuario.show');
+    Route::put('/usuario/{id}', 'UsuarioController@update')->name('usuario.update');
+    Route::delete('/usuario/{id}', 'UsuarioController@destroy')->name('usuario.delete');
 });
 
 

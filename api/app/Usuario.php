@@ -40,5 +40,12 @@ class Usuario extends Authenticatable
     return $this->hasMany('App\UsuarioEvento', 'usuario_id');
   }
 
+  public function notificacoes(){
+    return $this->hasMany('App\Notificacao', 'usuario_id');
+  }
+
+  public function notificacoesEnviadas(){
+    return $this->hasMany('App\Notificacao', 'usuario_envio_id');
+  }
 
 }
