@@ -7,8 +7,10 @@ use App\Http\Resources\Usuario as UsuarioResource;
 use App\Http\Controllers\EnderecoController;
 use Illuminate\Http\Request;
 use Validator;
+use Carbon\Carbon;
 use App\Endereco;
 use App\Mail\SendMailUser;
+use App\Mail\SendMailConfirmaCadastro;
 Use Exception;
 Use DB;
 use Illuminate\Support\Facades\Auth;
@@ -23,21 +25,12 @@ class UsuarioController extends Controller
 
   public function emailteste($emailDestino){
 
+     //dd(Auth::user());
 
-     // Mail::to($emailDestino)
-     // ->cc('maickelpc@gmail.com')
-     // ->send( new SendMailUser(Auth::user()));
+     Mail::to($emailDestino)
+     ->send( new SendMailConfirmaCadastro(Auth::user()));
 
-     // Mail::send(
-     //   'email.teste',['usuario', Auth::user()], function($mail){
-     //     $mail->from('jogajuntoapp@gmail.com','Joga Junto APP');
-     //     $mail->to('nilceia1982@gmail.com');
-     //     $mail->to('diegojp2006@gmail.com');
-     //     $mail->subject('Teste de envio de email');
-     //   });
-
-
-    return view('email.teste')->with('usuario',Auth::user());
+    return view('email.confirmaCadastro')->with('usuario', Auth::user());
 
 
   }
@@ -72,13 +65,10 @@ class UsuarioController extends Controller
     $dados = $request->json();
     $validacao = $this->validar(0, $dados->all());
     if ($validacao != null)
-    return response()->json($validacao, 400);
+      return response()->json($validacao, 400);
 
 
-    $enderecoController = new EnderecoController();
-    $validacao = $enderecoController->validar(0, $dados->get('endereco'));
-    if ($validacao != null)
-    return response()->json($validacao, 400);
+
     try{
       DB::beginTransaction();
       // $endereco = Endereco::create($dados->get('endereco'));
@@ -88,19 +78,29 @@ class UsuarioController extends Controller
       $usuario->nome = $dados->get('nome');
       $usuario->sobrenome = $dados->get('sobrenome');
       $usuario->email = $dados->get('email');
-      $usuario->email_verified_at = $dados->get('email_verified_at');
-      $usuario->dataNascimento = $dados->get('dataNascimento');
+      $data = $dados->get('dataNascimento');
+
+
+      $usuario->dataNascimento =Carbon::createFromformat('Y-m-d',  $data);
+
       $usuario->username = $dados->get('username');
-      $usuario->password = $dados->get('password');
+      $usuario->password = bcrypt($dados->get('password'));
       $usuario->idFacebook = $dados->get('idFacebook');
       $usuario->idGoogle = $dados->get('idGoogle');
-      $usuario->score = $dados->get('score');
+      //$usuario->score = $dados->get('score');
       $usuario->telefone = $dados->get('telefone');
       $usuario->latitude = $dados->get('latitude');
       $usuario->longitude = $dados->get('longitude');
 
-      // $usuario->endereco_id = $endereco->id;
       $usuario->save();
+
+      // $usuario->endereco_id = $endereco->id;
+      Mail::to($usuario->email)
+      ->send( new SendMailConfirmaCadastro($usuario));
+
+
+
+
       DB::commit();
       return response()->json(new UsuarioResource($usuario), 201);
 

@@ -28,6 +28,10 @@ Route::group([
 
 });
 
+Route::post('/usuario', 'UsuarioController@store')->name('usuario.store');
+
+
+
 Route::group([
     'middleware' => 'jwt.auth'
 ], function ($router) {
@@ -81,11 +85,12 @@ Route::group([
     Route::delete('/notificacao/{id}', 'NotificacaoController@destroy')->name('notificacao.delete');
 
     Route::get('/usuario', 'UsuarioController@index')->name('usuario.all');
-    Route::post('/usuario', 'UsuarioController@store')->name('usuario.store');
+    Route::get('/usuario/confirma/{token}', 'UsuarioController@index')->name('usuario.confirmacao');
     Route::get('/usuario/{id}', 'UsuarioController@show')->name('usuario.show');
     Route::put('/usuario/{id}', 'UsuarioController@update')->name('usuario.update');
     Route::delete('/usuario/{id}', 'UsuarioController@destroy')->name('usuario.delete');
     Route::get('/usuario/emailteste/{email}', 'UsuarioController@emailteste')->name('usuario.emailteste');
+
 
 
     Route::get('/evento', 'EventoController@index')->name('evento.all');
