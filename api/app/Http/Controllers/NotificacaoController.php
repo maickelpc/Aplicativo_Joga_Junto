@@ -7,7 +7,7 @@ use App\Http\Resources\Notificacao as NotificacaoResource;
 use Illuminate\Http\Request;
 use Validator;
 use Tymon\JWTAuth\JWT;
-
+use Illuminate\Support\Facades\Auth;
 class NotificacaoController extends Controller
 {
     /**
@@ -50,7 +50,7 @@ class NotificacaoController extends Controller
       $notificacao->mensagem = $dados->get('mensagem');
       $notificacao->usuario_id = $dados->get('usuario_id');
       //$notificacao->usuario_envio_id = $dados->get('usuario_envio_id');
-      $notificacao->usuario_envio_id = \Illuminate\Support\Facades\Auth::user()->id;
+      $notificacao->usuario_envio_id = Auth::user()->id;
 
       if($notificacao->save()) {
         return response()->json(new NotificacaoResource($notificacao), 201);

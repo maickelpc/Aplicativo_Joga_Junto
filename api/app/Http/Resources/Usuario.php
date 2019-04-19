@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Endereco;
 class Usuario extends JsonResource
 {
     /**
@@ -15,12 +16,18 @@ class Usuario extends JsonResource
     {
         return [
           'id' => $this->id,
-          'titulo' => $this->titulo,
-          // 'mensagem' => $this->mensagem,
-          // 'dataLeitura' => $this->dataLeitura,
-          // 'usuario' => Usuario::find($this->usuario_id),
-          // 'usuarioEnvio' => Usuario::find($this->usuario_envio_id),
-          // 'created_at' => $this->created_at,
+          'nome' => $this->nome,
+          'mensagem' => $this->mensagem,
+          'sobrenome' => $this->sobrenome,
+          'email' => $this->email,
+          'login' => $this->login,
+          'score' => $this->score,
+          'telefone' => $this->telefone,
+          'latitude' => $this->latitude,
+          'longitude' => $this->longitude,
+          'endereco' => Endereco::find($this->endereco_id),
+          'posicoes' => $this->posicoes,
+          'created_at' => $this->created_at,
           'updated_at' => $this->updated_at
         ];
     }

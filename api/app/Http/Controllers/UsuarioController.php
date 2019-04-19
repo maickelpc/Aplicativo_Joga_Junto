@@ -1,15 +1,17 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Mail;
 use App\Usuario;
 use App\Http\Resources\Usuario as UsuarioResource;
 use App\Http\Controllers\EnderecoController;
 use Illuminate\Http\Request;
 use Validator;
 use App\Endereco;
+use App\Mail\SendMailUser;
 Use Exception;
 Use DB;
+use Illuminate\Support\Facades\Auth;
 
 class UsuarioController extends Controller
 {
@@ -18,9 +20,33 @@ class UsuarioController extends Controller
   *
   * @return \Illuminate\Http\Response
   */
+
+  public function emailteste($emailDestino){
+
+
+     // Mail::to($emailDestino)
+     // ->cc('maickelpc@gmail.com')
+     // ->send( new SendMailUser(Auth::user()));
+
+     // Mail::send(
+     //   'email.teste',['usuario', Auth::user()], function($mail){
+     //     $mail->from('jogajuntoapp@gmail.com','Joga Junto APP');
+     //     $mail->to('nilceia1982@gmail.com');
+     //     $mail->to('diegojp2006@gmail.com');
+     //     $mail->subject('Teste de envio de email');
+     //   });
+
+
+    return view('email.teste')->with('usuario',Auth::user());
+
+
+  }
+
+
+
   public function index()
   {
-    
+
     return UsuarioResource::collection(Usuario::paginate());
   }
 

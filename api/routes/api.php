@@ -85,6 +85,7 @@ Route::group([
     Route::get('/usuario/{id}', 'UsuarioController@show')->name('usuario.show');
     Route::put('/usuario/{id}', 'UsuarioController@update')->name('usuario.update');
     Route::delete('/usuario/{id}', 'UsuarioController@destroy')->name('usuario.delete');
+    Route::get('/usuario/emailteste/{email}', 'UsuarioController@emailteste')->name('usuario.emailteste');
 
 
     Route::get('/evento', 'EventoController@index')->name('evento.all');
