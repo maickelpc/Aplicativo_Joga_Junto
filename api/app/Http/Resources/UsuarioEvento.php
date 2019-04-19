@@ -18,8 +18,8 @@ class UsuarioEvento extends JsonResource
     {
         return [
             'id' => $this->id,
-            'usuario' => Usuario::where('id', $this->usuario_id)->get(),
-            'evento' => EventoModel::where('id', $this->evento_id)->get(),
+            'usuario' => Usuario::where('id', $this->usuario_id)->first(),
+            'evento' => EventoModel::where('id', $this->evento_id)->first(),
             'situacao' => $this->situacao,
             'dataConfirmacao' => $this->dataConfirmacao,
             'dataCancelamento' => $this->dataCancelamento,

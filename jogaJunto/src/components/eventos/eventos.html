@@ -1,13 +1,16 @@
 <!-- Generated template for the EventosComponent component -->
-<ion-card>
-  <img src="img/nin-live.png"/>
-  <ion-card-content>
-    <ion-card-title>
-      Nine Inch Nails Live
-    </ion-card-title>
-    <p>
-      The most popular industrial group ever, and largely
-      responsible for bringing the music to a mass audience.
-    </p>
-  </ion-card-content>
-</ion-card>
+<ion-content padding>
+  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
+    <ion-card-content>
+      <ion-card-title>
+          {{ evento.evento.descricao }}
+      </ion-card-title>
+      <p>
+        <span class="desc">
+          <ion-icon name="calendar">{{ evento.evento.data|date:'d/MM/Y' }}</ion-icon>
+          <ion-icon name="alarm">{{ evento.evento.horario }}</ion-icon>
+        </span>
+      </p>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

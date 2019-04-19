@@ -89,7 +89,7 @@ Route::group([
 
 
     Route::get('/evento', 'EventoController@index')->name('evento.all');
-    Route::get('/evento/getEventosUsuario/{idUsuario}', 'EventoController@getEventosProximosUsuario')->name('evento.getEventosUsuario');
+    Route::get('/evento/getEventosUsuario', 'EventoController@getEventosProximosUsuario')->name('evento.getEventosUsuario');
     Route::post('/evento', 'EventoController@store')->name('evento.store');
     Route::get('/evento/{id}', 'EventoController@show')->name('evento.show');
     Route::put('/evento/{id}', 'EventoController@update')->name('evento.update');

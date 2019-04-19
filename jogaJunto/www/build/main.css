@@ -27988,6 +27988,10 @@ eventos .item {
   background-color: #306dd8;
 }
 
+eventos .bg-branco {
+  background-color: white;
+}
+
 eventos ion-label {
   color: #f7f7f7;
   text-align: center;
