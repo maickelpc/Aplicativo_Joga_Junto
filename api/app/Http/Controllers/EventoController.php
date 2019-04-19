@@ -7,6 +7,7 @@ use App\Usuario;
 use App\UsuarioEvento;
 use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventoController extends Controller
 {
@@ -86,9 +87,9 @@ class EventoController extends Controller
         //
     }
 
-    public function getEventosProximosUsuario($idUsuario) {
+    public function getEventosProximosUsuario() {
        return UsuarioEventoResource::collection(
-           UsuarioEvento::where(['usuario_id' => $idUsuario, 'situacao' => 'PENDENTE'])->get()
+           UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()
        );
 
     }

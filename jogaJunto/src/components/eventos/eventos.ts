@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {EventoService} from "../../services/evento.service";
+import {UsuarioEvento} from "../../models/evento";
 
 /**
  * Generated class for the EventosComponent component.
@@ -10,13 +12,23 @@ import { Component } from '@angular/core';
   selector: 'eventos',
   templateUrl: 'eventos.html'
 })
-export class EventosComponent {
+export class EventosComponent implements OnInit{
 
   text: string;
+  public listaEventos: UsuarioEvento[];
 
-  constructor() {
-    console.log('Hello EventosComponent Component');
-    this.text = 'Hello World';
+  constructor(private evento:EventoService) {}
+  ngOnInit(): void {
+    this.evento.evento().subscribe(
+      response =>{
+          this.listaEventos = response;
+          console.log(this.listaEventos);
+      },
+        erro=>{
+
+        },
+      ()=>console.log('ACABO CARAI')
+    );
   }
 
 }
