@@ -45,16 +45,24 @@
 
     <form  *ngSwitchCase="'signup'">
       <ion-item>
+        <ion-label stacked>{{ 'Name' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.nome" name="nome"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'Lastname' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="usuario.sobrenome" name="sobrenome"></ion-input>
+      </ion-item>
+      <ion-item>
         <ion-label stacked>{{ 'Email' | translate }}</ion-label>
         <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>
       </ion-item>
         <ion-item>
           <ion-label stacked>{{ 'Username' | translate }}</ion-label>
-          <ion-input type="text"  [(ngModel)]="usuario.login" name="login"></ion-input>
+          <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>{{ 'Password' | translate }}</ion-label>
-          <ion-input type="password"  [(ngModel)]="usuario.senha" name="senha"></ion-input>
+          <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label stacked>{{ 'Retry Password' | translate }}</ion-label>
@@ -76,7 +84,6 @@
 
       </form>
 
-      <button ion-button round (click)="teste()">TESTE</button>
 
     </div>
   </ion-content>

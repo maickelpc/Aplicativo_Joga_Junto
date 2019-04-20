@@ -22,7 +22,7 @@ class Usuario extends Authenticatable
     'telefone',
     'latitude',
     'longitude'];
-  protected $dates = ['dataNascimento','created_at', 'updated_at', 'deleted_at'];
+  protected $dates = ['dataNascimento','created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 
   protected $hidden = [
       'senha', 'idFacebook', 'idGoogle',

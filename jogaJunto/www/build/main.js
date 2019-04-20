@@ -80,6 +80,9 @@ var LoginService = (function () {
         this.http = http;
         this.storage = storage;
     }
+    LoginService.prototype.today = function () {
+        return new Date();
+    };
     LoginService.prototype.estaLogado = function () {
         return this.usuario !== undefined;
     };
@@ -111,8 +114,7 @@ var LoginService = (function () {
     LoginService.prototype.cadastrar = function (usuario) {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Content-type', 'application/json');
-        headers = headers.append('Authorization', 'Bearer ' + this.usuario.token);
-        return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/usuario/", { usuario: usuario }, { headers: headers });
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/usuario", { usuario: usuario }, { headers: headers });
     };
     LoginService.prototype.logout = function () {
         // window.sessionStorage.removeItem('usuario');
@@ -121,9 +123,10 @@ var LoginService = (function () {
     };
     LoginService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]) === "function" && _b || Object])
     ], LoginService);
     return LoginService;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=login.service.js.map
@@ -164,11 +167,11 @@ var map = {
 		0
 	],
 	"../pages/my-profile/my-profile.module": [
-		341,
+		340,
 		3
 	],
 	"../pages/profile-friend/profile-friend.module": [
-		340,
+		341,
 		2
 	]
 };
@@ -238,10 +241,9 @@ var EventoService = (function () {
     };
     EventoService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]) === "function" && _c || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]])
     ], EventoService);
     return EventoService;
-    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=evento.service.js.map
@@ -517,7 +519,8 @@ var ToastService = (function () {
         var toast = this.toastCtrl.create({
             message: mensagem,
             duration: 3000,
-            position: 'top'
+            position: 'top',
+            showCloseButton: true
         });
         toast.onDidDismiss(function () {
         });
@@ -584,10 +587,9 @@ var EventosComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'eventos',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/`<!-- Generated template for the EventosComponent component -->\n<ion-content padding>\n  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">\n    <ion-card-content>\n      <ion-card-title>\n          {{ evento.evento.descricao }}\n      </ion-card-title>\n      <p>\n        <span class="desc">\n          <ion-icon name="calendar">{{ evento.evento.data|date:\'d/MM/Y\' }}</ion-icon>\n          <ion-icon name="alarm">{{ evento.evento.horario }}</ion-icon>\n        </span>\n      </p>\n    </ion-card-content>\n  </ion-card>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */]) === "function" && _a || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */]])
     ], EventosComponent);
     return EventosComponent;
-    var _a;
 }());
 
 //# sourceMappingURL=eventos.js.map
@@ -690,8 +692,8 @@ var AppModule = (function () {
                         { loadChildren: '../pages/chat-room/chat-room.module#ChatRoomPageModule', name: 'ChatRoomPage', segment: 'chat-room', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/list-friends/list-friends.module#ListFriendsPageModule', name: 'ListFriendsPage', segment: 'list-friends', priority: 'low', defaultHistory: [] },
                         { loadChildren: '../pages/login/login.module#LoginPageModule', name: 'LoginPage', segment: 'login', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/profile-friend/profile-friend.module#ProfileFriendPageModule', name: 'ProfileFriendPage', segment: 'profile-friend', priority: 'low', defaultHistory: [] },
-                        { loadChildren: '../pages/my-profile/my-profile.module#MyProfilePageModule', name: 'MyProfilePage', segment: 'my-profile', priority: 'low', defaultHistory: [] }
+                        { loadChildren: '../pages/my-profile/my-profile.module#MyProfilePageModule', name: 'MyProfilePage', segment: 'my-profile', priority: 'low', defaultHistory: [] },
+                        { loadChildren: '../pages/profile-friend/profile-friend.module#ProfileFriendPageModule', name: 'ProfileFriendPage', segment: 'profile-friend', priority: 'low', defaultHistory: [] }
                     ]
                 }),
                 __WEBPACK_IMPORTED_MODULE_5__ionic_storage__["a" /* IonicStorageModule */].forRoot()

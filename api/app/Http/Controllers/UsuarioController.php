@@ -10,6 +10,7 @@ use Validator;
 use Carbon\Carbon;
 use App\Endereco;
 use App\Mail\SendMailUser;
+use App\Mail\SendConfirmaAtivacao;
 use App\Mail\SendMailConfirmaCadastro;
 Use Exception;
 Use DB;
@@ -59,19 +60,57 @@ class UsuarioController extends Controller
   * @param  \Illuminate\Http\Request  $request
   * @return \Illuminate\Http\Response
   */
+  public function confirmarCadastro($idUsuario, $codigoConfirmacao, Request $request){
+
+    try{
+      DB::beginTransaction();
+      $usuario = Usuario::findOrFail($idUsuario);
+      if($usuario->email_verified_at != null)
+        throw new Exception("");
+
+
+      if(strcasecmp($usuario->remember_token, $codigoConfirmacao) == 0){
+        $usuario->email_verified_at = Carbon::now();
+        $usuario->remember_token = null;
+        $usuario->save();
+
+        Mail::to($usuario->email)
+        ->send( new SendConfirmaAtivacao($usuario));
+
+      }else{
+        throw new Exception("");
+
+      }
+
+      DB::commit();
+      if($request->isJson())
+        return response()->json("Usuario ativado", 200);
+      else
+        return view('email.confirmaRegistroAtivado')->with('usuario',$usuario);
+
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json("Os dados não conferem", 406);
+    }
+
+  }
+
   public function store(Request $request)
   {
 
-    $dados = $request->json();
+    $dados = collect($request->json()->get('usuario'));
+
     $validacao = $this->validar(0, $dados->all());
     if ($validacao != null)
       return response()->json($validacao, 400);
 
-
+    $codigoConfirmacao = strtoupper(substr(md5(date("YmdHis")), 1, 9));
+    $codigoConfirmacao = substr($codigoConfirmacao,1,4) . "-" . substr($codigoConfirmacao,5,4);
 
     try{
       DB::beginTransaction();
       // $endereco = Endereco::create($dados->get('endereco'));
+
 
       $usuario = new Usuario();
 
@@ -80,23 +119,30 @@ class UsuarioController extends Controller
       $usuario->email = $dados->get('email');
       $data = $dados->get('dataNascimento');
 
-
-      $usuario->dataNascimento =Carbon::createFromformat('Y-m-d',  $data);
-
+      try{
+        $usuario->dataNascimento = (strlen($data) == 10)?  Carbon::createFromformat('Y-m-d',  $data) : new Carbon($data);
+      }catch(Exception $ex){
+        throw new Exception("Data de nascimento informada em formato inválido");
+      }
       $usuario->username = $dados->get('username');
       $usuario->password = bcrypt($dados->get('password'));
       $usuario->idFacebook = $dados->get('idFacebook');
       $usuario->idGoogle = $dados->get('idGoogle');
-      //$usuario->score = $dados->get('score');
+      $usuario->remember_token = $codigoConfirmacao;
       $usuario->telefone = $dados->get('telefone');
       $usuario->latitude = $dados->get('latitude');
       $usuario->longitude = $dados->get('longitude');
 
       $usuario->save();
 
+      try{
+        Mail::to($usuario->email)
+        ->send( new SendMailConfirmaCadastro($usuario));
+      }catch(Exception $ex){
+        throw new Exception("Não foi possível validar o seu email!");
+      }
       // $usuario->endereco_id = $endereco->id;
-      Mail::to($usuario->email)
-      ->send( new SendMailConfirmaCadastro($usuario));
+
 
 
 
@@ -106,8 +152,23 @@ class UsuarioController extends Controller
 
     }catch(Exception $ex){
       DB::rollback();
-      return response()->json($ex, 400);
+      return response()->json($ex->getMessage(), 400);
     }
+  }
+
+  public function reenviarConfirmacao(){
+
+    $usuario = Auth::user();
+    if($usuario->email_verified_at == null){
+      Mail::to($usuario->email)
+      ->send( new SendMailConfirmaCadastro($usuario));
+
+      return response()->json("Email enviado com sucesso!", 200);
+    }else{
+      return response()->json("Usuário já confirmado!", 400);
+    }
+
+
   }
 
   /**
@@ -208,7 +269,7 @@ class UsuarioController extends Controller
       'sobrenome' => 'max:150',
       'email' => 'required|email|unique:usuarios,email,'.$id,
       'telefone' => 'max:14',
-      'dataNascimento' => 'required',
+      'dataNascimento' => 'required|date',
       'username' => 'required|max:30|unique:usuarios,username,'.$id,
       'idFacebook' => 'max:100',
       'idGoogle' => 'max:100',

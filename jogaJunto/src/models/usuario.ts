@@ -7,8 +7,8 @@ class Usuario {
   sobrenome: string
   email: string
   dataNascimento: Date
-  login: string
-  senha: string
+  username: string
+  password: string
   idFacebook: string
   idGoogle: string
   score: number

@@ -16,6 +16,10 @@ export class LoginService{
 
   constructor(private http:HttpClient, private storage: Storage){}
 
+  today():Date{
+    return new Date();
+  }
+
   estaLogado():boolean{
     return this.usuario !== undefined;
   }
@@ -56,12 +60,10 @@ export class LoginService{
 
       let headers = new HttpHeaders();
       headers = headers.append('Content-type', 'application/json');
-      headers = headers.append('Authorization', 'Bearer '+this.usuario.token);
 
       return this.http.post<Usuario>(
-        `${API}/api/usuario/`,
-        {usuario: usuario},
-        {headers: headers});
+        `${API}/api/usuario`,
+        {usuario}, {headers: headers});
       }
 
 

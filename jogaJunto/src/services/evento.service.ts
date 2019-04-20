@@ -22,9 +22,9 @@ export class EventoService{
 
     let headers = new HttpHeaders();
     headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
-    return this.http.get<UsuarioEvento[]>(
+    return this.http.get<any>(
       `${API}/api/evento/getEventosUsuario/`,
-      {headers: headers}).map(x=>x.data);
+      {headers: headers}).map(x => x.data);
     }
 
   }

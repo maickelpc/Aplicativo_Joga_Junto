@@ -13,10 +13,10 @@
     <body>
       <!-- Begin page content -->
        <main role="main" class="container">
-         <h1 class="mt-5">Seja bem vindo ao JogaJunto {{$usuario->nome}}!!!</h1>
-         <p class="lead">Para usar nossos recursos, precisamos confirmar seu endereço de email, você pode fazer digitando o código no aplicativo, ou clicando no botão abaixo! <br>
-        <strong>Código de confirmação: </strong> {{$usuario->id}}</p>
-         <p><a class="btn btn-primary btn-block" href="../sticky-footer">Confirmar minha identidade</a></p>
+         <h1 class="mt-5">Seja bem vindo ao JogaJunto {{$usuario->nome}} !!!</h1>
+         <p class="lead">Para usar nossos recursos, precisamos confirmar seu endereço de email, você pode fazer digitando o código no aplicativo, ou clicando no link abaixo! <p>
+        <h2>Código de confirmação: <strong>{{$usuario->remember_token}}</strong></h2>
+         <p><a class="btn btn-primary btn-block" href="{{route('usuario.confirmarCadastro',['id'=>$usuario->id, 'codigo'=>$usuario->remember_token])}}">Confirmar minha identidade</a></p>
        </main>
     </body>
 </html>

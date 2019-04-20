@@ -31,7 +31,7 @@ class SendMailConfirmaCadastro extends Mailable
      {
 
          return $this->from('jogajuntoapp@gmail.com')
-         ->subject("Confirmação de Cadastro")
+         ->subject("Confirme seu Cadastro")
          ->view('email.confirmaCadastro')->with('usuario', $this->usuario);
      }
 }

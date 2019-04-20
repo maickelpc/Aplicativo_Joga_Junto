@@ -46,9 +46,9 @@ export class LoginPage {
       });
 
     }
-    
+
     today(){
-      console.log("Faz nada");
+      return new Date();
     }
 
     teste(){
@@ -58,11 +58,11 @@ export class LoginPage {
 
     login(){
 
-      this.loginService.login(this.usuario.login, this.usuario.senha)
+      this.loginService.login(this.usuario.username, this.usuario.password)
       .subscribe(
         dados =>{
 
-          this.toastService.toast("Bem Vindo " + this.usuario.login );
+          this.toastService.toast("Bem Vindo " + this.usuario.username );
           this.goToListaEventos();
         },
         error => {
@@ -72,12 +72,25 @@ export class LoginPage {
       }
 
       cadastrar(){
+        console.log(JSON.stringify(this.usuario));
         this.loginService.cadastrar(this.usuario)
         .subscribe(
-          x => console.log("Deu Certo " + JSON.stringify(x)),
-          function(error){
-            alert("Deu Merda ");
-            console.log(JSON.stringify(error));
+          x => {
+            console.log("Deu Certo " + JSON.stringify(this.usuario));
+            this.login();
+          },
+          error =>{
+            console.log(error);
+            let erros = error.error;
+            if(Array.isArray(erros)){
+              let erro = "";
+              for(let i=0; i< erros.length; i++){
+                  erro += (erros[i]) + "\n";
+              }
+              this.toastService.toast(erro);
+            }else{
+              this.toastService.toast(erros);
+            }
           });
 
         }
@@ -85,6 +98,8 @@ export class LoginPage {
           this.navCtrl.push(EventosComponent);
           console.log('Vai pra página de eventos');
         }
+        goToConfirmacao(){
+          //this.navCtrl.push(ConfirmacaoComponent);
+        }
 
       }
-
