@@ -36,13 +36,12 @@ export class LoginService{
 
   }
 
-  login (login: string, senha:string): Observable<Usuario>{
-
+  login (username: string, password:string): Observable<Usuario>{
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/json');
     return this.http.post<Usuario>(
       `${API}/api/auth/login`,
-      {username: login, password:senha, grant_type: 'password'},
+      {username: username, password:password, grant_type: 'password'},
       {headers: headers}).do(user => {
 
         let data = user.token.toString().split('.');
@@ -65,6 +64,15 @@ export class LoginService{
         `${API}/api/usuario`,
         {usuario}, {headers: headers});
       }
+
+      reenviar(): Observable<any>{
+
+        let headers = new HttpHeaders();
+        headers = headers.append('Authorization', 'Bearer '+this.getUsuarioLogado().token);
+        return this.http.get<any>(
+          `${API}/api/usuario/reenviar/`,
+          {headers: headers});
+        }
 
 
       logout(){

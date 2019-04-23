@@ -28,9 +28,9 @@
   <div [ngSwitch]="opt">
     <form *ngSwitchCase="'signin'">
 
-      <ion-input type="text" [(ngModel)]="usuario.login" placeholder="{{'Username' | translate}}" name="login"></ion-input>
+      <ion-input type="text" [(ngModel)]="usuario.username" placeholder="{{'Username' | translate}}" name="username"></ion-input>
 
-      <ion-input type="password" [(ngModel)]="usuario.senha" placeholder="{{'Password' | translate}}" name="senha"></ion-input>
+      <ion-input type="password" [(ngModel)]="usuario.password" placeholder="{{'Password' | translate}}" name="password"></ion-input>
 
 
       <div padding text-center>

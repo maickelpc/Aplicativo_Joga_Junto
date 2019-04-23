@@ -17,6 +17,7 @@ import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
 import { ToastService } from '../services/toast.service'
 import {EventosComponent} from "../components/eventos/eventos";
+import {ConfirmacaoComponent} from "../components/confirmacao/confirmacao";
 import {EventoService} from "../services/evento.service";
 
 // The translate loader needs to know where to load i18n files
@@ -29,10 +30,12 @@ export function createTranslateLoader(http: HttpClient) {
 @NgModule({
   declarations: [
     MyApp,
-    EventosComponent
+    EventosComponent,
+    ConfirmacaoComponent
   ],
   exports: [
-    EventosComponent
+    EventosComponent,
+    ConfirmacaoComponent
   ],
   imports: [
     BrowserModule,
@@ -50,7 +53,8 @@ export function createTranslateLoader(http: HttpClient) {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    EventosComponent
+    EventosComponent,
+    ConfirmacaoComponent
   ],
   providers: [
     Items,

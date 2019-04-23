@@ -139,7 +139,7 @@ class UsuarioController extends Controller
         Mail::to($usuario->email)
         ->send( new SendMailConfirmaCadastro($usuario));
       }catch(Exception $ex){
-        throw new Exception("Não foi possível validar o seu email!");
+        //throw new Exception("Não foi possível validar o seu email!");
       }
       // $usuario->endereco_id = $endereco->id;
 

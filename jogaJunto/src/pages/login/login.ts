@@ -7,6 +7,7 @@ import { Usuario } from "../../models/usuario";
 import { LoginService } from '../../services/login.service'
 import { ToastService } from '../../services/toast.service'
 import {EventosComponent} from "../../components/eventos/eventos";
+import {ConfirmacaoComponent} from "../../components/confirmacao/confirmacao"
 
 
 @IonicPage()
@@ -57,13 +58,16 @@ export class LoginPage {
     }
 
     login(){
-
       this.loginService.login(this.usuario.username, this.usuario.password)
       .subscribe(
         dados =>{
-
           this.toastService.toast("Bem Vindo " + this.usuario.username );
-          this.goToListaEventos();
+          if(this.loginService.getUsuarioLogado().email_verified_at == null){
+            this.goToConfirmacao();
+          }else{
+            this.goToListaEventos();
+          }
+
         },
         error => {
           this.toastService.toast("Credenciais inválidas");
@@ -94,12 +98,15 @@ export class LoginPage {
           });
 
         }
+
+
         goToListaEventos() {
           this.navCtrl.push(EventosComponent);
           console.log('Vai pra página de eventos');
         }
         goToConfirmacao(){
-          //this.navCtrl.push(ConfirmacaoComponent);
+          console.log('Vai pra página de confirmacao');
+          this.navCtrl.push(ConfirmacaoComponent);
         }
 
       }
