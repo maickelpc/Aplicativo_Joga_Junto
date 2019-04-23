@@ -543,6 +543,8 @@ var ConfirmacaoComponent = (function () {
     function ConfirmacaoComponent(login, toast) {
         this.login = login;
         this.toast = toast;
+        this.texto1 = '';
+        this.texto2 = '';
         console.log('Hello ConfirmacaoComponent Component');
     }
     ConfirmacaoComponent.prototype.reenviar = function () {
@@ -552,11 +554,12 @@ var ConfirmacaoComponent = (function () {
     };
     ConfirmacaoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'confirmacao',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirmacao/confirmacao.html"*/`<!--\nGenerated template for the ListFriendsPage page.\n\nSee http://ionicframework.com/docs/components/#navigation for more info on\nIonic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Ativação de Cadastro</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding-top>\n\n  <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <h2 stacked>{{ \'Activation Code\' | translate }}</h2>\n        <ion-input type="text" value=""></ion-input>\n        - \n        <ion-input type="text" value=""></ion-input>\n      </ion-col>\n    </ion-row>\n\n    <ion-row>\n      <ion-col col-6>\n        <button ion-button block round color="light" icon-right >\n          {{ \'Activate\' | translate }} <ion-icon name="done-all"></ion-icon>\n        </button>\n      </ion-col>\n      <ion-col col-6>\n        <button ion-button block round color="light" icon-right (click)="reenviar()">\n          {{ \'Resend\' | translate }} <ion-icon name="paper-plane"></ion-icon>\n        </button>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirmacao/confirmacao.html"*/
+            selector: 'confirmacao',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirmacao/confirmacao.html"*/`<!--\nGenerated template for the ListFriendsPage page.\n\nSee http://ionicframework.com/docs/components/#navigation for more info on\nIonic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>Ativação de Cadastro</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding-top>\n\n  <ion-grid>\n    <ion-row>\n      <ion-col col-12>\n        <h2 stacked>{{ \'Activation Code\' | translate }}</h2>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-5>\n        <ion-input maxlength="4" type="text" [(ngModel)]="texto1"></ion-input>\n      </ion-col>\n      <ion-col col-2>\n        <h2>-</h2>\n      </ion-col>\n      <ion-col col-5>\n        <ion-input maxlength="4" type="text" [(ngModel)]="texto2"></ion-input>\n      </ion-col>\n    </ion-row>\n    <ion-row>\n      <ion-col col-6>\n        <button ion-button block round color="light" icon-right [disabled]="!(texto1.length==4 && texto2.length==4)" >\n          {{ \'Activate\' | translate }} <ion-icon name="done-all"></ion-icon>\n        </button>\n      </ion-col>\n      <ion-col col-6>\n        <button ion-button block round color="light" icon-right (click)="reenviar()">\n          {{ \'Resend\' | translate }} <ion-icon name="paper-plane"></ion-icon>\n        </button>\n      </ion-col>\n    </ion-row>\n  </ion-grid>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirmacao/confirmacao.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_login_service__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_2__services_toast_service__["a" /* ToastService */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_login_service__["a" /* LoginService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_toast_service__["a" /* ToastService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_toast_service__["a" /* ToastService */]) === "function" && _b || Object])
     ], ConfirmacaoComponent);
     return ConfirmacaoComponent;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=confirmacao.js.map

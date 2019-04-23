@@ -6,11 +6,18 @@ confirmacao {
   .item {
     background-color: color($colors, primary);
   }
+  ion-input {
+  input {
+    text-align: center;
+  }
+}
 
   h2{
     color: white;
   }
-
+  ion-col{
+    text-align: center;
+  }
   ion-label {
     text-align: left;
     margin: 0;

@@ -13,7 +13,8 @@ import {ToastService} from "../../services/toast.service";
 })
 export class ConfirmacaoComponent {
 
-
+  texto1: string = '';
+  texto2: string = '';
 
   constructor(private login:LoginService, private toast: ToastService) {
     console.log('Hello ConfirmacaoComponent Component');

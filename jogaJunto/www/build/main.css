@@ -27988,8 +27988,16 @@ confirmacao .item {
   background-color: #306dd8;
 }
 
+confirmacao ion-input input {
+  text-align: center;
+}
+
 confirmacao h2 {
   color: white;
+}
+
+confirmacao ion-col {
+  text-align: center;
 }
 
 confirmacao ion-label {
