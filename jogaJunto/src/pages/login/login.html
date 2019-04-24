@@ -71,7 +71,7 @@
         <ion-item>
           <ion-label>{{ 'Date of birth' | translate }}</ion-label>
           <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"
-          placeholder="{{'Select Date' | translate}}" max="{{ today() | date:'yyyy-MM-dd' }}"
+          placeholder="{{'Select Date' | translate}}" max="{{ maxDataNasc() | date:'yyyy-MM-dd' }}"
           name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>
         </ion-item>
 

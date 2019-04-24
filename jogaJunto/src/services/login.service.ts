@@ -29,6 +29,8 @@ export class LoginService{
         this.usuario = JSON.parse(user);
         var agora = Date.now() / 1000;
         if(this.usuario === null || agora > this.usuario.exp){
+          console.log(this.usuario.exp);
+          console.log("token expirado!");
           this.logout();
         }
     });
@@ -50,6 +52,8 @@ export class LoginService{
         this.usuario.token = user.token.toString();
         console.log(this.usuario);
         this.storage.set('loggedUser', JSON.stringify(this.usuario));
+        this.storage.get('loggedUser').then(user =>{
+            console.log('user')});
         console.log("Usuario Salvo na localStorage");
       });
 
@@ -64,6 +68,22 @@ export class LoginService{
         `${API}/api/usuario`,
         {usuario}, {headers: headers});
       }
+
+    ativar(){
+      this.storage.get('loggedUser').then(user =>{
+          this.usuario = JSON.parse(user);
+        });
+      this.usuario.email_verified_at = new Date();
+      this.storage.set('loggedUser', JSON.stringify(this.usuario));
+    }
+
+    confirmar(codigo : string){
+      let headers = new HttpHeaders();
+      headers = headers.append('Content-type', 'application/json');
+      return this.http.get<any>(
+        `${API}/api/usuario/confirmar/${this.getUsuarioLogado().id}/${codigo}`,
+      {headers: headers});
+    }
 
       reenviar(): Observable<any>{
 

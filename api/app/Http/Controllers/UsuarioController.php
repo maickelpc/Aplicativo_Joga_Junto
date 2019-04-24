@@ -64,18 +64,23 @@ class UsuarioController extends Controller
 
     try{
       DB::beginTransaction();
+
       $usuario = Usuario::findOrFail($idUsuario);
+
       if($usuario->email_verified_at != null)
         throw new Exception("");
-
 
       if(strcasecmp($usuario->remember_token, $codigoConfirmacao) == 0){
         $usuario->email_verified_at = Carbon::now();
         $usuario->remember_token = null;
         $usuario->save();
+        try{
+          Mail::to($usuario->email)
+          ->send( new SendConfirmaAtivacao($usuario));
+        }catch(Exception $ex){
 
-        Mail::to($usuario->email)
-        ->send( new SendConfirmaAtivacao($usuario));
+        }
+
 
       }else{
         throw new Exception("");
@@ -124,6 +129,9 @@ class UsuarioController extends Controller
       }catch(Exception $ex){
         throw new Exception("Data de nascimento informada em formato inválido");
       }
+      $idade = Carbon::now()->diffInYears($usuario->dataNascimento);
+      if($idade < 18)
+        throw new Exception("Idade mínima para cadastro é 18 anos");
       $usuario->username = $dados->get('username');
       $usuario->password = bcrypt($dados->get('password'));
       $usuario->idFacebook = $dados->get('idFacebook');

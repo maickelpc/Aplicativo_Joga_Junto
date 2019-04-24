@@ -23,18 +23,20 @@ Ionic pages and navigation.
     </ion-row>
     <ion-row>
       <ion-col col-5>
-        <ion-input maxlength="4" type="text" [(ngModel)]="texto1"></ion-input>
+        <ion-input text-uppercase maxlength="4" type="text" [(ngModel)]="texto1"></ion-input>
       </ion-col>
       <ion-col col-2>
         <h2>-</h2>
       </ion-col>
       <ion-col col-5>
-        <ion-input maxlength="4" type="text" [(ngModel)]="texto2"></ion-input>
+        <ion-input text-uppercase maxlength="4" type="text" [(ngModel)]="texto2"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col col-6>
-        <button ion-button block round color="light" icon-right [disabled]="!(texto1.length==4 && texto2.length==4)" >
+        <button ion-button block round color="light" icon-right
+        (click)="confirmar()"
+        [disabled]="!(texto1.length==4 && texto2.length==4)" >
           {{ 'Activate' | translate }} <ion-icon name="done-all"></ion-icon>
         </button>
       </ion-col>

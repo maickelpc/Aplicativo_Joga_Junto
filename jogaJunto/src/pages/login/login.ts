@@ -48,8 +48,10 @@ export class LoginPage {
 
     }
 
-    today(){
-      return new Date();
+    maxDataNasc(){
+      let max = new Date();
+      max.setFullYear(max.getFullYear() - 18);
+      return max;
     }
 
     teste(){
