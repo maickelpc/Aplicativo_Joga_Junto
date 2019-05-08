@@ -1,12 +1,14 @@
+import { LoginPage } from './../pages/login/login';
 import { Component, ViewChild } from '@angular/core';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
-import { Config, Nav, Platform } from 'ionic-angular';
+import { Config, Nav, Platform, Events, MenuController } from 'ionic-angular';
 
 
 import { FirstRunPage } from '../pages/pages';
 import {UserProvider} from "../providers/user/user";
+import { EventosComponent } from '../components/eventos/eventos';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class MyApp {
     { icon: 'log-out', title: 'Logout', component: 'LoginPage' }
   ];
 
-  constructor(public userProvider: UserProvider, private translate: TranslateService, platform: Platform, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen) {
+  constructor(public menuCtrl: MenuController, public userProvider: UserProvider, private translate: TranslateService, platform: Platform, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen, events:Events) {
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -31,6 +33,23 @@ export class MyApp {
       this.splashScreen.hide();
     });
     this.initTranslate();
+
+    events.subscribe('user:loggedin',()=>{
+      this.pages = [
+                    {title:'Home', component: EventosComponent},
+                    {title:'Logout', component: null}
+                    ];
+                    this.menuCtrl.enable(true);
+      
+    });
+
+      events.subscribe('user:loggedout',()=>{
+      this.pages = [
+                    {title:'Login', component: LoginPage}
+                    ];
+                    this.menuCtrl.enable(false);
+    });
+
   }
 
   initTranslate() {

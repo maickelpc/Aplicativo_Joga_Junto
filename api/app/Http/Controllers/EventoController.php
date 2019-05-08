@@ -6,6 +6,7 @@ use App\Evento;
 use App\Usuario;
 use App\UsuarioEvento;
 use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
+use App\Http\Resources\Evento as EventoResource;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -48,9 +49,9 @@ class EventoController extends Controller
      * @param  \App\Evento  $evento
      * @return \Illuminate\Http\Response
      */
-    public function show(Evento $evento)
+    public function show($id)
     {
-        //
+        return new EventoResource(Evento::find($id));
     }
 
     /**

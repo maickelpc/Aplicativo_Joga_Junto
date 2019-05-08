@@ -9,7 +9,7 @@ import { Usuario } from '../models/usuario'
 
 import { API } from './api.config'
 import {LoginService} from "./login.service";
-import {UsuarioEvento} from "../models/evento";
+import {Evento, UsuarioEvento} from "../models/evento";
 
 @Injectable()
 export class EventoService{
@@ -27,4 +27,11 @@ export class EventoService{
       {headers: headers}).map(x => x.data);
     }
 
+    carregaEvento(id): Observable<Evento> {
+      let headers = new HttpHeaders();
+      headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+      return this.http.get<any>(
+        `${API}/api/evento/`+id,
+        {headers: headers}).map(x => x.data);
+    }
   }

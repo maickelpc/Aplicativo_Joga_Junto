@@ -28015,6 +28015,38 @@ confirmacao ion-input {
   margin: 0 0 10px 0;
 }
 
+evento #map {
+  height: 300px;
+}
+
+evento .content {
+  background-color: #306dd8;
+}
+
+evento .item {
+  background-color: #306dd8;
+}
+
+evento .bg-branco {
+  background-color: white;
+}
+
+evento ion-label {
+  color: #f7f7f7;
+  text-align: center;
+  margin: 0;
+}
+
+evento .label {
+  margin: 0 0 5px 0;
+}
+
+evento ion-input {
+  background-color: #fff;
+  border-radius: 500px;
+  margin: 0 0 25px 0;
+}
+
 eventos .content {
   background-color: #306dd8;
 }

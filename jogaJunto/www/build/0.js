@@ -1,15 +1,14 @@
 webpackJsonp([0],{
 
-/***/ 340:
+/***/ 341:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoginPageModule", function() { return LoginPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChatRoomPageModule", function() { return ChatRoomPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login__ = __webpack_require__(346);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__chat_room__ = __webpack_require__(346);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -19,28 +18,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-
-var LoginPageModule = (function () {
-    function LoginPageModule() {
+var ChatRoomPageModule = (function () {
+    function ChatRoomPageModule() {
     }
-    LoginPageModule = __decorate([
+    ChatRoomPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */],
+                __WEBPACK_IMPORTED_MODULE_2__chat_room__["a" /* ChatRoomPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */]),
-                __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["b" /* TranslateModule */].forChild()
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__chat_room__["a" /* ChatRoomPage */]),
             ],
-            exports: [
-                __WEBPACK_IMPORTED_MODULE_3__login__["a" /* LoginPage */]
-            ]
         })
-    ], LoginPageModule);
-    return LoginPageModule;
+    ], ChatRoomPageModule);
+    return ChatRoomPageModule;
 }());
 
-//# sourceMappingURL=login.module.js.map
+//# sourceMappingURL=chat-room.module.js.map
 
 /***/ }),
 
@@ -48,17 +42,16 @@ var LoginPageModule = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChatRoomPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(118);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(347);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_login_service__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_toast_service__ = __webpack_require__(119);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(120);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirmacao_confirmacao__ = __webpack_require__(232);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_util_util__ = __webpack_require__(230);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_user__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__ = __webpack_require__(232);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mocks_messageMocks__ = __webpack_require__(233);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_message__ = __webpack_require__(347);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -77,104 +70,74 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-var LoginPage = (function () {
-    function LoginPage(http, userProvider, menuCtrl, navCtrl, translateService, loginService, toastService) {
-        var _this = this;
+/**
+ * Generated class for the ChatRoomPage page.
+ *
+ * See https://ionicframework.com/docs/components/#navigation for more info on
+ * Ionic pages and navigation.
+ */
+var ChatRoomPage = (function () {
+    function ChatRoomPage(msgMocks, http, navCtrl, navParams) {
+        this.msgMocks = msgMocks;
         this.http = http;
-        this.userProvider = userProvider;
-        this.menuCtrl = menuCtrl;
         this.navCtrl = navCtrl;
-        this.translateService = translateService;
-        this.loginService = loginService;
-        this.toastService = toastService;
-        // The account fields for the login form.
-        // If you're using the username field with or without email, make
-        // sure to add it to the type
-        this.usuario = new __WEBPACK_IMPORTED_MODULE_5__models_usuario__["a" /* Usuario */]();
-        this.cadastro = false;
-        this.opt = 'signin';
-        this.menuCtrl.enable(false);
-        this.translateService.get('LOGIN_ERROR').subscribe(function (value) {
-            _this.loginErrorString = value;
-        });
+        this.navParams = navParams;
+        this.Util = __WEBPACK_IMPORTED_MODULE_2__providers_util_util__["a" /* Util */];
+        this.friend = new __WEBPACK_IMPORTED_MODULE_3__models_user__["a" /* Friend */]();
+        this.myProfile = new __WEBPACK_IMPORTED_MODULE_3__models_user__["b" /* User */]();
+        this.input = '';
+        this.isLoading = true;
     }
-    LoginPage.prototype.maxDataNasc = function () {
-        var max = new Date();
-        max.setFullYear(max.getFullYear() - 18);
-        return max;
-    };
-    LoginPage.prototype.teste = function () {
-        console.log(this.loginService.getUsuarioLogado());
-        this.toastService.toast("TESTE");
-    };
-    LoginPage.prototype.login = function () {
+    ChatRoomPage.prototype.ionViewDidLoad = function () {
         var _this = this;
-        this.loginService.login(this.usuario.username, this.usuario.password)
-            .subscribe(function (dados) {
-            _this.toastService.toast("Bem Vindo " + _this.usuario.username);
-            if (_this.loginService.getUsuarioLogado().email_verified_at == null) {
-                _this.goToConfirmacao();
-            }
-            else {
-                _this.goToListaEventos();
-            }
-        }, function (error) {
-            _this.toastService.toast("Credenciais inválidas");
-            console.log(JSON.stringify(error));
+        this.isLoading = true;
+        this.messages = this.msgMocks.items;
+        this.friend = this.navParams.get('friend');
+        Object(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__["forkJoin"])(this.http.get('my-profile.json')).subscribe(function (_a) {
+            var profile = _a[0];
+            _this.isLoading = false;
+            _this.myProfile = profile;
         });
     };
-    LoginPage.prototype.cadastrar = function () {
+    ChatRoomPage.prototype.ionViewWillEnter = function () {
+        this.scrollToBottom();
+    };
+    ChatRoomPage.prototype.scrollToBottom = function () {
         var _this = this;
-        console.log(JSON.stringify(this.usuario));
-        this.loginService.cadastrar(this.usuario)
-            .subscribe(function (x) {
-            console.log("Deu Certo " + JSON.stringify(_this.usuario));
-            _this.login();
-        }, function (error) {
-            console.log(error);
-            var erros = error.error;
-            if (Array.isArray(erros)) {
-                var erro = "";
-                for (var i = 0; i < erros.length; i++) {
-                    erro += (erros[i]) + "\n";
-                }
-                _this.toastService.toast(erro);
-            }
-            else {
-                _this.toastService.toast(erros);
-            }
+        setTimeout(function () {
+            _this.content.scrollToBottom(300);
         });
     };
-    LoginPage.prototype.goToListaEventos = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__["a" /* EventosComponent */]);
-        console.log('Vai pra página de eventos');
+    ChatRoomPage.prototype.doSend = function () {
+        if (this.input.length > 0) {
+            var message = new __WEBPACK_IMPORTED_MODULE_7__models_message__["a" /* Message */]();
+            message.to = this.friend.username;
+            message.from = 'me';
+            message.content = this.input;
+            this.msgMocks.add(message);
+            this.scrollToBottom();
+            this.input = '';
+        }
     };
-    LoginPage.prototype.goToConfirmacao = function () {
-        console.log('Vai pra página de confirmacao');
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_9__components_confirmacao_confirmacao__["a" /* ConfirmacaoComponent */]);
-    };
-    LoginPage = __decorate([
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* Content */]),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* Content */])
+    ], ChatRoomPage.prototype, "content", void 0);
+    ChatRoomPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-login',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/`<!--<ion-header>\n\n<ion-navbar>\n<ion-title>Temo Chat Theme fo Ionic</ion-title>\n</ion-navbar>\n\n</ion-header>-->\n\n\n<ion-content padding>\n\n  <div [hidden]="cadastro" id="logo" padding text-center>\n\n    <img src="./assets/img/logo.png">\n  </div>\n\n  <div padding>\n    <ion-segment [(ngModel)]="opt" color="light">\n      <ion-segment-button value="signin" (click)="cadastro = false">\n        {{ \'LOGIN\' | translate }}\n      </ion-segment-button>\n      <ion-segment-button value="signup" (click)="cadastro = true">\n        {{ \'SIGNUP\' | translate }}\n      </ion-segment-button>\n    </ion-segment>\n  </div>\n\n  <div [ngSwitch]="opt">\n    <form *ngSwitchCase="\'signin\'">\n\n      <ion-input type="text" [(ngModel)]="usuario.username" placeholder="{{\'Username\' | translate}}" name="username"></ion-input>\n\n      <ion-input type="password" [(ngModel)]="usuario.password" placeholder="{{\'Password\' | translate}}" name="password"></ion-input>\n\n\n      <div padding text-center>\n        <button ion-button round color="light" icon-right (click)="login()">\n          {{ \'LOGIN\' | translate }} <ion-icon name="log-in"></ion-icon>\n        </button>\n\n      </div>\n\n\n    </form>\n\n    <form  *ngSwitchCase="\'signup\'">\n      <ion-item>\n        <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.nome" name="nome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Lastname\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.sobrenome" name="sobrenome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Email\' | translate }}</ion-label>\n        <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>\n      </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Password\' | translate }}</ion-label>\n          <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Retry Password\' | translate }}</ion-label>\n          <ion-input type="password"  [(ngModel)]="usuario.repassword" name="repassword"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label>{{ \'Date of birth\' | translate }}</ion-label>\n          <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n          placeholder="{{\'Select Date\' | translate}}" max="{{ maxDataNasc() | date:\'yyyy-MM-dd\' }}"\n          name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>\n        </ion-item>\n\n        <div padding text-center>\n          <button ion-button round color="light" icon-right (click)="cadastrar()">\n            {{ \'SIGNUP\' | translate }} <ion-icon name="person-add"></ion-icon>\n          </button>\n        </div>\n\n\n      </form>\n\n\n    </div>\n  </ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/
+            selector: 'page-chat-room',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/chat-room/chat-room.html"*/`<!--\n  Generated template for the ChatRoomPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{ friend.fullname }}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding *ngIf="!isLoading">\n\n  <div class="message-wrap">\n\n    <div *ngFor="let msg of messages">\n\n      <div class="sender" *ngIf="msg.from == friend.username && msg.to == \'me\' ">\n\n        <ion-grid>\n          <ion-row>\n            <ion-col col-2 text-left>\n              <img class="friend-img" [src]="Util.pathAvatar(friend.avatar)" alt="">\n            </ion-col>\n            <ion-col col-10>\n              <p>{{msg.content}}</p>\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </div>\n\n      <div class="me" *ngIf="msg.from == \'me\' && msg.to == friend.username">\n        <ion-grid>\n          <ion-row>\n            <ion-col col-10>\n              <p>{{msg.content}}</p>\n            </ion-col>\n            <ion-col col-2>\n              <img class="friend-img" [src]="Util.pathAvatar(myProfile.avatar)" alt="">\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </div>\n    </div>\n  </div>\n\n</ion-content>\n\n<ion-footer no-border>\n  <ion-toolbar color="primary">\n    <ion-textarea (keyup.enter)="doSend()" [(ngModel)]="input" placeholder="Enter your message" name="message"></ion-textarea>\n    <ion-buttons end>\n      <button (click)="doSend()" ion-button icon-only >\n        <ion-icon name="send" color="light"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-toolbar>\n\n</ion-footer>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/chat-room/chat-room.html"*/,
         })
         /**
-        * @author: KMR
-        * @email: yajuve.25.dz@gmail.com
-        */
+         * @author: KMR
+         * @email: yajuve.25.dz@gmail.com
+         */
         ,
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */],
-            __WEBPACK_IMPORTED_MODULE_3__providers_user_user__["a" /* UserProvider */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["g" /* MenuController */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["i" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["c" /* TranslateService */],
-            __WEBPACK_IMPORTED_MODULE_6__services_login_service__["a" /* LoginService */],
-            __WEBPACK_IMPORTED_MODULE_7__services_toast_service__["a" /* ToastService */]])
-    ], LoginPage);
-    return LoginPage;
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__mocks_messageMocks__["a" /* MessageMocks */], __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]])
+    ], ChatRoomPage);
+    return ChatRoomPage;
 }());
 
-//# sourceMappingURL=login.js.map
+//# sourceMappingURL=chat-room.js.map
 
 /***/ }),
 
@@ -182,15 +145,17 @@ var LoginPage = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Usuario; });
-var Usuario = (function () {
-    function Usuario() {
-        this.dataNascimento = new Date();
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Message; });
+var Message = (function () {
+    function Message() {
+        this.from = '';
+        this.to = '';
+        this.content = '';
     }
-    return Usuario;
+    return Message;
 }());
 
-//# sourceMappingURL=usuario.js.map
+//# sourceMappingURL=message.js.map
 
 /***/ })
 

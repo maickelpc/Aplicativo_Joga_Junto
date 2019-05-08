@@ -1,14 +1,14 @@
 webpackJsonp([1],{
 
-/***/ 338:
+/***/ 345:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ChatRoomPageModule", function() { return ChatRoomPageModule; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ProfileFriendPageModule", function() { return ProfileFriendPageModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__chat_room__ = __webpack_require__(343);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__profile_friend__ = __webpack_require__(350);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,40 +18,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 
 
 
-var ChatRoomPageModule = (function () {
-    function ChatRoomPageModule() {
+var ProfileFriendPageModule = (function () {
+    function ProfileFriendPageModule() {
     }
-    ChatRoomPageModule = __decorate([
+    ProfileFriendPageModule = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["I" /* NgModule */])({
             declarations: [
-                __WEBPACK_IMPORTED_MODULE_2__chat_room__["a" /* ChatRoomPage */],
+                __WEBPACK_IMPORTED_MODULE_2__profile_friend__["a" /* ProfileFriendPage */],
             ],
             imports: [
-                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["f" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__chat_room__["a" /* ChatRoomPage */]),
+                __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["g" /* IonicPageModule */].forChild(__WEBPACK_IMPORTED_MODULE_2__profile_friend__["a" /* ProfileFriendPage */]),
             ],
         })
-    ], ChatRoomPageModule);
-    return ChatRoomPageModule;
+    ], ProfileFriendPageModule);
+    return ProfileFriendPageModule;
 }());
 
-//# sourceMappingURL=chat-room.module.js.map
+//# sourceMappingURL=profile-friend.module.js.map
 
 /***/ }),
 
-/***/ 343:
+/***/ 350:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ChatRoomPage; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ProfileFriendPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__providers_util_util__ = __webpack_require__(227);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_user__ = __webpack_require__(229);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(228);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__ = __webpack_require__(230);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__mocks_messageMocks__ = __webpack_require__(231);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__models_message__ = __webpack_require__(344);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__models_user__ = __webpack_require__(231);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_util_util__ = __webpack_require__(230);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -65,97 +60,40 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
-
-
-
-
-
 /**
- * Generated class for the ChatRoomPage page.
+ * Generated class for the ProfileFriendPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
  */
-var ChatRoomPage = (function () {
-    function ChatRoomPage(msgMocks, http, navCtrl, navParams) {
-        this.msgMocks = msgMocks;
-        this.http = http;
+var ProfileFriendPage = (function () {
+    function ProfileFriendPage(navCtrl, navParams) {
         this.navCtrl = navCtrl;
         this.navParams = navParams;
-        this.Util = __WEBPACK_IMPORTED_MODULE_2__providers_util_util__["a" /* Util */];
-        this.friend = new __WEBPACK_IMPORTED_MODULE_3__models_user__["a" /* Friend */]();
-        this.myProfile = new __WEBPACK_IMPORTED_MODULE_3__models_user__["b" /* User */]();
-        this.input = '';
-        this.isLoading = true;
+        this.Util = __WEBPACK_IMPORTED_MODULE_3__providers_util_util__["a" /* Util */];
+        this.profile = new __WEBPACK_IMPORTED_MODULE_2__models_user__["a" /* Friend */]();
     }
-    ChatRoomPage.prototype.ionViewDidLoad = function () {
-        var _this = this;
-        this.isLoading = true;
-        this.messages = this.msgMocks.items;
-        this.friend = this.navParams.get('friend');
-        Object(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_forkJoin__["forkJoin"])(this.http.get('my-profile.json')).subscribe(function (_a) {
-            var profile = _a[0];
-            _this.isLoading = false;
-            _this.myProfile = profile;
-        });
+    ProfileFriendPage.prototype.ionViewDidLoad = function () {
+        this.profile = this.navParams.get('friend');
     };
-    ChatRoomPage.prototype.ionViewWillEnter = function () {
-        this.scrollToBottom();
+    ProfileFriendPage.prototype.goToChatRoom = function () {
+        this.navCtrl.push('ChatRoomPage', { friend: this.profile });
     };
-    ChatRoomPage.prototype.scrollToBottom = function () {
-        var _this = this;
-        setTimeout(function () {
-            _this.content.scrollToBottom(300);
-        });
-    };
-    ChatRoomPage.prototype.doSend = function () {
-        if (this.input.length > 0) {
-            var message = new __WEBPACK_IMPORTED_MODULE_7__models_message__["a" /* Message */]();
-            message.to = this.friend.username;
-            message.from = 'me';
-            message.content = this.input;
-            this.msgMocks.add(message);
-            this.scrollToBottom();
-            this.input = '';
-        }
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["_8" /* ViewChild */])(__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* Content */]),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["b" /* Content */])
-    ], ChatRoomPage.prototype, "content", void 0);
-    ChatRoomPage = __decorate([
+    ProfileFriendPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-chat-room',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/chat-room/chat-room.html"*/`<!--\n  Generated template for the ChatRoomPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{ friend.fullname }}</ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding *ngIf="!isLoading">\n\n  <div class="message-wrap">\n\n    <div *ngFor="let msg of messages">\n\n      <div class="sender" *ngIf="msg.from == friend.username && msg.to == \'me\' ">\n\n        <ion-grid>\n          <ion-row>\n            <ion-col col-2 text-left>\n              <img class="friend-img" [src]="Util.pathAvatar(friend.avatar)" alt="">\n            </ion-col>\n            <ion-col col-10>\n              <p>{{msg.content}}</p>\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </div>\n\n      <div class="me" *ngIf="msg.from == \'me\' && msg.to == friend.username">\n        <ion-grid>\n          <ion-row>\n            <ion-col col-10>\n              <p>{{msg.content}}</p>\n            </ion-col>\n            <ion-col col-2>\n              <img class="friend-img" [src]="Util.pathAvatar(myProfile.avatar)" alt="">\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </div>\n    </div>\n  </div>\n\n</ion-content>\n\n<ion-footer no-border>\n  <ion-toolbar color="primary">\n    <ion-textarea (keyup.enter)="doSend()" [(ngModel)]="input" placeholder="Enter your message" name="message"></ion-textarea>\n    <ion-buttons end>\n      <button (click)="doSend()" ion-button icon-only >\n        <ion-icon name="send" color="light"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-toolbar>\n\n</ion-footer>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/chat-room/chat-room.html"*/,
+            selector: 'page-profile-friend',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/profile-friend/profile-friend.html"*/`<!--\n  Generated template for the ProfileFriendPage page.\n\n  See http://ionicframework.com/docs/components/#navigation for more info on\n  Ionic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{ profile.fullname }}</ion-title>\n    <ion-buttons end>\n      <button (click)="goToChatRoom()" ion-button icon-only >\n        <ion-icon name="chatboxes"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n</ion-header>\n\n\n<ion-content padding-top>\n\n  <div text-center>\n    <img id="friend-avatar" [src]="Util.pathAvatar(profile.avatar)">\n  </div>\n\n  <ion-list>\n    <ion-item-group>\n      <ion-item-divider color="light" text-center>Full name</ion-item-divider>\n      <ion-item>{{ profile.fullname }}</ion-item>\n    </ion-item-group>\n    <ion-item-group>\n      <ion-item-divider color="light" text-center>Username</ion-item-divider>\n      <ion-item>{{ profile.username }}</ion-item>\n    </ion-item-group>\n  </ion-list>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/profile-friend/profile-friend.html"*/,
         })
         /**
          * @author: KMR
          * @email: yajuve.25.dz@gmail.com
          */
         ,
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_6__mocks_messageMocks__["a" /* MessageMocks */], __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["i" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavParams */]])
-    ], ChatRoomPage);
-    return ChatRoomPage;
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["j" /* NavController */], __WEBPACK_IMPORTED_MODULE_1_ionic_angular__["k" /* NavParams */]])
+    ], ProfileFriendPage);
+    return ProfileFriendPage;
 }());
 
-//# sourceMappingURL=chat-room.js.map
-
-/***/ }),
-
-/***/ 344:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Message; });
-var Message = (function () {
-    function Message() {
-        this.from = '';
-        this.to = '';
-        this.content = '';
-    }
-    return Message;
-}());
-
-//# sourceMappingURL=message.js.map
+//# sourceMappingURL=profile-friend.js.map
 
 /***/ })
 

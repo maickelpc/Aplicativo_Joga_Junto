@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { IonicPage, NavController, MenuController } from 'ionic-angular';
+import { IonicPage, NavController, MenuController, Events } from 'ionic-angular';
 import { UserProvider } from "../../providers/user/user";
 import { HttpProvider } from "../../providers/http/http";
 import { Usuario } from "../../models/usuario";
@@ -40,7 +40,8 @@ export class LoginPage {
     public navCtrl: NavController,
     public translateService: TranslateService,
     private loginService: LoginService,
-    private toastService : ToastService) {
+    private toastService : ToastService,
+    public events: Events) {
       this.menuCtrl.enable(false);
       this.translateService.get('LOGIN_ERROR').subscribe((value) => {
         this.loginErrorString = value;
@@ -67,6 +68,7 @@ export class LoginPage {
           if(this.loginService.getUsuarioLogado().email_verified_at == null){
             this.goToConfirmacao();
           }else{
+            this.events.publish('user:loggedin');
             this.goToListaEventos();
           }
 

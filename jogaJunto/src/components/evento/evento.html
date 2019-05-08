@@ -1,0 +1,25 @@
+<!-- Generated template for the EventoComponent component -->
+
+<ion-header>
+  <ion-navbar>
+      <ion-buttons left>
+          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>
+      </ion-buttons>
+
+      <ion-title>
+        {{ evento.descricao }}
+      </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding class="bg-branco">
+  <ion-row>
+      <ion-col col-12>
+        <h4>{{ evento.descricao }}</h4>
+      </ion-col>
+  </ion-row>
+  <ion-row padding>
+    <div id="map" #map></div>
+  </ion-row>
+
+</ion-content>

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Usuario;
 use App\Evento as EventoModel;
+use App\Local;
 
 class UsuarioEvento extends JsonResource
 {
@@ -20,6 +21,8 @@ class UsuarioEvento extends JsonResource
             'id' => $this->id,
             'usuario' => Usuario::where('id', $this->usuario_id)->first(),
             'evento' => EventoModel::where('id', $this->evento_id)->first(),
+            'local' => Local::where('id', $this->evento->local_id)->first(),
+            'participantes' => $this->evento->participantes(),
             'situacao' => $this->situacao,
             'dataConfirmacao' => $this->dataConfirmacao,
             'dataCancelamento' => $this->dataCancelamento,

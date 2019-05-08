@@ -19,6 +19,7 @@ import { ToastService } from '../services/toast.service'
 import {EventosComponent} from "../components/eventos/eventos";
 import {ConfirmacaoComponent} from "../components/confirmacao/confirmacao";
 import {EventoService} from "../services/evento.service";
+import {EventoComponent} from "../components/evento/evento";
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -31,11 +32,13 @@ export function createTranslateLoader(http: HttpClient) {
   declarations: [
     MyApp,
     EventosComponent,
-    ConfirmacaoComponent
+    ConfirmacaoComponent,
+    EventoComponent
   ],
   exports: [
     EventosComponent,
-    ConfirmacaoComponent
+    ConfirmacaoComponent,
+    EventoComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +57,8 @@ export function createTranslateLoader(http: HttpClient) {
   entryComponents: [
     MyApp,
     EventosComponent,
-    ConfirmacaoComponent
+    ConfirmacaoComponent,
+    EventoComponent
   ],
   providers: [
     Items,

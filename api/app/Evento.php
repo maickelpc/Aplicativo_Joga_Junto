@@ -26,19 +26,19 @@ class Evento extends Model
     'created_at', 'updated_at', 'deleted_at'];
 
   public function local(){
-    return $this->hasMany('App\Local', 'local_id');
+    return $this->hasOne('App\Local', 'id', 'local_id');
   }
 
   public function esporte(){
-    return $this->hasMany('App\Esporte', 'esporte_id');
+    return $this->hasOne('App\Esporte', 'id', 'esporte_id');
   }
 
   public function usuarioResponsavel(){
-    return $this->hasMany('App\Usuario', 'usuarioResponsavel_id');
+    return $this->hasOne('App\Usuario', 'id', 'usuarioResponsavel_id');
   }
 
   public function participantes(){
-    return $this->hasMany('App\UsuarioEvento', 'evento_id');
+    return $this->hasMany('App\UsuarioEvento', 'evento_id', 'id');
   }
 
 }

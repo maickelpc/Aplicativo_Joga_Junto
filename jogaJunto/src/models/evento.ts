@@ -20,6 +20,7 @@ class Evento {
 class UsuarioEvento{
   usuario : Usuario
   evento : Evento
+  local: Local
   situacao : EventoSituacao
   dataConfirmacao : Date
   dataCancelamento : Date
