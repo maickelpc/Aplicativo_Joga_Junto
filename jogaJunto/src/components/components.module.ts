@@ -15,6 +15,10 @@ import { PerfilComponent } from './perfil/perfil';
 	exports: [EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
-    PerfilComponent]
+    PerfilComponent],
+		entryComponents:[EventosComponent,
+	    ConfirmacaoComponent,
+	    EventoComponent,
+	    PerfilComponent]
 })
 export class ComponentsModule {}

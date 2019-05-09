@@ -1,3 +1,36 @@
 perfil {
+  #map {
+    height: 300px;
+  }
+  .content {
+    background-color: color($colors, primary);
+  }
+  .item {
+    background-color: color($colors, primary);
+  }
 
+  .bg-branco {
+    background-color: white;
+  }
+
+  ion-label {
+    color: color($colors, light);
+    text-align: center;
+    margin: 0;
+  }
+
+  .label {
+    margin: 0 0 5px 0;
+  }
+
+  ion-input {
+    background-color: #fff;
+    border-radius: 500px;
+    margin: 0 0 25px 0;
+  }
+
+
+  ion-item-divider{
+    background-color: #fff;
+  }
 }

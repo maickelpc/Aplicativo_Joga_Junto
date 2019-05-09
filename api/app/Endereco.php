@@ -23,6 +23,6 @@ class Endereco extends Model
   protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
   public function cidade(){
-    return $this->belongsTo(Cidade, 'cidade_id');
+    return $this->belongsTo('App\Cidade', 'cidade_id');
   }
 }

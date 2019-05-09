@@ -7,7 +7,7 @@ import { IonicStorageModule, Storage } from '@ionic/storage';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
-
+import { IonicSelectableModule } from 'ionic-selectable';
 import { Items } from '../mocks/providers/items';
 import { MessageMocks } from '../mocks/messageMocks';
 import { MyApp } from './app.component';
@@ -19,7 +19,9 @@ import { ToastService } from '../services/toast.service'
 import {EventosComponent} from "../components/eventos/eventos";
 import {ConfirmacaoComponent} from "../components/confirmacao/confirmacao";
 import {EventoService} from "../services/evento.service";
+import {UsuarioService} from "../services/usuario.service";
 import {EventoComponent} from "../components/evento/evento";
+import {PerfilComponent} from "../components/perfil/perfil";
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -33,14 +35,17 @@ export function createTranslateLoader(http: HttpClient) {
     MyApp,
     EventosComponent,
     ConfirmacaoComponent,
-    EventoComponent
+    EventoComponent,
+    PerfilComponent
   ],
   exports: [
     EventosComponent,
     ConfirmacaoComponent,
-    EventoComponent
+    EventoComponent,
+    PerfilComponent
   ],
   imports: [
+    IonicSelectableModule,
     BrowserModule,
     HttpClientModule,
     TranslateModule.forRoot({
@@ -58,7 +63,8 @@ export function createTranslateLoader(http: HttpClient) {
     MyApp,
     EventosComponent,
     ConfirmacaoComponent,
-    EventoComponent
+    EventoComponent,
+    PerfilComponent
   ],
   providers: [
     Items,
@@ -72,7 +78,8 @@ export function createTranslateLoader(http: HttpClient) {
     UserProvider,
     LoginService,
     ToastService,
-    EventoService
+    EventoService,
+    UsuarioService
   ]
 })
 export class AppModule { }
