@@ -15,4 +15,8 @@ export class Util {
     return './assets/avatar/' + name;
   }
 
+  static pathImg(name: string):string {
+    return './assets/img/' + name;
+  }
+
 }

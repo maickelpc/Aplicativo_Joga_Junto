@@ -2,12 +2,12 @@
 
 <ion-header>
   <ion-navbar hideBackButton="true">
-    <button ion-button icon-only menuToggle style="display: block !important;">
+    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">
       <ion-icon name="menu"></ion-icon>
     </button>
 
-      <ion-title>
-        Eventos Agendados
+      <ion-title center class="titleicon toolbar-background">
+        <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
       </ion-title>
   </ion-navbar>
 </ion-header>
@@ -21,7 +21,7 @@
       <ion-row>
         <ion-col>
           <span icon-start clear small>
-            <ion-icon name="calendar">{{ evento.evento.data|date:'dd/MM/yyyy' }}</ion-icon>
+            <ion-icon name="calendar">{{ evento.evento.dataRealizacao|date:'dd/MM/yyyy' }}</ion-icon>
           </span>
         </ion-col>
         <ion-col>

@@ -7,12 +7,14 @@
 </ion-header>-->
 
 
-<ion-content padding>
-
-  <div [hidden]="cadastro" id="logo" padding text-center>
-
-    <img src="./assets/img/jogaJuntoLogo.png">
-  </div>
+<ion-content>
+  <ion-row style="background-color: white;" padding>
+    <ion-col s12>
+      <div [hidden]="cadastro" id="logo" text-center>
+        <img src="./assets/img/jogaJuntoLogo.png" width="80%">
+      </div>
+    </ion-col>
+  </ion-row>
 
   <div padding>
     <ion-segment [(ngModel)]="opt" color="light">
@@ -25,7 +27,7 @@
     </ion-segment>
   </div>
 
-  <div [ngSwitch]="opt">
+  <div [ngSwitch]="opt" padding>
     <form *ngSwitchCase="'signin'">
 
       <ion-input type="text" [(ngModel)]="usuario.username" placeholder="{{'Username' | translate}}" name="username"></ion-input>
@@ -43,7 +45,7 @@
 
     </form>
 
-    <form  *ngSwitchCase="'signup'">
+    <form  *ngSwitchCase="'signup'" padding>
       <ion-item>
         <ion-label stacked>{{ 'Name' | translate }}</ion-label>
         <ion-input type="text" [(ngModel)]="usuario.nome" name="nome"></ion-input>

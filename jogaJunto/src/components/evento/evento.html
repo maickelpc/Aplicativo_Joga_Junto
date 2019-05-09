@@ -7,16 +7,39 @@
       </ion-buttons>
 
       <ion-title>
-        {{ evento.descricao }}
+        Visualizar Evento
       </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding class="bg-branco">
   <ion-row>
-      <ion-col col-12>
-        <h4>{{ evento.descricao }}</h4>
-      </ion-col>
+    <ion-col col-5>
+      <ion-card>
+        <img [src]="Util.pathImg(evento.local.imagem)"/>
+        <ion-card-content style="background-color: white">
+          <p>
+            {{ evento.local.descricao }}
+          </p>
+        </ion-card-content>
+      </ion-card>
+    </ion-col>
+    <ion-col col-7>
+        <p>{{ evento.descricao }}</p>
+        <p>{{ evento.esporte.nome }} </p>
+        <p>
+          <span icon-start clear small>
+            <ion-icon name="calendar">{{ evento.dataRealizacao.getDate|date:'dd/MM/yyyy' }}{{ evento.horario }}</ion-icon>
+          </span>
+        </p>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col col-12>
+      <div *ngFor="let participante of evento.participantes">
+          {{ participante|json }}
+      </div>
+    </ion-col>
   </ion-row>
   <ion-row padding>
     <div id="map" #map></div>

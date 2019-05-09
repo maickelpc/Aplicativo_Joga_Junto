@@ -18,7 +18,7 @@ class CreateEventoTable extends Migration
             $table->integer('local_id')->unsigned();
             $table->integer('usuarioResponsavel_id')->unsigned();
             $table->integer('esporte_id')->unsigned();
-            $table->date('data');
+            $table->date('dataRealizacao');
             $table->time('horario');
             $table->string('descricao')->nullable();
             $table->integer('vagas')->unsigned();

@@ -1,3 +1,4 @@
+import { Util } from './../../providers/util/util';
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {EventoService} from "../../services/evento.service";
 import {Evento} from "../../models/evento";
@@ -18,6 +19,7 @@ declare var google: any;
 export class EventoComponent {
 
   public evento: Evento;
+  public Util = Util;
   @ViewChild('map') mapRef: ElementRef;
 
   constructor(private eventoService: EventoService,

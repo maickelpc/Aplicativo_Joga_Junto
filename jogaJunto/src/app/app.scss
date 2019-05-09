@@ -27,3 +27,7 @@
 img.circle {
   border-radius: 50%;
 }
+
+ion-header ion-icon.menu-button-icon.icon {
+  color: map-get($colors, primary);
+}
