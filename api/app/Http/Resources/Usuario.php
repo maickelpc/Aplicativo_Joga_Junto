@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Endereco;
+use App\Cidade;
 class Usuario extends JsonResource
 {
     /**
@@ -26,7 +27,7 @@ class Usuario extends JsonResource
           'latitude' => $this->latitude,
           'longitude' => $this->longitude,
           'email_verified_at' => $this->email_verified_at,
-          'endereco' => Endereco::find($this->endereco_id),
+          'endereco' => Endereco::with(['cidade', 'cidade.estado'])->find($this->endereco_id),
           'posicoes' => $this->posicoes,
           'created_at' => $this->created_at,
           'updated_at' => $this->updated_at

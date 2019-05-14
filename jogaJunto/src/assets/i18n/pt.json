@@ -83,5 +83,8 @@
   "SEARCH_PLACEHOLDER": "Search the items list, e.g. \"Donald Duck\"",
   "Activate": "Ativar",
   "Resend": "Reenviar",
-  "Activation Code": "Código de Ativação"
+  "Activation Code": "Código de Ativação",
+  "My Profile": "Meu Perfil",
+  "About me" : "Sobre mim",
+  "City" : "Cidade"
 }

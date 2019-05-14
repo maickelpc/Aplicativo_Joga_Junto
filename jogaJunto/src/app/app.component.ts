@@ -4,7 +4,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { TranslateService } from '@ngx-translate/core';
 import { Config, Nav, Platform, Events, MenuController } from 'ionic-angular';
-
+import { PerfilComponent } from '../components/perfil/perfil'
 
 import { FirstRunPage } from '../pages/pages';
 import {UserProvider} from "../providers/user/user";
@@ -37,10 +37,11 @@ export class MyApp {
     events.subscribe('user:loggedin',()=>{
       this.pages = [
                     {title:'Home', component: EventosComponent},
+                    {title:'Perfil', component: PerfilComponent},
                     {title:'Logout', component: null}
                     ];
                     this.menuCtrl.enable(true);
-      
+
     });
 
       events.subscribe('user:loggedout',()=>{

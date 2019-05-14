@@ -1,4 +1,88 @@
-<!-- Generated template for the PerfilComponent component -->
-<div>
-  {{text}}
-</div>
+<!--
+  Generated template for the MyProfilePage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{'My Profile' | translate}}</ion-title>
+    <ion-buttons end>
+      <button (click)="doSubmit()" ion-button icon-only >
+        <ion-icon name="checkmark"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+
+</ion-header>
+
+
+<ion-content padding-top *ngIf="!isLoading">
+
+
+
+  <form (submit)="doSubmit()">
+    <ion-list>
+      <div text-center style="background-color: white">
+
+        <ion-avatar>
+          <img id="my-avatar" [src]="Util.pathAvatar('Dylan.png')">
+        </ion-avatar>
+        <ion-item-divider  text-center>
+          <!-- <ion-icon name="information-circle"></ion-icon> -->
+          <div color="secondary">
+            <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>
+          </div>
+          <div *ngIf="usuario.endereco !== null" color="secondary">
+            <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>
+          </div>
+        </ion-item-divider>
+      </div>
+
+
+      <ion-item-divider color="light" text-center>
+        <h1>{{'About me' | translate}}</h1>
+        Sobre mim... blablablablabla
+      </ion-item-divider >
+
+      <ion-item>
+        <ion-label stacked>{{ 'Username' | translate }}</ion-label>
+        <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{ 'Fullname' | translate }}</ion-label>
+        <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{ 'EMAIL' | translate }}</ion-label>
+        <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>{{'City' | translate}}</ion-label>
+        <ionic-selectable
+        name="cidade"
+          item-content
+          [(ngModel)]="port"
+          [items]="ports"
+          itemValueField="id"
+          itemTextField="name"
+          [canSearch]="true"
+          (onChange)="portChange($event)">
+        </ionic-selectable>
+      </ion-item>
+
+
+      <div padding text text-center>
+        <button ion-button color="primary" icon-right>
+          {{ 'BTN.SUBMIT' | translate }} <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </div>
+
+    </ion-list>
+  </form>
+</ion-content>
