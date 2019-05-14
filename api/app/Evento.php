@@ -21,7 +21,7 @@ class Evento extends Model
     'justificativaCancelamento'];
 
   protected $dates = [
-    'data',
+    'dataRealizacao',
     'dataCancelamento',
     'created_at', 'updated_at', 'deleted_at'];
 

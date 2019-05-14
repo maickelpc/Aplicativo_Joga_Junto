@@ -24,6 +24,8 @@ class Evento extends JsonResource
             'justificativaCancelamento' => $this->justificativaCancelamento,
             'esporte' => $this->esporte,
             'local' => $this->local,
+            'dataRealizacao' => $this->dataRealizacao,
+            'dataCancelamento' => $this->dataCancelamento,
             'usuarioResponsavel' => $this->usuarioResponsavel,
             'participantes' => $this->participantes,
         ];

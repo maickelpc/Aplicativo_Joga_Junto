@@ -8,10 +8,11 @@ $factory->define(App\Evento::class, function (Faker $faker) {
     $locais = DB::table('locais')->pluck('id');
     $usuarios = DB::table('usuarios')->pluck('id');
     $esportes = DB::table('esportes')->pluck('id');
+
     return [
-        'data' => $faker->date('Y-m-d', 'now'),
+        'dataRealizacao' => $faker->date('Y-m-d', 'now'),
         'horario' => $faker->time('H:i', 'now'),
-        'descricao' => implode('', $faker->sentences),
+        'descricao' => 'Partida do '.$faker->name,
         'vagas' => rand(10, 20),
         'publico' => rand(0, 1),
         'valorCusto' => rand(100, 200),

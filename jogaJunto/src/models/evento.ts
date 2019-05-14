@@ -3,7 +3,7 @@ import { Usuario } from './usuario'
 import { Esporte } from './esporte'
 
 class Evento {
-  data : Date
+  dataRealizacao : Date
   horario : string
   descricao : string
   vagas : number
