@@ -36,8 +36,8 @@
   </ion-row>
   <ion-row>
     <ion-col col-12>
-      <div *ngFor="let participante of evento.participantes">
-          {{ participante|json }}
+      <div *ngFor="let p of evento.participantes" style="color: teal">
+          {{ p.nome }} 
       </div>
     </ion-col>
   </ion-row>

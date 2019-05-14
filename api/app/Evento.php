@@ -38,7 +38,7 @@ class Evento extends Model
   }
 
   public function participantes(){
-    return $this->hasMany('App\UsuarioEvento', 'evento_id', 'id');
+    return $this->belongsToMany('App\Usuario', 'usuario_evento');
   }
 
 }

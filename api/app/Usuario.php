@@ -37,7 +37,7 @@ class Usuario extends Authenticatable
   }
 
   public function eventos(){
-    return $this->hasMany('App\UsuarioEvento', 'usuario_id');
+    return $this->belongsToMany('App\UsuarioEvento', 'usuario_evento');
   }
 
   public function notificacoes(){
