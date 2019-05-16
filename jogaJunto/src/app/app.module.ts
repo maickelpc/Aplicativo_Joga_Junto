@@ -13,9 +13,15 @@ import { MessageMocks } from '../mocks/messageMocks';
 import { MyApp } from './app.component';
 import { HttpProvider } from '../providers/http/http';
 import { Util } from '../providers/util/util';
+
+
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
 import { ToastService } from '../services/toast.service'
+import { CidadeService } from '../services/cidade.service'
+import { EsporteService } from '../services/esporte.service'
+
+
 import {EventosComponent} from "../components/eventos/eventos";
 import {ConfirmacaoComponent} from "../components/confirmacao/confirmacao";
 import {EventoService} from "../services/evento.service";
@@ -79,7 +85,9 @@ export function createTranslateLoader(http: HttpClient) {
     LoginService,
     ToastService,
     EventoService,
-    UsuarioService
+    UsuarioService,
+    CidadeService,
+    EsporteService
   ]
 })
 export class AppModule { }

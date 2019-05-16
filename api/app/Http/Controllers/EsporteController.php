@@ -14,8 +14,11 @@ class EsporteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
+    public function index(Request $request)
+    { 
+      if($request->get('withPositions') == 1)
+        return EsporteResource::collection(Esporte::with('posicoes')->paginate());
+      else
         return EsporteResource::collection(Esporte::paginate());
     }
 

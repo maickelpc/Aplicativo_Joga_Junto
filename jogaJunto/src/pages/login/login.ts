@@ -74,7 +74,21 @@ export class LoginPage {
 
         },
         error => {
-          this.toastService.toast("Credenciais inválidas");
+          switch(error.status){
+            case 0:
+              this.toastService.toast("O Servidor remoto recusou a conexão, tente novamente mais tarde");
+              break;
+            case 401:
+              this.toastService.toast("Credenciais inválidas");
+              this.usuario.username = '';
+              this.usuario.password = '';
+            break;
+            default:
+            this.toastService.toast("Ocorreu um erro na sua tentativa de login");
+
+          }
+          
+          console.log(error.statusCode);
           console.log(JSON.stringify(error));
         });
       }
