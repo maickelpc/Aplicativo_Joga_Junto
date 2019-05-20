@@ -17,7 +17,7 @@ export class ToastService{
     let toast = this.toastCtrl.create({
       message: mensagem,
       duration: 3000,
-      position: 'top',
+      position: 'bottom',
       showCloseButton: true
     });
 

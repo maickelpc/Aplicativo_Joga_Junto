@@ -45,15 +45,15 @@ export class LoginService{
       `${API}/api/auth/login`,
       {username: username, password:password, grant_type: 'password'},
       {headers: headers}).do(user => {
-
+        // this.storage.remove('loggedUser').then(() => console.log("removido!"));
         let data = user.token.toString().split('.');
         let userTemp = JSON.parse(atob(data[1]));
         this.usuario = userTemp;
         this.usuario.token = user.token.toString();
         console.log(this.usuario);
         this.storage.set('loggedUser', JSON.stringify(this.usuario));
-        this.storage.get('loggedUser').then(user =>{
-            console.log('user')});
+        // this.storage.get('loggedUser').then(user =>{
+        //     console.log(user)});
         console.log("Usuario Salvo na localStorage");
       });
 

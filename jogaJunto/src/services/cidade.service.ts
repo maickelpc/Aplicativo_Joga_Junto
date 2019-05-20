@@ -24,4 +24,13 @@ export class CidadeService{
         {headers: headers});
     }
 
+    buscaPorIbge(codigo: string): Observable<any> {
+      let headers = new HttpHeaders();
+      headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+
+      return this.http.get<any>(
+        `${API}/api/cidade/ibge/${codigo}`,
+        {headers: headers});
+    }
+
   }

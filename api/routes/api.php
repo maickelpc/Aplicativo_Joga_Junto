@@ -49,6 +49,7 @@ Route::group([
     Route::put('/estado/{id}', 'EstadoController@update')->name('estado.update');
     Route::delete('/estado/{id}', 'EstadoController@destroy')->name('estado.delete');
 
+    Route::get('/cidade/ibge/{codigo}', 'CidadeController@codigoIbge')->name('cidade.ibge');
     Route::get('/cidade', 'CidadeController@index')->name('cidade.all');
     Route::post('/cidade', 'CidadeController@store')->name('cidade.store');
     Route::get('/cidade/{id}', 'CidadeController@show')->name('cidade.show');

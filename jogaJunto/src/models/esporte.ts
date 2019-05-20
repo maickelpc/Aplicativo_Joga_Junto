@@ -12,6 +12,7 @@ class Esporte {
 }
 
 class Posicao{
+  nome: string
   descricao : string
   esporte : Esporte
   usuarios: Usuario[]

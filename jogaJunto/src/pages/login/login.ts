@@ -6,8 +6,8 @@ import { HttpProvider } from "../../providers/http/http";
 import { Usuario } from "../../models/usuario";
 import { LoginService } from '../../services/login.service'
 import { ToastService } from '../../services/toast.service'
-import {EventosComponent} from "../../components/eventos/eventos";
-import {ConfirmacaoComponent} from "../../components/confirmacao/confirmacao"
+import { EventosComponent } from "../../components/eventos/eventos";
+import { ConfirmacaoComponent } from "../../components/confirmacao/confirmacao"
 
 
 @IonicPage()
@@ -87,7 +87,7 @@ export class LoginPage {
             this.toastService.toast("Ocorreu um erro na sua tentativa de login");
 
           }
-          
+
           console.log(error.statusCode);
           console.log(JSON.stringify(error));
         });
@@ -120,10 +120,10 @@ export class LoginPage {
 
         goToListaEventos() {
           this.navCtrl.push(EventosComponent);
-          console.log('Vai pra página de eventos');
+          // console.log('Vai pra página de eventos');
         }
         goToConfirmacao(){
-          console.log('Vai pra página de confirmacao');
+          // console.log('Vai pra página de confirmacao');
           this.navCtrl.push(ConfirmacaoComponent);
         }
 

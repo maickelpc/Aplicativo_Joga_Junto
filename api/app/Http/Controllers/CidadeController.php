@@ -121,6 +121,15 @@ class CidadeController extends Controller
       }
     }
 
+    public function codigoIbge($codigo){
+      $cidade = Cidade::with('estado')->where('codigoIbge',$codigo)->first();
+      if($cidade == null)
+        return response()->json(new CidadeResource($cidade),400);
+      else
+      return response()->json(new CidadeResource($cidade),200);
+
+    }
+
     private function validar($id, $dados){
 
       $regras = [

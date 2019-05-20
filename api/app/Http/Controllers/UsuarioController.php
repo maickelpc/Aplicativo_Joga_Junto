@@ -212,25 +212,23 @@ class UsuarioController extends Controller
   {
     $dados = $request->json();
 
-    $validacao = $this->validar($id, $dados->all());
-    if ($validacao != null)
-      return response()->json($validacao, 400);
+    // $validacao = $this->validar($id, $dados->all());
+    // if ($validacao != null)
+    //   return response()->json($validacao, 400);
 
     $usuario =  Usuario::with('endereco')->findOrFail($id);
+    
     try{
       DB::beginTransaction();
 
-
       $usuario->nome = $dados->get('nome');
-
       $usuario->save();
-
-
+      
       if(count($dados->get('endereco')) > 0){
         if($dados->get('endereco')['id'] > 0){
           // Se for apenas alteracao no endereco
           $endereco = $usuario->endereco;
-          $endereco->cidade_id = $dados->get('endereco')['cidade_id'];
+          $endereco->cidade_id = $dados->get('endereco')['cidade']['id'];
           $endereco->logradouro = $dados->get('endereco')['logradouro'];
           $endereco->bairro = $dados->get('endereco')['bairro'];
           $endereco->numero = $dados->get('endereco')['numero'];
@@ -246,6 +244,12 @@ class UsuarioController extends Controller
         }
       }
 
+      //Sync das posições
+      
+      
+      
+      $usuario = Usuario::with(['endereco','endereco.cidade','posicoes','posicoes.esporte'])->find($id);
+      
       DB::commit();
       return response()->json(new UsuarioResource($usuario), 200);
     }catch(Exception $ex){

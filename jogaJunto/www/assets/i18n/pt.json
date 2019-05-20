@@ -86,5 +86,19 @@
   "Activation Code": "Código de Ativação",
   "My Profile": "Meu Perfil",
   "About me" : "Sobre mim",
-  "City" : "Cidade"
+  "City" : "Cidade",
+  "Data": "Dados",
+  "DATA": "DADOS",
+  "Address": "Endereço",
+  "ADDRESS": "ENDEREÇO",
+  "address": "endereço",
+  "Sport": "Esporte",
+  "SPORT": "ESPORTE",
+  "sport": "esporte",
+  "Number": "Número",
+  "number": "número",
+  "Neighborhood" : "Bairro",
+  "neighborhood" : "bairro",
+  "Complement": "Complemento",
+  "complement": "complemento"
 }

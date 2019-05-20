@@ -29,7 +29,7 @@ class Usuario extends Authenticatable
   ];
 
   public function endereco(){
-    return $this->belongsTo(Endereco, 'endereco_id');
+    return $this->belongsTo('App\Endereco', 'endereco_id');
   }
 
   public function posicoes(){

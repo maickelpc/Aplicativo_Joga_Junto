@@ -13,7 +13,7 @@ import { MessageMocks } from '../mocks/messageMocks';
 import { MyApp } from './app.component';
 import { HttpProvider } from '../providers/http/http';
 import { Util } from '../providers/util/util';
-
+import { InputMaskModule } from 'ionic-input-mask';
 
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
@@ -62,7 +62,8 @@ export function createTranslateLoader(http: HttpClient) {
       }
     }),
     IonicModule.forRoot(MyApp),
-    IonicStorageModule.forRoot()
+    IonicStorageModule.forRoot(),
+    InputMaskModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
