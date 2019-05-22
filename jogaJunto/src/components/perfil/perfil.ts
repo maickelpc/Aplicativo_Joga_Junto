@@ -26,8 +26,8 @@ export class PerfilComponent implements OnInit{
   public cidades = [];
 
   public esportes = [];
-  public esportesSelecionados = [];
-  public posicoes = [];
+  public esportesUsuario = [];
+
 
   cidadeChange(event: {
     component: IonicSelectableComponent,
@@ -37,7 +37,7 @@ export class PerfilComponent implements OnInit{
     // console.log('idcidade:', event.value);
   }
 
-
+  public posicoesSelecionadas : any;
   public usuario: Usuario;
   public Util = Util;
 
@@ -73,22 +73,39 @@ export class PerfilComponent implements OnInit{
     );
   }
 
+  filtraEsportePorId(id):boolean{
+    if (this.usuario.posicoes.map(x => x.esporte_id).indexOf(id) >= 0 )
+      return true;
+    else
+      return false;
+  }
+
   buscaEsportes(){
     this.esporteService.buscaTodasEsportes().subscribe(
       dados => {
         this.esportes = dados.data;
-        for(let i = 0; i < this.usuario.posicoes.length; i++){
-          this.esportesSelecionados.push(this.usuario.posicoes[i].esporte);
-        }
-        // this.esporte = this.esporte. maickel aqui filtrar para remover os duplicados
-        // console.log(this.usuario);
-        // this.esporte = this.usuario.posicoes
+        this.esportesUsuario = this.esportes.filter(value => this.filtraEsportePorId(value.id));
+        this.esportes = this.esportes.filter(value => !this.filtraEsportePorId(value.id));
       }
     )
   }
 
-  possuiPosicao(posicao: Posicao){
-    return this.usuario.posicoes.indexOf(posicao) >= 0;
+
+  atualizaPosicoes(event, idEsporte){
+    console.log(idEsporte);
+    // console.log(this.usuario.posicoes);
+    // let idEsporte = event[0].esporte_id;
+    this.usuario.posicoes = this.usuario.posicoes.filter(x => x.esporte_id != idEsporte);
+
+    while(event.length > 0){
+      this.usuario.posicoes.push(event.pop());
+    }
+    // console.log(this.usuario.posicoes);
+  }
+
+  possuiPosicao(posicao: number){
+    // console.log(posicao + ' - ' + (this.usuario.posicoes.map(x => x.id).indexOf(posicao) >= 0));
+    return (this.usuario.posicoes.map(x => x.id).indexOf(posicao) >= 0);
   }
 
   salvar(){
