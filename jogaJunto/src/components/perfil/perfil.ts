@@ -7,7 +7,7 @@ import { EsporteService } from '../../services/esporte.service'
 import { Util } from "../../providers/util/util";
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { ToastService } from '../../services/toast.service'
-
+import { LoadingController } from 'ionic-angular';
 /**
  * Generated class for the PerfilComponent component.
  *
@@ -40,12 +40,19 @@ export class PerfilComponent implements OnInit{
   public posicoesSelecionadas : any;
   public usuario: Usuario;
   public Util = Util;
+  public loading() {
+    return this.loadingCtrl.create({
+      content: 'Aguarde...',
+      dismissOnPageChange: true
+    });
+  }
 
   constructor(
     private usuarioService: UsuarioService,
     private cidadeService: CidadeService,
     private esporteService: EsporteService,
-    private toastService: ToastService) {
+    private toastService: ToastService,
+    private loadingCtrl: LoadingController) {
   }
 
   ngOnInit(){
@@ -90,17 +97,23 @@ export class PerfilComponent implements OnInit{
     )
   }
 
+  adicionaEsporte(esporte){
+    console.log(this.esportes);
+    this.esportes = this.esportes.filter(x => x.id != esporte.id);
+    console.log(this.esportes);
+    this.esportesUsuario.push(esporte);
+  }
 
   atualizaPosicoes(event, idEsporte){
-    console.log(idEsporte);
-    // console.log(this.usuario.posicoes);
+    // console.log(idEsporte);
+     console.log(this.usuario.posicoes);
     // let idEsporte = event[0].esporte_id;
     this.usuario.posicoes = this.usuario.posicoes.filter(x => x.esporte_id != idEsporte);
 
-    while(event.length > 0){
-      this.usuario.posicoes.push(event.pop());
+    for(let i =0; i < event.length; i++){
+      this.usuario.posicoes.push(event[i]);
     }
-    // console.log(this.usuario.posicoes);
+     console.log(this.usuario.posicoes);
   }
 
   possuiPosicao(posicao: number){
@@ -109,6 +122,8 @@ export class PerfilComponent implements OnInit{
   }
 
   salvar(){
+   var loading =   this.loading();
+   loading.present();
     this.usuarioService.salvarUsuario(this.usuario).subscribe(
       dados => {
         this.toastService.toast("Dados salvos com sucesso!");
@@ -116,7 +131,8 @@ export class PerfilComponent implements OnInit{
       erro => {
         this.toastService.toast("Erro ao salvar os dados");
         console.log(erro);
-      }
+      },
+      () => loading.dismiss()
     );
   }
 
@@ -142,6 +158,8 @@ export class PerfilComponent implements OnInit{
   }
 
   ionViewCanEnter() {
+    let loading = this.loading();
+    loading.present();
       return new Promise((resolve, reject) =>{
 
           this.usuarioService.carregaUsuario().subscribe(
@@ -159,6 +177,7 @@ export class PerfilComponent implements OnInit{
             },
             ()=> {
               console.log('Carregou Informações do Evento');
+              loading.dismiss();
             });
 
       })

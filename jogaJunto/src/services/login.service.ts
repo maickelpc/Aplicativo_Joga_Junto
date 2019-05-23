@@ -29,7 +29,7 @@ export class LoginService{
         this.usuario = JSON.parse(user);
         var agora = Date.now() / 1000;
         if(this.usuario === null || agora > this.usuario.exp){
-          console.log(this.usuario.exp);
+          // console.log(this.usuario.exp);
           console.log("token expirado!");
           this.logout();
         }

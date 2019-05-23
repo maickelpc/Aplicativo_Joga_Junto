@@ -8,7 +8,7 @@ import { LoginService } from '../../services/login.service'
 import { ToastService } from '../../services/toast.service'
 import { EventosComponent } from "../../components/eventos/eventos";
 import { ConfirmacaoComponent } from "../../components/confirmacao/confirmacao"
-
+import { LoadingController } from 'ionic-angular';
 
 @IonicPage()
 @Component({
@@ -25,6 +25,13 @@ export class LoginPage {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
+  public loading() {
+    return this.loadingCtrl.create({
+      content: 'Aguarde...',
+      dismissOnPageChange: true
+    });
+  }
+
   public usuario : Usuario =  new Usuario();
 
 
@@ -41,7 +48,8 @@ export class LoginPage {
     public translateService: TranslateService,
     private loginService: LoginService,
     private toastService : ToastService,
-    public events: Events) {
+    public events: Events,
+    private loadingCtrl:LoadingController) {
       this.menuCtrl.enable(false);
       this.translateService.get('LOGIN_ERROR').subscribe((value) => {
         this.loginErrorString = value;
@@ -61,6 +69,8 @@ export class LoginPage {
     }
 
     login(){
+      let loading = this.loading();
+      loading.present();
       this.loginService.login(this.usuario.username, this.usuario.password)
       .subscribe(
         dados =>{
@@ -90,15 +100,19 @@ export class LoginPage {
 
           console.log(error.statusCode);
           console.log(JSON.stringify(error));
-        });
+        },
+      ()=> loading.dismiss());
       }
 
       cadastrar(){
+        let loading = this.loading();
+        loading.present();
         console.log(JSON.stringify(this.usuario));
         this.loginService.cadastrar(this.usuario)
         .subscribe(
           x => {
             console.log("Deu Certo " + JSON.stringify(this.usuario));
+            loading.dismiss();
             this.login();
           },
           error =>{
@@ -113,7 +127,10 @@ export class LoginPage {
             }else{
               this.toastService.toast(erros);
             }
-          });
+            loading.dismiss();
+          },
+        () => loading.dismiss()
+      );
 
         }
 

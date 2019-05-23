@@ -222,6 +222,13 @@ class UsuarioController extends Controller
       DB::beginTransaction();
 
       $usuario->nome = $dados->get('nome');
+      $usuario->sobrenome = $dados->get('sobrenome');
+      $usuario->email = $dados->get('email');
+      $data = $dados->get('dataNascimento');
+      $usuario->telefone = $dados->get('telefone');
+      $usuario->latitude = $dados->get('latitude');
+      $usuario->longitude = $dados->get('longitude');
+
       $usuario->save();
       
       if(count($dados->get('endereco')) > 0){
@@ -244,17 +251,23 @@ class UsuarioController extends Controller
         }
       }
 
-      //Sync das posições
-      
-      
-      
+      $posicoesInformadas = $dados->get('posicoes');
+      $posicoes = array();
+      foreach($posicoesInformadas as $p){
+        array_push($posicoes,$p['id']);
+      }
+      sleep(3);
+
+
+      $usuario->posicoes()->sync($posicoes);
+
       $usuario = Usuario::with(['endereco','endereco.cidade','posicoes','posicoes.esporte'])->find($id);
       
       DB::commit();
       return response()->json(new UsuarioResource($usuario), 200);
     }catch(Exception $ex){
       DB::rollback();
-      return response()->json(new UsuarioResource($usuario), 400);
+      return response()->json($ex, 400);
     }
   }
 

@@ -91,14 +91,21 @@
   "DATA": "DADOS",
   "Address": "Endereço",
   "ADDRESS": "ENDEREÇO",
+  "Phone": "Telefone",
+  "PHONE": "Telefone",
   "address": "endereço",
   "Sport": "Esporte",
   "SPORT": "ESPORTE",
   "sport": "esporte",
+  "Sports": "Esportes",
+  "SPORTS": "ESPORTES",
+  "sports": "esportes",
   "Number": "Número",
   "number": "número",
   "Neighborhood" : "Bairro",
   "neighborhood" : "bairro",
   "Complement": "Complemento",
-  "complement": "complemento"
+  "complement": "complemento",
+  "Add": "Adicionar",
+  "Save": "Salvar"
 }
