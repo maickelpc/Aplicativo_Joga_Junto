@@ -214,7 +214,7 @@ module.exports = webpackAsyncContext;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__providers_util_util__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_evento_service__ = __webpack_require__(138);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -307,7 +307,7 @@ var EventoComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConfirmacaoComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_login_service__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_toast_service__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(80);
@@ -387,7 +387,7 @@ var ConfirmacaoComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_esporte_service__ = __webpack_require__(376);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_util_util__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services_toast_service__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -533,10 +533,13 @@ var PerfilComponent = (function () {
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'perfil',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/`<!--\nGenerated template for the MyProfilePage page.\n\nSee http://ionicframework.com/docs/components/#navigation for more info on\nIonic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{\'My Profile\' | translate}}</ion-title>\n    <ion-buttons end>\n      <button (click)="doSubmit()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n\n<ion-content padding-top *ngIf="!isLoading">\n  <form >\n    <div padding>\n      <ion-segment [(ngModel)]="aba" name="abas">\n        <ion-segment-button value="dados">\n          {{\'Data\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="endereco">\n          {{\'Address\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="esporte">\n          {{\'Sport\' | translate}}\n        </ion-segment-button>\n      </ion-segment>\n    </div>\n\n    <div [ngSwitch]="aba">\n      <ion-list *ngSwitchCase="\'dados\'">\n\n        <div text-center style="background-color: white">\n\n          <ion-avatar>\n            <img id="my-avatar" [src]="Util.pathAvatar(\'Dylan.png\')">\n          </ion-avatar>\n          <ion-item-divider  text-center>\n            <!-- <ion-icon name="information-circle"></ion-icon> -->\n            <div color="secondary">\n              <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>\n            </div>\n            <div *ngIf="usuario.endereco !== null" color="secondary">\n              <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>\n            </div>\n          </ion-item-divider>\n        </div>\n\n\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'About me\' | translate}}</h1>\n          <ion-item>\n            <ion-textarea placeholder="Fale um pouco sobre você."\n            [(ngModel)]="usuario.mensagem" name="mensagem"></ion-textarea>\n          </ion-item>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'PHONE\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.telefone"  name="telefone"></ion-input>\n        </ion-item>\n      </ion-list>\n\n      <ion-list *ngSwitchCase="\'endereco\'">\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'Address\' | translate}}</h1>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>CEP: </ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.endereco.cep" name="cep" (blur)="buscaCep()"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.logradouro"  name="logradouro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Number\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.numero"  name="numero"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Neighborhood\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.bairro"  name="bairro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Complement\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.complemento"  name="complemento"></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <ion-label stacked>{{\'City\' | translate}}</ion-label>\n          <ionic-selectable\n          name="cidade"\n          item-content\n          [(ngModel)]="cidade"\n          [items]="cidades"\n          itemValueField="id"\n          itemTextField="name"\n          [canSearch]="true"\n          (onChange)="cidadeChange($event)">\n        </ionic-selectable>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'esporte\'">\n\n      <ion-item-divider color="light" text-center>\n        <h1>{{\'My Sports\' | translate}}</h1>\n      </ion-item-divider >\n\n      <ion-list>\n        <ion-item *ngFor="let esporte of esportesUsuario; let i= index">\n          <ion-label>{{esporte.nome}}</ion-label>\n          <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n          cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n          <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n          [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ion-list>\n\n    <ion-item>\n      <ion-item *ngFor="let esporte of esportes; let i= index">\n        <ion-label>{{esporte.nome}}</ion-label>\n        <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n        cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n        <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n        [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-item>\n\n  <ion-item>\n    <ion-label><ion-icon name="add-circle"></ion-icon>{{\'Add\' | translate}}</ion-label>\n    <ion-select placeholder="Selecione" (ionChange)="adicionaEsporte($event)" >\n      <ion-option *ngFor="let esporte of esportes" [value]="esporte">{{esporte.nome}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n</ion-list>\n</div>\n\n<div padding text text-center>\n  <button ion-button color="primary" icon-right (click)="salvar()">\n    {{ \'Save\' | translate }} <ion-icon name="checkmark"></ion-icon>\n  </button>\n</div>\n</form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/
         }),
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__services_usuario_service__["a" /* UsuarioService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__services_usuario_service__["a" /* UsuarioService */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__services_cidade_service__["a" /* CidadeService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__services_cidade_service__["a" /* CidadeService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_3__services_esporte_service__["a" /* EsporteService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__services_esporte_service__["a" /* EsporteService */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_5__services_toast_service__["a" /* ToastService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__services_toast_service__["a" /* ToastService */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* LoadingController */]) === "function" && _e || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_usuario_service__["a" /* UsuarioService */],
+            __WEBPACK_IMPORTED_MODULE_2__services_cidade_service__["a" /* CidadeService */],
+            __WEBPACK_IMPORTED_MODULE_3__services_esporte_service__["a" /* EsporteService */],
+            __WEBPACK_IMPORTED_MODULE_5__services_toast_service__["a" /* ToastService */],
+            __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["j" /* LoadingController */]])
     ], PerfilComponent);
     return PerfilComponent;
-    var _a, _b, _c, _d, _e;
 }());
 
 //# sourceMappingURL=perfil.js.map
@@ -584,7 +587,7 @@ var UsuarioService = (function () {
     UsuarioService.prototype.salvarUsuario = function (usuario) {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Authorization', 'Bearer ' + this.login.getUsuarioLogado().token);
-        console.log(JSON.stringify(usuario));
+        // console.log(JSON.stringify(usuario));
         return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/usuario/" + this.login.getUsuarioLogado().id, usuario, { headers: headers });
     };
     UsuarioService.prototype.buscarCep = function (cep) {
@@ -594,9 +597,10 @@ var UsuarioService = (function () {
     };
     UsuarioService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */], __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_5__login_service__["a" /* LoginService */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]) === "function" && _c || Object])
     ], UsuarioService);
     return UsuarioService;
+    var _a, _b, _c;
 }());
 
 //# sourceMappingURL=usuario.service.js.map
@@ -642,9 +646,10 @@ var CidadeService = (function () {
     };
     CidadeService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__login_service__["a" /* LoginService */]) === "function" && _b || Object])
     ], CidadeService);
     return CidadeService;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=cidade.service.js.map
@@ -861,7 +866,7 @@ var MessageMocks = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(137);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(166);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(423);
@@ -1001,10 +1006,17 @@ var LoginPage = (function () {
         * @email: yajuve.25.dz@gmail.com
         */
         ,
-        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_3__providers_user_user__["a" /* UserProvider */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_3__providers_user_user__["a" /* UserProvider */]) === "function" && _b || Object, typeof (_c = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* MenuController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* MenuController */]) === "function" && _c || Object, typeof (_d = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */]) === "function" && _d || Object, typeof (_e = typeof __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["c" /* TranslateService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["c" /* TranslateService */]) === "function" && _e || Object, typeof (_f = typeof __WEBPACK_IMPORTED_MODULE_6__services_login_service__["a" /* LoginService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_6__services_login_service__["a" /* LoginService */]) === "function" && _f || Object, typeof (_g = typeof __WEBPACK_IMPORTED_MODULE_7__services_toast_service__["a" /* ToastService */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_7__services_toast_service__["a" /* ToastService */]) === "function" && _g || Object, typeof (_h = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* Events */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* Events */]) === "function" && _h || Object, typeof (_j = typeof __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* LoadingController */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* LoadingController */]) === "function" && _j || Object])
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_4__providers_http_http__["a" /* HttpProvider */],
+            __WEBPACK_IMPORTED_MODULE_3__providers_user_user__["a" /* UserProvider */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* MenuController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["n" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__["c" /* TranslateService */],
+            __WEBPACK_IMPORTED_MODULE_6__services_login_service__["a" /* LoginService */],
+            __WEBPACK_IMPORTED_MODULE_7__services_toast_service__["a" /* ToastService */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["c" /* Events */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["j" /* LoadingController */]])
     ], LoginPage);
     return LoginPage;
-    var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 }());
 
 //# sourceMappingURL=login.js.map
@@ -1039,7 +1051,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngx_translate_core__ = __webpack_require__(93);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ngx_translate_http_loader__ = __webpack_require__(402);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_ionic_selectable__ = __webpack_require__(442);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mocks_providers_items__ = __webpack_require__(706);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mocks_messageMocks__ = __webpack_require__(379);
@@ -1225,12 +1237,11 @@ var LoginService = (function () {
     };
     LoginService.prototype.getUsuarioLogado = function () {
         var _this = this;
-        this.storage.get('loggedUser').then(function (user) {
+        this.storage.get('loggedUser')
+            .then(function (user) {
             _this.usuario = JSON.parse(user);
             var agora = Date.now() / 1000;
-            if (_this.usuario === null || agora > _this.usuario.exp) {
-                // console.log(this.usuario.exp);
-                console.log("token expirado!");
+            if (_this.usuario === null || agora >= _this.usuario.exp) {
                 _this.logout();
             }
         });
@@ -1241,16 +1252,17 @@ var LoginService = (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Content-type', 'application/json');
         return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/auth/login", { username: username, password: password, grant_type: 'password' }, { headers: headers }).do(function (user) {
-            // this.storage.remove('loggedUser').then(() => console.log("removido!"));
             var data = user.token.toString().split('.');
             var userTemp = JSON.parse(atob(data[1]));
             _this.usuario = userTemp;
             _this.usuario.token = user.token.toString();
-            console.log(_this.usuario);
             _this.storage.set('loggedUser', JSON.stringify(_this.usuario));
-            // this.storage.get('loggedUser').then(user =>{
-            //     console.log(user)});
-            console.log("Usuario Salvo na localStorage");
+            // this.storage.get('loggedUser').then(
+            //   us => {
+            //     console.log(us);
+            //     console.log("A_____________AAA");
+            // });
+            // console.log("USuario SETADO");
         });
     };
     LoginService.prototype.cadastrar = function (usuario) {
@@ -1283,9 +1295,10 @@ var LoginService = (function () {
     };
     LoginService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */], __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]])
+        __metadata("design:paramtypes", [typeof (_a = typeof __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["a" /* HttpClient */]) === "function" && _a || Object, typeof (_b = typeof __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */] !== "undefined" && __WEBPACK_IMPORTED_MODULE_2__ionic_storage__["b" /* Storage */]) === "function" && _b || Object])
     ], LoginService);
     return LoginService;
+    var _a, _b;
 }());
 
 //# sourceMappingURL=login.service.js.map
@@ -1442,7 +1455,7 @@ var Item = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__ = __webpack_require__(183);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(188);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngx_translate_core__ = __webpack_require__(93);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_perfil_perfil__ = __webpack_require__(373);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_pages__ = __webpack_require__(709);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_user_user__ = __webpack_require__(137);
@@ -1567,7 +1580,7 @@ var FirstRunPage = 'LoginPage';
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ToastService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(21);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1623,7 +1636,7 @@ var ToastService = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventosComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(138);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(21);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__evento_evento__ = __webpack_require__(249);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;

@@ -29,7 +29,7 @@ export class UsuarioService{
     salvarUsuario(usuario: Usuario): Observable<Usuario> {
       let headers = new HttpHeaders();
       headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
-      console.log(JSON.stringify(usuario));
+      // console.log(JSON.stringify(usuario));
       return this.http.put<Usuario>(
         `${API}/api/usuario/`+this.login.getUsuarioLogado().id,
         usuario,
