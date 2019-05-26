@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">181773671487-kbcumslcu9ec36034d26vp8a0nl6crlc.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://jogajunto-83974.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">181773671487</string>
+    <string name="google_api_key" translatable="false">AIzaSyDYtycN3kwgoLHa77omERlDDMQjB903s60</string>
+    <string name="google_app_id" translatable="false">1:181773671487:android:a253c23eb34cc4cb</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDYtycN3kwgoLHa77omERlDDMQjB903s60</string>
+    <string name="google_storage_bucket" translatable="false">jogajunto-83974.appspot.com</string>
+    <string name="project_id" translatable="false">jogajunto-83974</string>
+</resources>

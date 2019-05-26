@@ -1,0 +1,60 @@
+{
+    "logs": [
+        {
+            "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/incremental/mergeDebugResources/merged.dir/values-pt-rBR/values-pt-rBR.xml",
+            "map": [
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/firebase-messaging-11.6.2.aar/b40890a1a9cfdb3c0b3f4816801af819/res/values-pt-rBR/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "247",
+                        "endColumns": "102",
+                        "endOffsets": "349"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "309",
+                        "endColumns": "106",
+                        "endOffsets": "411"
+                    }
+                },
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/values-pt-rBR/values-pt-rBR.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "416",
+                        "endColumns": "100",
+                        "endOffsets": "512"
+                    }
+                },
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.2.aar/0deddd625c7d5fbf67c7610529fb2f74/res/values-pt-rBR/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "289",
+                        "endColumns": "203",
+                        "endOffsets": "492"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "203",
+                        "endOffsets": "304"
+                    }
+                }
+            ]
+        }
+    ]
+}

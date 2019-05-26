@@ -14,6 +14,8 @@ import { MyApp } from './app.component';
 import { HttpProvider } from '../providers/http/http';
 import { Util } from '../providers/util/util';
 import { InputMaskModule } from 'ionic-input-mask';
+import { Geolocation } from '@ionic-native/geolocation';
+
 
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
@@ -21,13 +23,14 @@ import { ToastService } from '../services/toast.service'
 import { CidadeService } from '../services/cidade.service'
 import { EsporteService } from '../services/esporte.service'
 
-
+import { Push } from '@ionic-native/push';
 import {EventosComponent} from "../components/eventos/eventos";
 import {ConfirmacaoComponent} from "../components/confirmacao/confirmacao";
 import {EventoService} from "../services/evento.service";
 import {UsuarioService} from "../services/usuario.service";
 import {EventoComponent} from "../components/evento/evento";
 import {PerfilComponent} from "../components/perfil/perfil";
+
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -74,6 +77,7 @@ export function createTranslateLoader(http: HttpClient) {
     PerfilComponent
   ],
   providers: [
+    Push,
     Items,
     SplashScreen,
     StatusBar,
@@ -83,6 +87,7 @@ export function createTranslateLoader(http: HttpClient) {
     HttpProvider,
     Util,
     UserProvider,
+    Geolocation,
     LoginService,
     ToastService,
     EventoService,

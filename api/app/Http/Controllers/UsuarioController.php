@@ -282,6 +282,39 @@ class UsuarioController extends Controller
   }
 
   /**
+  * Update the specified resource in storage.
+  *
+  * @param  \Illuminate\Http\Request  $request
+  * @param  int  $id
+  * @return \Illuminate\Http\Response
+  */
+  public function atualizaGeoLocalizacao(Request $request, $id)
+  {
+    $dados = $request->json();
+
+    // $validacao = $this->validar($id, $dados->all());
+    // if ($validacao != null)
+    //   return response()->json($validacao, 400);
+
+    $usuario =  Usuario::findOrFail($id);
+    
+    try{
+      DB::beginTransaction();
+
+      $usuario->latitude = $dados->get('latitude');
+      $usuario->longitude = $dados->get('longitude');
+
+      $usuario->save();
+            
+      DB::commit();
+      return response()->json("Ok", 200);
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json($ex, 400);
+    }
+  }
+
+  /**
   * Remove the specified resource from storage.
   *
   * @param  int  $id

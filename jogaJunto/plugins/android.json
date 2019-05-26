@@ -12,7 +12,22 @@
     },
     "cordova-plugin-whitelist": {
       "PACKAGE_NAME": "com.cdd.jogaJunto"
+    },
+    "cordova-plugin-geolocation": {
+      "PACKAGE_NAME": "com.cdd.jogaJunto"
+    },
+    "phonegap-plugin-push": {
+      "ANDROID_SUPPORT_V13_VERSION": "27.+",
+      "FCM_VERSION": "11.6.2",
+      "PACKAGE_NAME": "site.maickel.jogajunto"
     }
   },
-  "dependent_plugins": {}
+  "dependent_plugins": {
+    "cordova-support-google-services": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
+    },
+    "phonegap-plugin-multidex": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
+    }
+  }
 }

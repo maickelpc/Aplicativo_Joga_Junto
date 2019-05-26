@@ -9,6 +9,7 @@ import { PerfilComponent } from '../components/perfil/perfil'
 import { FirstRunPage } from '../pages/pages';
 import {UserProvider} from "../providers/user/user";
 import { EventosComponent } from '../components/eventos/eventos';
+import { UsuarioService} from '../services/usuario.service'
 
 
 @Component({
@@ -25,7 +26,17 @@ export class MyApp {
     { icon: 'log-out', title: 'Logout', component: 'LoginPage' }
   ];
 
-  constructor(public menuCtrl: MenuController, public userProvider: UserProvider, private translate: TranslateService, platform: Platform, private config: Config, private statusBar: StatusBar, private splashScreen: SplashScreen, events:Events) {
+  constructor(
+    public menuCtrl: MenuController,
+    public userProvider: UserProvider,
+    private translate: TranslateService,
+    platform: Platform,
+    private config: Config,
+    private statusBar: StatusBar,
+    private splashScreen: SplashScreen,
+    events:Events,
+    private usuarioService: UsuarioService) {
+
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
@@ -78,6 +89,7 @@ export class MyApp {
     this.translate.get(['BACK_BUTTON_TEXT']).subscribe(values => {
       this.config.set('ios', 'backButtonText', values.BACK_BUTTON_TEXT);
     });
+
   }
 
   openPage(page) {
@@ -85,4 +97,6 @@ export class MyApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
   }
+
+
 }

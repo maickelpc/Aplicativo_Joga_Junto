@@ -1,0 +1,15 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-app-preferences": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
+    }
+  },
+  "dependent_plugins": {}
+}

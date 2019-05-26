@@ -23,7 +23,8 @@
     "@ionic-native/app-preferences": "^5.6.0",
     "@ionic-native/core": "4.3.2",
     "@ionic-native/device": "^5.6.0",
-    "@ionic-native/geolocation": "^3.14.0",
+    "@ionic-native/geolocation": "^4.20.0",
+    "@ionic-native/push": "^4.20.0",
     "@ionic-native/splash-screen": "4.3.2",
     "@ionic-native/status-bar": "4.3.2",
     "@ionic-native/toast": "^5.2.0",
@@ -31,18 +32,22 @@
     "@ngx-translate/core": "8.0.0",
     "@ngx-translate/http-loader": "^2.0.0",
     "cordova-android": "^7.1.4",
+    "cordova-browser": "5.0.4",
     "cordova-ios": "~4.3.1",
     "cordova-plugin-app-preferences": "file:../../me.apla.cordova.app-preferences",
     "cordova-plugin-device": "2.0.2",
     "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-file-transfer": "^1.7.1",
-    "cordova-plugin-geolocation": "^4.0.1",
+    "cordova-plugin-geolocation": "4.0.1",
     "cordova-plugin-whitelist": "file:../../cordova-plugin-whitelist",
     "cordova-plugin-x-toast": "2.7.2",
+    "cordova-support-google-services": "1.1.0",
     "ionic-angular": "3.9.2",
     "ionic-input-mask": "^1.0.1",
     "ionic-selectable": "^3.4.0",
     "ionicons": "3.0.0",
+    "phonegap-plugin-multidex": "1.0.0",
+    "phonegap-plugin-push": "2.2.3",
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"
@@ -55,13 +60,18 @@
   "cordova": {
     "plugins": {
       "cordova-plugin-x-toast": {},
-      "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
-      },
       "cordova-plugin-app-preferences": {},
       "cordova-plugin-device": {},
       "cordova-plugin-file-transfer": {},
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you"
+      },
+      "phonegap-plugin-push": {
+        "ANDROID_SUPPORT_V13_VERSION": "27.+",
+        "FCM_VERSION": "11.6.2",
+        "SENDER_ID": "181773671487"
+      }
     },
     "platforms": [
       "ios"

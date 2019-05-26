@@ -14,8 +14,8 @@ class Usuario {
   score: number
   telefone: string
   endereco: Endereco
-  latitude: string
-  longitude: string
+  latitude: number
+  longitude: number
   posicoes : Posicao[]
   created_at : Date
   updated_at : Date

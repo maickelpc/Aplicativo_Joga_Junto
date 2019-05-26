@@ -4,13 +4,13 @@ import { IonicPage, NavController, MenuController, Events } from 'ionic-angular'
 import { UserProvider } from "../../providers/user/user";
 import { HttpProvider } from "../../providers/http/http";
 import { Usuario } from "../../models/usuario";
-import { LoginService } from '../../services/login.service'
+import { LoginService, UsuarioService } from '../../services'
 import { ToastService } from '../../services/toast.service'
 import { EventosComponent } from "../../components/eventos/eventos";
 import { ConfirmacaoComponent } from "../../components/confirmacao/confirmacao"
 import { LoadingController } from 'ionic-angular';
 
-import { Storage } from '@ionic/storage';
+import { Push , PushOptions, PushObject} from '@ionic-native/push';
 
 @IonicPage()
 @Component({
@@ -44,22 +44,64 @@ export class LoginPage {
   private loginErrorString: string;
   private opt: string = 'signin';
 
-  constructor( private storage: Storage,
+  constructor( private push: Push,
     public http:HttpProvider,
     public userProvider: UserProvider,
     public menuCtrl: MenuController,
     public navCtrl: NavController,
     public translateService: TranslateService,
     private loginService: LoginService,
+    private usuarioService: UsuarioService,
     private toastService : ToastService,
     public events: Events,
     private loadingCtrl:LoadingController) {
+
       this.menuCtrl.enable(false);
       this.translateService.get('LOGIN_ERROR').subscribe((value) => {
         this.loginErrorString = value;
       });
 
+      // this.push.hasPermission().then();
+
+      this.push.hasPermission()
+        .then((res: any) => {
+
+          if (res.isEnabled) {
+            this.toastService.toast('Possui Permissão!!!');
+            const options: PushOptions = {
+               android: {},
+               ios: {
+                   alert: 'true',
+                   badge: true,
+                   sound: 'false'
+               },
+               windows: {},
+               browser: {
+                   pushServiceURL: 'http://push.api.phonegap.com/v1/push'
+               }
+            };
+            const pushObject: PushObject = this.push.init(options);
+            pushObject.on('notification').subscribe((notification: any) => {
+              alert(notification.message);
+            });
+
+            pushObject.on('registration').subscribe((registration: any) => console.log('Device registered', registration));
+
+            pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+
+
+          } else {
+            this.toastService.toast('NÃO possui permissão!!!');
+          }
+
+        });
+
+
+
     }
+
+
+
 
     sleep(ms) {
       return new Promise(resolve => setTimeout(resolve, ms));
@@ -71,11 +113,6 @@ export class LoginPage {
       return max;
     }
 
-    teste(){
-      console.log(this.loginService.getUsuarioLogado());
-      this.toastService.toast("TESTE");
-    }
-
     login(){
       let loading = this.loading();
       loading.present();
@@ -84,6 +121,7 @@ export class LoginPage {
         dados =>{
           this.sleep(1000).then(
             () => {
+              this.usuarioService.atualizaPosicao();
               this.toastService.toast("Bem Vindo " + this.usuario.username );
               loading.dismiss();
               if(this.loginService.getUsuarioLogado().email_verified_at == null){
