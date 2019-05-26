@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../models/usuario'
+import { Endereco, Cidade } from '../../models/endereco'
 import { Esporte,Posicao } from '../../models/esporte'
 import { UsuarioService } from '../../services/usuario.service'
 import { CidadeService } from '../../services/cidade.service'
@@ -69,8 +70,8 @@ export class PerfilComponent implements OnInit{
           return {'id': x.id,'name': x.nome}
         });
         //this.cidade = this.cidades.filter(x => x.id == this.usuario.endereco.cidade.id)[0];
-
-        this.cidade = {'id': this.usuario.endereco.cidade.id, 'name': this.usuario.endereco.cidade.nome};
+        if(this.usuario.endereco != null && this.usuario.endereco.cidade != null)
+          this.cidade = {'id': this.usuario.endereco.cidade.id, 'name': this.usuario.endereco.cidade.nome};
 
       },
       erro => {
@@ -122,18 +123,19 @@ export class PerfilComponent implements OnInit{
   }
 
   salvar(){
+    console.log(JSON.stringify(this.usuario));
    var loading =   this.loading();
    loading.present();
     this.usuarioService.salvarUsuario(this.usuario).subscribe(
       dados => {
         this.toastService.toast("Dados salvos com sucesso!");
+        loading.dismiss();
       },
       erro => {
         this.toastService.toast("Erro ao salvar os dados");
         console.log(erro);
-      },
-      () => loading.dismiss()
-    );
+        loading.dismiss();
+      });
   }
 
   buscaCep(){
@@ -166,17 +168,19 @@ export class PerfilComponent implements OnInit{
             response =>{
               // console.log(response);
               this.usuario = response;
+              if(this.usuario.endereco == null){
+                this.usuario.endereco = new Endereco();
+              }
+
 
               console.log(this.usuario);
               this.buscaCidades();
               this.buscaEsportes();
+              loading.dismiss();
               resolve(response);
             },
             error=>{
-              console.log("Erro ao Carregar Evento: "+error)
-            },
-            ()=> {
-              console.log('Carregou Informações do Evento');
+              console.log("Erro ao Carregar Evento: "+error);
               loading.dismiss();
             });
 

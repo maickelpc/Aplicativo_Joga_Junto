@@ -9,12 +9,19 @@ import { Usuario } from '../models/usuario'
 
 import { API } from './api.config'
 
+const LOGGEDIN = 'loggedUser'
+
+
 @Injectable()
 export class LoginService{
 
   private usuario: Usuario;
 
-  constructor(private http:HttpClient, private storage: Storage){}
+  constructor(
+    private http:HttpClient,
+    private storage: Storage){
+
+    }
 
   today():Date{
     return new Date();
@@ -25,13 +32,16 @@ export class LoginService{
   }
 
   getUsuarioLogado():Usuario{
-    this.storage.get('loggedUser')
+    this.storage.get(LOGGEDIN)
     .then(user =>{
         this.usuario = JSON.parse(user);
         var agora = Date.now() / 1000;
         if(this.usuario === null || agora >= this.usuario.exp){
           this.logout();
         }
+    }).catch(erro => {
+      console.log(erro);
+      this.logout();
     });
     return this.usuario;
 
@@ -39,34 +49,34 @@ export class LoginService{
 
   login (username: string, password:string): Observable<Usuario>{
     let headers = new HttpHeaders();
-    headers = headers.append('Content-type', 'application/json');
+    headers = headers.append('Content-type', 'application/x-www-form-urlencoded');
+
+    let body = `username=${username}&password=${password}&grant_type=password`;
     return this.http.post<Usuario>(
       `${API}/api/auth/login`,
-      {username: username, password:password, grant_type: 'password'},
-      {headers: headers}).do(user => {
+      body, {headers: headers}).do(user => {
         let data = user.token.toString().split('.');
         let userTemp = JSON.parse(atob(data[1]));
         this.usuario = userTemp;
         this.usuario.token = user.token.toString();
-        this.storage.set('loggedUser', JSON.stringify(this.usuario));
-        // this.storage.get('loggedUser').then(
-        //   us => {
-        //     console.log(us);
-        //     console.log("A_____________AAA");
-        // });
-        // console.log("USuario SETADO");
+        // console.log(JSON.stringify(this.usuario))
+        this.storage.set(LOGGEDIN, JSON.stringify(this.usuario)).then(
+          data => console.log("GRAVOU")
+        ).catch(
+          error => console.log("NAO GRAVOU")
+        );
       });
 
     }
 
     cadastrar(usuario: Usuario): Observable<Usuario>{
 
-      let headers = new HttpHeaders();
-      headers = headers.append('Content-type', 'application/json');
+      // let headers = new HttpHeaders();
+      // headers = headers.append('Content-type', 'application/json');
 
       return this.http.post<Usuario>(
         `${API}/api/usuario`,
-        {usuario}, {headers: headers});
+        {usuario});
       }
 
     ativar(){
@@ -97,8 +107,10 @@ export class LoginService{
 
       logout(){
         // window.sessionStorage.removeItem('usuario');
-        this.storage.remove('loggedUser').then(() => console.log("Deslogado!"));
+        // this.storage.remove('loggedUser').then(() => console.log("Deslogado!"));
         this.usuario = null;
+        // const navCtrl = this.injector.get(NavController)
+        // navCtrl.push(LoginPage).then(dd => console.log(dd));
 
       }
 

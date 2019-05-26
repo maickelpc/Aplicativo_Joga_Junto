@@ -10,6 +10,8 @@ import { EventosComponent } from "../../components/eventos/eventos";
 import { ConfirmacaoComponent } from "../../components/confirmacao/confirmacao"
 import { LoadingController } from 'ionic-angular';
 
+import { Storage } from '@ionic/storage';
+
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -20,6 +22,8 @@ import { LoadingController } from 'ionic-angular';
 * @author: KMR
 * @email: yajuve.25.dz@gmail.com
 */
+
+
 
 export class LoginPage {
   // The account fields for the login form.
@@ -33,14 +37,14 @@ export class LoginPage {
   }
 
   public usuario : Usuario =  new Usuario();
-
+  public errosss : String;
 
   private cadastro: boolean = false;
   // Our translated text strings
   private loginErrorString: string;
   private opt: string = 'signin';
 
-  constructor(
+  constructor( private storage: Storage,
     public http:HttpProvider,
     public userProvider: UserProvider,
     public menuCtrl: MenuController,
@@ -56,6 +60,10 @@ export class LoginPage {
       });
 
     }
+
+    sleep(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    };
 
     maxDataNasc(){
       let max = new Date();
@@ -74,13 +82,19 @@ export class LoginPage {
       this.loginService.login(this.usuario.username, this.usuario.password)
       .subscribe(
         dados =>{
-          this.toastService.toast("Bem Vindo " + this.usuario.username );
-          if(this.loginService.getUsuarioLogado().email_verified_at == null){
-            this.goToConfirmacao();
-          }else{
-            this.events.publish('user:loggedin');
-            this.goToListaEventos();
-          }
+          this.sleep(1000).then(
+            () => {
+              this.toastService.toast("Bem Vindo " + this.usuario.username );
+              loading.dismiss();
+              if(this.loginService.getUsuarioLogado().email_verified_at == null){
+                this.goToConfirmacao();
+              }else{
+                this.events.publish('user:loggedin');
+                this.goToListaEventos();
+              }
+            }
+          )
+
 
         },
         error => {
@@ -95,9 +109,11 @@ export class LoginPage {
             break;
             default:
             this.toastService.toast("Ocorreu um erro na sua tentativa de login");
+            this.toastService.toast(JSON.stringify(error));
+            this.errosss = JSON.stringify(error);
 
           }
-
+          loading.dismiss()
           console.log(error.statusCode);
           console.log(JSON.stringify(error));
         },
@@ -111,7 +127,7 @@ export class LoginPage {
         this.loginService.cadastrar(this.usuario)
         .subscribe(
           x => {
-            console.log("Deu Certo " + JSON.stringify(this.usuario));
+            // console.log("Deu Certo " + JSON.stringify(this.usuario));
             loading.dismiss();
             this.login();
           },

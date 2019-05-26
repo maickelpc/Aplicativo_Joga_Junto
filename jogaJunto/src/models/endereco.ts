@@ -20,6 +20,9 @@ class Estado {
   deleted_at: Date
   cidades : Cidade[]
 
+  constructor(){
+    this.pais = new Pais();
+  }
 
 }
 
@@ -31,6 +34,10 @@ class Cidade {
   created_at : Date
   updated_at : Date
   deleted_at: Date
+
+  constructor(){
+    this.estado = new Estado();
+  }
 }
 
 class Endereco{
@@ -45,6 +52,10 @@ class Endereco{
   created_at : Date
   updated_at : Date
   deleted_at: Date
+
+  constructor(){
+    this.cidade = new Cidade();
+  }
 
 }
 

@@ -1,0 +1,112 @@
+{
+  "BTN": {
+    "SUBMIT": "Enviar"
+  },
+  "BACK_BUTTON_TEXT": "Voltar",
+
+  "NAME": "Nome",
+  "Name": "Nome",
+  "First Name": "Nome",
+  "Last Name": "Sobrenome",
+  "Fullname": "Nome Completo",
+
+  "EMAIL": "Email",
+  "USERNAME": "Login",
+  "Username": "Login",
+  "PASSWORD": "Senha",
+  "Password": "Senha",
+  "Retry Password": "Digite a senha novamente",
+  "Date of birth": "Data de Nascimento",
+  "Select Date" : "Selecione uma Data",
+
+  "LOGIN": "Entrar",
+  "Login": "Entrar",
+  "SIGNUP": "Inscrever-me",
+  "Signup": "Inscrever-me",
+
+  "TAB1_TITLE": "Itens",
+  "TAB2_TITLE": "Buscar",
+  "TAB3_TITLE": "Opções",
+
+  "MAP_TITLE": "Mapa",
+
+  "TUTORIAL_SKIP_BUTTON": "Pular",
+  "TUTORIAL_CONTINUE_BUTTON": "Continuar",
+
+  "TUTORIAL_SLIDE1_TITLE": "Bem-vindo",
+  "TUTORIAL_SLIDE1_DESCRIPTION": "The <b>Ionic Super Starter</b> is a fully-featured Ionic starter with many pre-built pages and best practices.",
+
+  "TUTORIAL_SLIDE2_TITLE": "How to use the Super Starter",
+  "TUTORIAL_SLIDE2_DESCRIPTION": "Assemble the various page types you want and remove the ones you don't. We've provided many common mobile app page layouts, like login and signup pages, tabs, and this tutorial page.",
+
+  "TUTORIAL_SLIDE3_TITLE": "Getting Started",
+  "TUTORIAL_SLIDE3_DESCRIPTION": "Need help? Check out the Super Starter README for a full tutorial",
+
+  "TUTORIAL_SLIDE4_TITLE": "Pronto para começar?",
+
+  "WELCOME_INTRO": "The starting point for your next great Ionic app",
+
+  "SETTINGS_TITLE": "Opções",
+  "SETTINGS_OPTION1": "Opção 1",
+  "SETTINGS_OPTION2": "Opção 2",
+  "SETTINGS_OPTION3": "Opção 3",
+  "SETTINGS_OPTION4": "Opção 4",
+
+  "SETTINGS_PROFILE_BUTTON": "Editar perfil",
+
+  "SETTINGS_PAGE_PROFILE": "Editar perfil",
+
+  "WELCOME_TITLE": "Bem vindo",
+
+  "LOGIN_TITLE": "Entrar",
+  "LOGIN_ERROR": "Unable to sign in. Please check your account information and try again.",
+  "LOGIN_BUTTON": "Entrar",
+  "SIGNUP_TITLE": "Inscrever-me",
+  "SIGNUP_ERROR": "Unable to create account. Please check your account information and try again.",
+  "SIGNUP_BUTTON": "Inscrever-me",
+
+  "LIST_MASTER_TITLE": "Itens",
+
+  "ITEM_CREATE_TITLE": "Novo",
+  "ITEM_CREATE_CHOOSE_IMAGE": "Adicionar imagem",
+
+  "ITEM_NAME_PLACEHOLDER": "Nome",
+  "ITEM_ABOUT_PLACEHOLDER": "Sobre",
+
+  "DONE_BUTTON": "Pronto",
+  "CANCEL_BUTTON": "Cancelar",
+  "DELETE_BUTTON": "Deletar",
+
+  "CARDS_TITLE": "Social",
+
+  "SEARCH_TITLE": "Buscar",
+  "SEARCH_PLACEHOLDER": "Search the items list, e.g. \"Donald Duck\"",
+  "Activate": "Ativar",
+  "Resend": "Reenviar",
+  "Activation Code": "Código de Ativação",
+  "My Profile": "Meu Perfil",
+  "About me" : "Sobre mim",
+  "City" : "Cidade",
+  "Data": "Dados",
+  "DATA": "DADOS",
+  "Address": "Endereço",
+  "ADDRESS": "ENDEREÇO",
+  "Phone": "Telefone",
+  "PHONE": "Telefone",
+  "address": "endereço",
+  "Sport": "Esporte",
+  "SPORT": "ESPORTE",
+  "sport": "esporte",
+  "Sports": "Esportes",
+  "SPORTS": "ESPORTES",
+  "sports": "esportes",
+  "Number": "Número",
+  "number": "número",
+  "Neighborhood" : "Bairro",
+  "neighborhood" : "bairro",
+  "Complement": "Complemento",
+  "complement": "complemento",
+  "Add": "Adicionar",
+  "Save": "Salvar",
+  "My Sports": "Meus Esportes"
+}

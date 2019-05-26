@@ -231,26 +231,36 @@ class UsuarioController extends Controller
 
       $usuario->save();
       
+      $endereco = null;
+      
+      
       if(count($dados->get('endereco')) > 0){
-        if($dados->get('endereco')['id'] > 0){
+        $end = collect($dados->get('endereco'));
+        if($end->get('id') > 0){
           // Se for apenas alteracao no endereco
           $endereco = $usuario->endereco;
-          $endereco->cidade_id = $dados->get('endereco')['cidade']['id'];
-          $endereco->logradouro = $dados->get('endereco')['logradouro'];
-          $endereco->bairro = $dados->get('endereco')['bairro'];
-          $endereco->numero = $dados->get('endereco')['numero'];
-          $endereco->cep = $dados->get('endereco')['cep'];
-          $endereco->complemento = $dados->get('endereco')['complemento'];
-          $endereco->referencia = $dados->get('endereco')['referencia'];
-          $endereco->save();
+  
         }else{
           // Se for  um endereco novo
-          $endereco = Endereco::create($dados->get('endereco'));
+          $endereco = new Endereco();
+         
+        }
+          
+          $endereco->cidade_id = $end->has('cidade_id') ? $end->get('cidade_id') : $end->get('cidade')['id'];
+          $endereco->logradouro = $end->get('logradouro');
+          $endereco->bairro = $end->get('bairro');
+          $endereco->numero = $end->get('numero');
+          $endereco->cep = $end->get('cep');
+          $endereco->complemento = $end->get('complemento');
+          $endereco->referencia = $end->get('referencia');
+          
+          $endereco->save();
+
           $usuario->endereco_id = $endereco->id;
           $usuario->save();
-        }
+          
       }
-
+      
       $posicoesInformadas = $dados->get('posicoes');
       $posicoes = array();
       foreach($posicoesInformadas as $p){
