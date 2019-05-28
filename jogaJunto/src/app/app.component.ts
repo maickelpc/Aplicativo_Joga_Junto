@@ -9,6 +9,7 @@ import { PerfilComponent } from '../components/perfil/perfil'
 import { FirstRunPage } from '../pages/pages';
 import {UserProvider} from "../providers/user/user";
 import { EventosComponent } from '../components/eventos/eventos';
+import { LogoutComponent } from '../components/logout/logout';
 import { UsuarioService} from '../services/usuario.service'
 
 
@@ -16,7 +17,7 @@ import { UsuarioService} from '../services/usuario.service'
   templateUrl: 'main.html'
 })
 export class MyApp {
-  rootPage = FirstRunPage;
+  rootPage = 'LoginPage';
 
   @ViewChild(Nav) nav: Nav;
 
@@ -49,7 +50,7 @@ export class MyApp {
       this.pages = [
                     {title:'Home', component: EventosComponent},
                     {title:'Perfil', component: PerfilComponent},
-                    {title:'Logout', component: null}
+                    {icon: 'log-out', title:'Sair', component: LogoutComponent}
                     ];
                     this.menuCtrl.enable(true);
 

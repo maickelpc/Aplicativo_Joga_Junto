@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { IonicPage, NavController, MenuController, Events } from 'ionic-angular';
 import { UserProvider } from "../../providers/user/user";
@@ -25,7 +25,7 @@ import { Push , PushOptions, PushObject} from '@ionic-native/push';
 
 
 
-export class LoginPage {
+export class LoginPage implements OnInit {
   // The account fields for the login form.
   // If you're using the username field with or without email, make
   // sure to add it to the type
@@ -43,6 +43,30 @@ export class LoginPage {
   // Our translated text strings
   private loginErrorString: string;
   private opt: string = 'signin';
+
+  ngOnInit(){
+    if(!this.loginService.estaLogado()){
+        let credenciais =  this.loginService.getCredenciais().then(
+          dados => {
+            if(dados != null ){
+              let cred = JSON.parse(dados);
+              this.usuario.username = cred.login;
+              this.usuario.password = cred.senha;
+              this.login();
+            }
+
+          })
+
+    }else{
+      console.log("Esta logado");
+      if(this.loginService.getUsuarioLogado().email_verified_at != undefined)
+        this.goToListaEventos();
+      else
+        this.goToConfirmacao();
+    }
+
+
+  }
 
   constructor( private push: Push,
     public http:HttpProvider,
@@ -67,7 +91,7 @@ export class LoginPage {
         .then((res: any) => {
 
           if (res.isEnabled) {
-            this.toastService.toast('Possui Permissão!!!');
+            // this.toastService.toast('Possui Permissão!!!');
             const options: PushOptions = {
                android: {},
                ios: {
@@ -89,10 +113,10 @@ export class LoginPage {
 
             pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 
-
-          } else {
-            this.toastService.toast('NÃO possui permissão!!!');
           }
+          // } else {
+          //   this.toastService.toast('NÃO possui permissão!!!');
+          // }
 
         });
 
@@ -144,6 +168,7 @@ export class LoginPage {
               this.toastService.toast("Credenciais inválidas");
               this.usuario.username = '';
               this.usuario.password = '';
+              this.loginService.clearCredenciais();
             break;
             default:
             this.toastService.toast("Ocorreu um erro na sua tentativa de login");

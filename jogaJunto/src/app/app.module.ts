@@ -30,6 +30,7 @@ import {EventoService} from "../services/evento.service";
 import {UsuarioService} from "../services/usuario.service";
 import {EventoComponent} from "../components/evento/evento";
 import {PerfilComponent} from "../components/perfil/perfil";
+import {LogoutComponent} from "../components/logout/logout";
 
 
 // The translate loader needs to know where to load i18n files
@@ -45,13 +46,15 @@ export function createTranslateLoader(http: HttpClient) {
     EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
-    PerfilComponent
+    PerfilComponent,
+    LogoutComponent
   ],
   exports: [
     EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
-    PerfilComponent
+    PerfilComponent,
+    LogoutComponent
   ],
   imports: [
     IonicSelectableModule,
@@ -74,7 +77,8 @@ export function createTranslateLoader(http: HttpClient) {
     EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
-    PerfilComponent
+    PerfilComponent,
+    LogoutComponent
   ],
   providers: [
     Push,

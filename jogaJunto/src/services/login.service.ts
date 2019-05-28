@@ -1,15 +1,17 @@
 
-import { Injectable } from '@angular/core'
+import { Injectable, Injector } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable'
 import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/do'
+import { NavController } from 'ionic-angular';
 
 import { Usuario } from '../models/usuario'
 
 import { API } from './api.config'
 
 const LOGGEDIN = 'loggedUser'
+const CREDENCIAIS = 'credentialsUser'
 
 
 @Injectable()
@@ -18,6 +20,7 @@ export class LoginService{
   private usuario: Usuario;
 
   constructor(
+    public injector: Injector,
     private http:HttpClient,
     private storage: Storage){
 
@@ -27,8 +30,24 @@ export class LoginService{
     return new Date();
   }
 
+  clearCredenciais(){
+    this.storage.remove(CREDENCIAIS);
+  }
+
+  setCredenciais(login: String, senha: String){
+    let credenciais = {login : login, senha: senha}
+    this.storage.set(CREDENCIAIS, JSON.stringify(credenciais));
+    // .then(()=> console.log("Guardou as credenciais"));
+  }
+
+  getCredenciais(){
+    let credenciais : any = null;
+    return this.storage.get(CREDENCIAIS);
+
+  }
+
   estaLogado():boolean{
-    return this.usuario !== undefined;
+    return (this.getUsuarioLogado() !== undefined && this.getUsuarioLogado() !== null);
   }
 
   getUsuarioLogado():Usuario{
@@ -37,17 +56,19 @@ export class LoginService{
         this.usuario = JSON.parse(user);
         var agora = Date.now() / 1000;
         if(this.usuario === null || agora >= this.usuario.exp){
-          this.logout();
+          this.logout(false);
         }
     }).catch(erro => {
       console.log(erro);
-      this.logout();
+      this.logout(false);
     });
     return this.usuario;
 
   }
 
+
   login (username: string, password:string): Observable<Usuario>{
+
     let headers = new HttpHeaders();
     headers = headers.append('Content-type', 'application/x-www-form-urlencoded');
 
@@ -65,6 +86,8 @@ export class LoginService{
         ).catch(
           error => console.log("NAO GRAVOU")
         );
+
+        this.setCredenciais(username, password);
       });
 
     }
@@ -74,17 +97,19 @@ export class LoginService{
       // let headers = new HttpHeaders();
       // headers = headers.append('Content-type', 'application/json');
 
+      this.setCredenciais(usuario.username, usuario.password);
+
       return this.http.post<Usuario>(
         `${API}/api/usuario`,
         {usuario});
       }
 
     ativar(){
-      this.storage.get('loggedUser').then(user =>{
+      this.storage.get(LOGGEDIN).then(user =>{
           this.usuario = JSON.parse(user);
         });
       this.usuario.email_verified_at = new Date();
-      this.storage.set('loggedUser', JSON.stringify(this.usuario));
+      this.storage.set(LOGGEDIN, JSON.stringify(this.usuario));
     }
 
     confirmar(codigo : string){
@@ -105,12 +130,14 @@ export class LoginService{
         }
 
 
-      logout(){
-        // window.sessionStorage.removeItem('usuario');
-        // this.storage.remove('loggedUser').then(() => console.log("Deslogado!"));
+      logout(removeCredenciais: boolean = false){
+
+        this.storage.remove(LOGGEDIN).then(() => console.log("Deslogado!"));
+        if(removeCredenciais)
+          this.storage.remove(CREDENCIAIS);
         this.usuario = null;
         // const navCtrl = this.injector.get(NavController)
-        // navCtrl.push(LoginPage).then(dd => console.log(dd));
+        // navCtrl.setRoot('LoginPage');
 
       }
 
