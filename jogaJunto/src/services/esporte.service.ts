@@ -11,16 +11,27 @@ import {LoginService} from "./login.service";
 @Injectable()
 export class EsporteService{
 
+  headers = new HttpHeaders();
 
-  constructor(private http:HttpClient, private login:LoginService){}
+
+  constructor(private http:HttpClient, private login:LoginService){
+    this.headers = this.headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+  }
+
 
     buscaTodasEsportes(): Observable<any> {
-      let headers = new HttpHeaders();
-      headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+
 
       return this.http.get<any>(
         `${API}/api/esporte?withPositions=1&per_page=500`,
-        {headers: headers});
+        {headers: this.headers});
+    }
+
+    buscaMeusEsportes(): Observable<Esporte[]>{
+      return this.http.get<Esporte[]>(
+        `${API}/api/esporte/meus/esportes`,
+        {headers: this.headers});
+
     }
 
   }

@@ -45,7 +45,7 @@
 -printconfiguration /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/multi-dex/debug/components.flags
 
 
-# Referenced at /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/manifests/full/debug/AndroidManifest.xml:59
+# Referenced at /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/manifests/full/debug/AndroidManifest.xml:62
 -keep class android.support.multidex.MultiDexApplication {
     <init>(...);
 }

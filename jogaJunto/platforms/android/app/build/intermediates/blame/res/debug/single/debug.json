@@ -32,12 +32,12 @@
         "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/drawable-hdpi-v4/notification_bg_low_normal.9.png"
     },
     {
-        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_template_big_media.xml.flat",
-        "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/cc274daac89fe10cc5d88396cdfb8d3b/res/layout/notification_template_big_media.xml"
-    },
-    {
         "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_template_part_chronometer.xml.flat",
         "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/layout/notification_template_part_chronometer.xml"
+    },
+    {
+        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_template_big_media.xml.flat",
+        "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/cc274daac89fe10cc5d88396cdfb8d3b/res/layout/notification_template_big_media.xml"
     },
     {
         "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/drawable-hdpi-v4_notification_bg_normal_pressed.9.png.flat",
@@ -56,16 +56,16 @@
         "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/drawable-mdpi-v4/notification_bg_low_pressed.9.png"
     },
     {
-        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/drawable-land-xxhdpi_screen.png.flat",
-        "source": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/res/drawable-land-xxhdpi/screen.png"
+        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_action_tombstone.xml.flat",
+        "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/layout/notification_action_tombstone.xml"
     },
     {
         "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/mipmap-xhdpi_icon.png.flat",
         "source": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/res/mipmap-xhdpi/icon.png"
     },
     {
-        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_action_tombstone.xml.flat",
-        "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/layout/notification_action_tombstone.xml"
+        "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/drawable-land-xxhdpi_screen.png.flat",
+        "source": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/res/drawable-land-xxhdpi/screen.png"
     },
     {
         "merged": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/layout_notification_action.xml.flat",

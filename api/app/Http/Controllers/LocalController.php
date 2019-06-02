@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Local;
 use App\Http\Resources\Local as LocalResource;
 use App\Http\Controllers\EnderecoController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
 use App\Endereco;
+use App\Esporte;
 Use Exception;
 Use DB;
 
@@ -89,6 +91,29 @@ class LocalController extends Controller
   {
     return new LocalResource(Local::find($id));
   }
+
+  public function localPorEsporte(Request $request, $esporte_id)
+  {
+
+    $usuario = Auth::user();
+    $cidade = $usuario->endereco->cidade;
+    $locaisId = DB::table('locais')
+    ->join('enderecos', 'enderecos.id', '=', 'locais.endereco_id')
+    ->join('cidades', 'cidades.id', '=', 'enderecos.cidade_id')
+    ->join('local_esporte', 'locais.id', '=', 'local_esporte.local_id')
+    ->where('cidades.id',$cidade->id)
+    ->where('local_esporte.esporte_id', $esporte_id);
+    if($request->has('nome'))
+      $locaisId = $locaisId->where('locais.nome', 'ilike', '%'.$request->get('nome').'%');
+    $locaisId = $locaisId->select('locais.id')->get();
+    $locaisId = $locaisId->map(function($dado){return ($dado->id);})->toArray();
+    
+    $locais = Local::with(['endereco','endereco.cidade'])->whereIn('id', $locaisId)->orderBy('nome')->get();
+    
+    return response()->json($locais);
+  }
+
+  
 
   /**
   * Show the form for editing the specified resource.

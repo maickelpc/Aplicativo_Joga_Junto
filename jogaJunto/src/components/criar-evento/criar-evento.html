@@ -1,0 +1,146 @@
+<ion-header padding>
+
+  <ion-navbar hideBackButton="false">
+    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title center class="titleicon toolbar-background">
+      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+  <ion-segment [(ngModel)]="seguimento" name="seguimento">
+    <ion-segment-button value="esporte">
+      Esporte
+    </ion-segment-button>
+    <ion-segment-button [disabled]="podeAvancar()" value="local">
+      Local
+    </ion-segment-button>
+    <ion-segment-button [disabled]="!podeAvancar()" value="convidados">
+      Convidados
+    </ion-segment-button>
+  </ion-segment>
+
+  <!-- <ion-list *ngIf="seguimento == 'convidados'"> -->
+  <!-- <ion-list>
+  <ion-list-header>
+  Convidar Amigos
+</ion-list-header>
+
+<ion-item *ngFor="let contato of meusContatos">
+{{contato.displayName}}
+</ion-item>
+
+</ion-list> -->
+
+<ion-list [ngSwitch]="seguimento">
+  <ion-list *ngSwitchCase="'esporte'">
+
+    <ion-item *ngFor="let esporte of esportes" >
+      <ion-grid>
+        <ion-row>
+          <ion-col col-4>
+            <ion-thumbnail item-start>
+              <img [src]="Util.pathAvatar('avatar5.jpg')" style="padding: 5px">
+            </ion-thumbnail>
+          </ion-col>
+          <ion-col col-4>
+            <h2>{{esporte.nome}}</h2>
+          </ion-col>
+          <ion-col col-4>
+            <button ion-button (click)="selecionaEsporte(esporte)">Selecionar</button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngSwitchCase="'local'">
+
+
+    <div [hidden]="evento.local.id != -1">
+      <ion-item>
+        <ion-label stacked>{{ 'Name' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'address' | translate }}</ion-label>
+        <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>Bairro</ion-label>
+        <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>
+      </ion-item>
+    </div>
+
+    <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">
+      <ion-list-header>
+        Escolha um local
+      </ion-list-header>
+      <ion-item>
+        <ion-label stacked>{{ 'SEARCH_TITLE' | translate }}</ion-label>
+        <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>
+      </ion-item>
+
+
+      <ion-item>
+        <ion-label>Criar um novo</ion-label>
+        <ion-radio [value]="local"></ion-radio>
+      </ion-item>
+
+      <ion-item *ngFor="let l of locais">
+        <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>
+        <ion-radio [value]="l"></ion-radio>
+      </ion-item>
+
+    </ion-list>
+  </ion-list>
+
+  <ion-list *ngSwitchCase="'convidados'">
+    <ion-list *ngIf="temContatos">
+      <ion-list-header>
+        Convidar Amigos
+      </ion-list-header>
+
+      <ion-item *ngFor="let contato of meusContatos">
+        <ion-col col-4>{{contato.displayName}}</ion-col>
+      </ion-item>
+
+    </ion-list>
+
+  </ion-list>
+</ion-list>
+
+
+
+<ion-fab bottom left>
+
+  <button ion-fab [disabled]="seguimento == 'esporte'" (click)="voltar()">
+    <ion-icon name="arrow-dropleft-circle"></ion-icon>
+    <div  class="label"dir="rtl"></div>
+  </button>
+
+
+
+</ion-fab>
+
+<ion-fab bottom right>
+
+  <button ion-fab *ngIf="seguimento != 'convidados'" (click)="avancar()" [disabled]="!podeAvancar()">
+    <ion-icon name="arrow-dropright-circle"></ion-icon>
+    <div class="label"></div>
+  </button>
+
+  <button ion-fab *ngIf="seguimento == 'convidados'" (click)="concluir()" [disabled]="!podeAvancar()">
+    <ion-icon name="checkmark-circle"></ion-icon>
+    <div  class="label"dir="rtl"></div>
+  </button>
+
+
+</ion-fab>
+
+</ion-content>

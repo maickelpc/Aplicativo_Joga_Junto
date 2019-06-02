@@ -67,6 +67,7 @@ Route::group([
     Route::get('/esporte/{id}', 'EsporteController@show')->name('esporte.show');
     Route::put('/esporte/{id}', 'EsporteController@update')->name('esporte.update');
     Route::delete('/esporte/{id}', 'EsporteController@destroy')->name('esporte.delete');
+    Route::get('/esporte/meus/esportes', 'EsporteController@meusEsportes')->name('meusEsportes');
 
     Route::get('/posicao', 'PosicaoController@index')->name('posicao.all');
     Route::post('/posicao', 'PosicaoController@store')->name('posicao.store');
@@ -79,6 +80,7 @@ Route::group([
     Route::get('/local/{id}', 'LocalController@show')->name('local.show');
     Route::put('/local/{id}', 'LocalController@update')->name('local.update');
     Route::delete('/local/{id}', 'LocalController@destroy')->name('local.delete');
+    Route::get('/local/esporte/{esporte_id}', 'LocalController@localPorEsporte')->name('local.porEsporte');
 
     Route::get('/notificacao', 'NotificacaoController@index')->name('notificacao.all');
     Route::post('/notificacao', 'NotificacaoController@store')->name('notificacao.store');

@@ -33,6 +33,16 @@ class CreateLocalTable extends Migration
             $table->foreign('endereco_id')->references('id')->on('enderecos');
         });
 
+        Schema::create('local_esporte', function (Blueprint $table) {
+          
+            $table->integer('local_id')->unsigned();
+            $table->integer('esporte_id')->unsigned();
+          
+            $table->foreign('esporte_id')->references('id')->on('esportes');
+            $table->foreign('local_id')->references('id')->on('locais');
+            $table->primary(['local_id','esporte_id']);
+        });
+
     }
 
     /**
@@ -42,6 +52,7 @@ class CreateLocalTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('local_esporte');
         Schema::dropIfExists('locais');
     }
 }

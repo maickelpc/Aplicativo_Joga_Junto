@@ -128,21 +128,6 @@
             ]
         },
         {
-            "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/values-v24_values-v24.arsc.flat",
-            "map": [
-                {
-                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/cc274daac89fe10cc5d88396cdfb8d3b/res/values-v24/values-v24.xml",
-                    "from": {
-                        "startLines": "2,3,4,5",
-                        "startColumns": "4,4,4,4",
-                        "startOffsets": "55,121,182,248",
-                        "endColumns": "65,60,65,66",
-                        "endOffsets": "116,177,243,310"
-                    }
-                }
-            ]
-        },
-        {
             "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/values-ru_values-ru.arsc.flat",
             "map": [
                 {
@@ -199,57 +184,16 @@
             ]
         },
         {
-            "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/values-uz_values-uz.arsc.flat",
+            "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/values-v24_values-v24.arsc.flat",
             "map": [
                 {
-                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.2.aar/0deddd625c7d5fbf67c7610529fb2f74/res/values-uz/values.xml",
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-media-compat-27.1.1.aar/cc274daac89fe10cc5d88396cdfb8d3b/res/values-v24/values-v24.xml",
                     "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "285",
-                        "endColumns": "208",
-                        "endOffsets": "493"
-                    },
-                    "to": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "105",
-                        "endColumns": "208",
-                        "endOffsets": "309"
-                    }
-                },
-                {
-                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/firebase-messaging-11.6.2.aar/b40890a1a9cfdb3c0b3f4816801af819/res/values-uz/values.xml",
-                    "from": {
-                        "startLines": "4",
-                        "startColumns": "0",
-                        "startOffsets": "243",
-                        "endColumns": "101",
-                        "endOffsets": "344"
-                    },
-                    "to": {
-                        "startLines": "3",
-                        "startColumns": "4",
-                        "startOffsets": "314",
-                        "endColumns": "105",
-                        "endOffsets": "415"
-                    }
-                },
-                {
-                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/values-uz/values-uz.xml",
-                    "from": {
-                        "startLines": "2",
-                        "startColumns": "4",
-                        "startOffsets": "55",
-                        "endColumns": "100",
-                        "endOffsets": "151"
-                    },
-                    "to": {
-                        "startLines": "4",
-                        "startColumns": "4",
-                        "startOffsets": "420",
-                        "endColumns": "100",
-                        "endOffsets": "516"
+                        "startLines": "2,3,4,5",
+                        "startColumns": "4,4,4,4",
+                        "startOffsets": "55,121,182,248",
+                        "endColumns": "65,60,65,66",
+                        "endOffsets": "116,177,243,310"
                     }
                 }
             ]
@@ -306,6 +250,62 @@
                         "startOffsets": "105",
                         "endColumns": "204",
                         "endOffsets": "305"
+                    }
+                }
+            ]
+        },
+        {
+            "outputFile": "/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/res/merged/debug/values-uz_values-uz.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/play-services-basement-11.6.2.aar/0deddd625c7d5fbf67c7610529fb2f74/res/values-uz/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "285",
+                        "endColumns": "208",
+                        "endOffsets": "493"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "105",
+                        "endColumns": "208",
+                        "endOffsets": "309"
+                    }
+                },
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/firebase-messaging-11.6.2.aar/b40890a1a9cfdb3c0b3f4816801af819/res/values-uz/values.xml",
+                    "from": {
+                        "startLines": "4",
+                        "startColumns": "0",
+                        "startOffsets": "243",
+                        "endColumns": "101",
+                        "endOffsets": "344"
+                    },
+                    "to": {
+                        "startLines": "3",
+                        "startColumns": "4",
+                        "startOffsets": "314",
+                        "endColumns": "105",
+                        "endOffsets": "415"
+                    }
+                },
+                {
+                    "source": "/home/maickel/.gradle/caches/transforms-1/files-1.1/support-compat-27.1.1.aar/3bd86f642b333d80e899251f581ed370/res/values-uz/values-uz.xml",
+                    "from": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "100",
+                        "endOffsets": "151"
+                    },
+                    "to": {
+                        "startLines": "4",
+                        "startColumns": "4",
+                        "startOffsets": "420",
+                        "endColumns": "100",
+                        "endOffsets": "516"
                     }
                 }
             ]

@@ -28306,6 +28306,34 @@ confirmacao ion-input {
   margin: 0 0 10px 0;
 }
 
+criar-evento .content {
+  background-color: #741b75;
+}
+
+criar-evento .item {
+  background-color: #741b75;
+}
+
+criar-evento .bg-branco {
+  background-color: white;
+}
+
+criar-evento ion-label {
+  color: #f7f7f7;
+  text-align: center;
+  margin: 0;
+}
+
+criar-evento .label {
+  margin: 0 0 5px 0;
+}
+
+criar-evento ion-input {
+  background-color: #fff;
+  border-radius: 500px;
+  margin: 0 0 25px 0;
+}
+
 evento #map {
   height: 300px;
 }

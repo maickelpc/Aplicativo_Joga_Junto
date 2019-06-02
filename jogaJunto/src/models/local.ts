@@ -3,7 +3,7 @@ import { Esporte } from './esporte'
 import { Endereco } from './endereco'
 
 class Local {
-
+  id: number
   nome : string
   descricao : string
   endereco : Endereco
@@ -18,7 +18,10 @@ class Local {
   valido : boolean
   esportes : Esporte[]
 
-
+  constructor(){
+    this.id = 0;
+    this.endereco = new Endereco();
+  }
 }
 
 

@@ -28,6 +28,9 @@
     <feature name="Geolocation">
         <param name="ios-package" value="CDVLocation" />
     </feature>
+    <feature name="Contacts">
+        <param name="ios-package" value="CDVContacts" />
+    </feature>
     <name>Joga Junto</name>
     <description>Joga Junto</description>
     <author email="yajuve.25.dz@gmail.com" href="#">KMR</author>

@@ -9,10 +9,10 @@ INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/androi
 	android:name
 		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:12:43-101
 manifest
-ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
+ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
 MERGED from [com.android.support:support-v13:27.1.1] /home/maickel/.gradle/caches/transforms-1/files-1.1/support-v13-27.1.1.aar/1a34d63adb521c3389319570206ba2d0/AndroidManifest.xml:17:1-22:12
 MERGED from [me.leolin:ShortcutBadger:1.1.17] /home/maickel/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.17.aar/666be2ba4c2ef17750abe719bda2cffd/AndroidManifest.xml:2:1-52:12
 MERGED from [com.google.firebase:firebase-messaging:11.6.2] /home/maickel/.gradle/caches/transforms-1/files-1.1/firebase-messaging-11.6.2.aar/b40890a1a9cfdb3c0b3f4816801af819/AndroidManifest.xml:16:1-30:12
@@ -42,9 +42,9 @@ MERGED from [android.arch.lifecycle:runtime:1.1.0] /home/maickel/.gradle/caches/
 MERGED from [android.arch.lifecycle:livedata-core:1.1.0] /home/maickel/.gradle/caches/transforms-1/files-1.1/livedata-core-1.1.0.aar/74acda2e362c9e68da90735454999cb9/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.lifecycle:viewmodel:1.1.0] /home/maickel/.gradle/caches/transforms-1/files-1.1/viewmodel-1.1.0.aar/df55b2cabe03223c6a1a9c2b528a97f6/AndroidManifest.xml:17:1-22:12
 MERGED from [android.arch.core:runtime:1.1.0] /home/maickel/.gradle/caches/transforms-1/files-1.1/runtime-1.1.0.aar/a7d99e34ec22a73eb2697249ce512a58/AndroidManifest.xml:17:1-22:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-34:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
+INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:1-37:12
 	package
 		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:2:102-134
 		INJECTED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml
@@ -287,6 +287,18 @@ uses-permission#android.permission.VIBRATE
 ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:33:5-66
 	android:name
 		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:33:22-63
+uses-permission#android.permission.READ_CONTACTS
+ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:34:5-72
+	android:name
+		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:34:22-69
+uses-permission#android.permission.WRITE_CONTACTS
+ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:35:5-73
+	android:name
+		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:35:22-70
+uses-permission#android.permission.GET_ACCOUNTS
+ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:36:5-71
+	android:name
+		ADDED from /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/src/main/AndroidManifest.xml:36:22-68
 uses-permission#com.sec.android.provider.badge.permission.READ
 ADDED from [me.leolin:ShortcutBadger:1.1.17] /home/maickel/.gradle/caches/transforms-1/files-1.1/ShortcutBadger-1.1.17.aar/666be2ba4c2ef17750abe719bda2cffd/AndroidManifest.xml:19:5-86
 	android:name

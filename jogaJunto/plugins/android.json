@@ -20,6 +20,9 @@
       "ANDROID_SUPPORT_V13_VERSION": "27.+",
       "FCM_VERSION": "11.6.2",
       "PACKAGE_NAME": "site.maickel.jogajunto"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
     }
   },
   "dependent_plugins": {

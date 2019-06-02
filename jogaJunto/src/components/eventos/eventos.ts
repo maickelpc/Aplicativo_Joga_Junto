@@ -3,6 +3,7 @@ import {EventoService} from "../../services/evento.service";
 import {UsuarioEvento} from "../../models/evento";
 import {NavController, ViewController, MenuController} from "ionic-angular";
 import {EventoComponent} from "../evento/evento";
+import {CriarEventoComponent} from "../criar-evento/criar-evento";
 
 /**
  * Generated class for the EventosComponent component.
@@ -25,20 +26,25 @@ export class EventosComponent implements OnInit{
                   this.menuCtrl.enable(true);
               }
   ngOnInit(): void {
-    this.evento.evento().subscribe(
-      response =>{
-          this.listaEventos = response;
-          console.log(this.listaEventos);
-      },
-        erro=>{
-
-        },
-      ()=>console.log('Carregou Lista de Eventos')
-    );
+    console.log("Entrando na tela de listagem de eventos");
+    // this.evento.evento().subscribe(
+    //   response =>{
+    //       this.listaEventos = response;
+    //       console.log(this.listaEventos);
+    //   },
+    //     erro=>{
+    //
+    //     },
+    //   ()=>console.log('Carregou Lista de Eventos')
+    // );
   }
 
   carregaEvento(idEvento):void {
       let param = { id: idEvento };
       this.navCtrl.push(EventoComponent, param);
+  }
+
+  criarNovoEvento(){
+    this.navCtrl.push(CriarEventoComponent);
   }
 }

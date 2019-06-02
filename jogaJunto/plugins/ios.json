@@ -18,6 +18,9 @@
     },
     "cordova-plugin-geolocation": {
       "PACKAGE_NAME": "com.cdd.jogaJunto"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
     }
   },
   "dependent_plugins": {

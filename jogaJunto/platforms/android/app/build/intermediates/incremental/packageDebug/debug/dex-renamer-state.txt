@@ -1,4 +1,4 @@
-#Mon May 27 21:23:40 BRT 2019
+#Sun Jun 02 12:31:53 BRT 2019
 base.0=/var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/transforms/dexMerger/debug/0
 path.1=classes2.dex
 renamed.1=classes2.dex

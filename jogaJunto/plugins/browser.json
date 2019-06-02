@@ -9,6 +9,9 @@
   "installed_plugins": {
     "cordova-plugin-app-preferences": {
       "PACKAGE_NAME": "site.maickel.jogajunto"
+    },
+    "cordova-plugin-contacts": {
+      "PACKAGE_NAME": "site.maickel.jogajunto"
     }
   },
   "dependent_plugins": {}

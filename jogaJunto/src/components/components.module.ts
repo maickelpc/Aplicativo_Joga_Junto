@@ -5,24 +5,32 @@ import { ConfirmacaoComponent } from './confirmacao/confirmacao';
 import { EventoComponent } from './evento/evento';
 import { PerfilComponent } from './perfil/perfil';
 import { LogoutComponent } from './logout/logout';
+import { CriarEventoComponent } from './criar-evento/criar-evento';
+import { IonicSelectableModule } from  'ionic-selectable';
+
+
 @NgModule({
 	declarations: [EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
     PerfilComponent,
-    LogoutComponent],
+    LogoutComponent,
+    CriarEventoComponent],
   imports: [
-    IonicPageModule
+    IonicPageModule,
+		IonicSelectableModule
   ],
 	exports: [EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
     PerfilComponent,
-    LogoutComponent],
+    LogoutComponent,
+    CriarEventoComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
 	    EventoComponent,
 	    PerfilComponent,
-			LogoutComponent]
+			LogoutComponent,
+			CriarEventoComponent]
 })
 export class ComponentsModule {}

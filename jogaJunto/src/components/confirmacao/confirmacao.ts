@@ -41,6 +41,12 @@ export class ConfirmacaoComponent {
       }
     );
   }
+  verificar(){
+    console.log("Enviando para a pagina de login");
+    this.login.logout();
+    this.navCtrl.pop();
+
+  }
 
   reenviar(){
     this.login.reenviar().subscribe(
