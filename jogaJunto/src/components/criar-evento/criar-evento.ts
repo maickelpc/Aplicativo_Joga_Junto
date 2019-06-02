@@ -19,7 +19,7 @@ import { Contacts, Contact, ContactField, ContactName , ContactFindOptions, Cont
 })
 export class CriarEventoComponent implements OnInit{
   public Util = Util;
-  seguimento : string;
+  passo : number;
   evento: Evento = new Evento();
   esportes: Esporte[];
   locais: Local[];
@@ -42,7 +42,7 @@ export class CriarEventoComponent implements OnInit{
   ngOnInit(){
     this.local = new Local();
     this.local.id = -1;
-    this.seguimento = 'esporte';
+    this.passo = 1;
 
 
 
@@ -65,7 +65,8 @@ export class CriarEventoComponent implements OnInit{
   selecionaEsporte(esporte: Esporte){
     this.evento.esporte = esporte;
     this.evento.local = new Local();
-    this.seguimento = 'local';
+    this.evento.vagas = esporte.qtdMaximo;
+    this.avancar();
     this.buscaLocal(esporte);
   }
 
@@ -83,6 +84,10 @@ export class CriarEventoComponent implements OnInit{
     )
   }
 
+  checkContato(contato){
+    contato.checked = ! contato.checked
+  }
+
   getContatos(){
     let options = new ContactFindOptions();
     options.filter = "";
@@ -92,7 +97,10 @@ export class CriarEventoComponent implements OnInit{
 
     this.contacts.find( fields, options ).then(
       dados => {
-        this.meusContatos = dados;
+        this.meusContatos = dados.map(x=> {
+          x.checked = false;
+          return x;
+        });
         this.temContatos = true;
         console.log(JSON.stringify(dados[1]));
       }
@@ -100,41 +108,72 @@ export class CriarEventoComponent implements OnInit{
   }
 
   voltar(){
-    switch(this.seguimento){
+    switch(this.passo){
       // case 'esporte':
-      case 'local':
-        this.seguimento = 'esporte';
+      case 2:
+        this.passo = 1;
         break;
-      case 'convidados':
-        this.seguimento = 'local';
+      case 3:
+        this.passo = 2;
+      case 4:
+        this.passo = 3;
+        break;
     }
   }
 
   avancar(){
-    switch(this.seguimento){
-      case 'esporte':
-        this.seguimento = 'local';
+    switch(this.passo){
+      case 1:
+        this.passo = 2;
         break;
-      case 'local':
-        this.seguimento = 'convidados';
+      case 2:
+        this.passo = 3;
+      case 3:
+        this.passo = 4;
         break;
-      // case 'convidados':
-      //   this.seguimento = 'local';
     }
   }
 
   concluir(){
-    console.log(JSON.stringify( this.evento))
+    //Lista de convidados do celular
+    let convidados = this.meusContatos.filter(x => x.checked);
+
+    //LISTA PARA TESTES EM BROWSER
+    // let convidados = `[{"_objectInstance":{"id":"3","rawId":"1","displayName":"Daniel","name":{"givenName":"Daniel","formatted":"Daniel "},"nickname":null,"phoneNumbers":[{"id":"5","pref":false,"value":"41 9774-3774","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"4","rawId":"6","displayName":"Tia Keyla","name":{"familyName":"Keyla","givenName":"Tia","formatted":"Tia Keyla"},"nickname":null,"phoneNumbers":[{"id":"30","pref":false,"value":"+55 41 9620-2901","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"7","rawId":"23","displayName":"Caroline","name":{"givenName":"Caroline","formatted":"Caroline "},"nickname":null,"phoneNumbers":[{"id":"115","pref":false,"value":"+55 45 9842-1001","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true}]`;
+
+    convidados = JSON.parse(convidados);
+
+
+    let loading = this.loading();
+    loading.present();
+
+    this.eventoService.criarEvento(this.evento, convidados).subscribe(
+      dados => {
+        loading.dismiss();
+        console.log(dados);
+        this.toastService.toast("Evento criado com sucesso!");
+      },
+      erro => {
+        loading.dismiss();
+        console.log(erro);
+        this.toastService.toast("Erro ao criar o evento: "+erro);
+      }
+
+    );
+
+    // console.log(JSON.stringify(this.evento));
   }
 
   podeAvancar():boolean{
-    switch(this.seguimento){
-      case 'esporte':
+    switch(this.passo){
+      case 1:
          return !(this.evento.esporte.id == null);
-      case 'local':
+     case 2:
+        return !(this.evento.dataRealizacao == null || this.evento.horario == null);
+      case 3:
         return !(this.evento.local.id == 0);
         // break;
-      case 'convidados':
+      case 4:
         return true;
     }
 
@@ -146,6 +185,15 @@ export class CriarEventoComponent implements OnInit{
     this.buscaLocal(this.evento.esporte, this.search);
   }
 
+  maxData(){
+    let max = new Date();
+    max.setFullYear(max.getFullYear() + 1);
+    return max;
+  }
+
+  minData(){
+    return new Date();
+  }
 
   public loading() {
     return this.loadingCtrl.create({

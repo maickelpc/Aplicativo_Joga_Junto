@@ -34,4 +34,13 @@ export class EventoService{
         `${API}/api/evento/`+id,
         {headers: headers}).map(x => x.data);
     }
+
+    criarEvento(evento: Evento, convidados: any): Observable<Evento> {
+      let headers = new HttpHeaders();
+      let dados = {evento: evento, convidados: convidados};
+      // console.log(dados);
+      console.log(JSON.stringify(dados));
+      headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+      return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: headers});
+    }
   }

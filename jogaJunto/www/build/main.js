@@ -344,7 +344,7 @@ var LoginPage = (function () {
     };
     LoginPage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-login',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/`<!--<ion-header>\n\n<ion-navbar>\n<ion-title>Temo Chat Theme fo Ionic</ion-title>\n</ion-navbar>\n\n</ion-header>-->\n\n\n<ion-content>\n  <ion-row style="background-color: white;" padding>\n    <ion-col s12>\n      <div [hidden]="cadastro" id="logo" text-center>\n        <img src="./assets/img/jogaJuntoLogo.png" width="80%">\n      </div>\n    </ion-col>\n  </ion-row>\n\n  <div padding>\n    <ion-segment [(ngModel)]="opt" color="light">\n      <ion-segment-button value="signin" (click)="cadastro = false">\n        {{ \'LOGIN\' | translate }}\n      </ion-segment-button>\n      <ion-segment-button value="signup" (click)="cadastro = true">\n        {{ \'SIGNUP\' | translate }}\n      </ion-segment-button>\n    </ion-segment>\n  </div>\n\n  <div [ngSwitch]="opt" padding>\n    <form *ngSwitchCase="\'signin\'">\n\n      <ion-input type="text" [(ngModel)]="usuario.username" placeholder="{{\'Username\' | translate}}" name="username"></ion-input>\n\n      <ion-input type="password" [(ngModel)]="usuario.password" placeholder="{{\'Password\' | translate}}" name="password"></ion-input>\n\n\n      <div padding text-center>\n        <button ion-button round color="light" icon-right (click)="login()">\n          {{ \'LOGIN\' | translate }} <ion-icon name="log-in"></ion-icon>\n        </button>\n\n      </div>\n\n\n    </form>\n\n    <form  *ngSwitchCase="\'signup\'" padding>\n      <ion-item>\n        <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.nome" name="nome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Lastname\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.sobrenome" name="sobrenome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Email\' | translate }}</ion-label>\n        <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>\n      </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Password\' | translate }}</ion-label>\n          <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Retry Password\' | translate }}</ion-label>\n          <ion-input type="password"  [(ngModel)]="usuario.repassword" name="repassword"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label>{{ \'Date of birth\' | translate }}</ion-label>\n          <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n          placeholder="{{\'Select Date\' | translate}}" max="{{ maxDataNasc() | date:\'yyyy-MM-dd\' }}"\n          name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>\n        </ion-item>\n\n        <div padding text-center>\n          <button ion-button round color="light" icon-right (click)="cadastrar()">\n            {{ \'SIGNUP\' | translate }} <ion-icon name="person-add"></ion-icon>\n          </button>\n        </div>\n      </form>\n\n\n    </div>\n  </ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/
+            selector: 'page-login',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/`<!--<ion-header>\n\n<ion-navbar>\n<ion-title>Temo Chat Theme fo Ionic</ion-title>\n</ion-navbar>\n\n</ion-header>-->\n\n\n<ion-content>\n  <ion-row style="background-color: white;" padding>\n    <ion-col s12>\n      <div [hidden]="cadastro" id="logo" text-center>\n        <img src="./assets/img/jogaJuntoLogo.png" width="80%">\n      </div>\n    </ion-col>\n  </ion-row>\n\n  <div padding>\n    <ion-segment [(ngModel)]="opt" color="light">\n      <ion-segment-button value="signin" (click)="cadastro = false">\n        {{ \'LOGIN\' | translate }}\n      </ion-segment-button>\n      <ion-segment-button value="signup" (click)="cadastro = true">\n        {{ \'SIGNUP\' | translate }}\n      </ion-segment-button>\n    </ion-segment>\n  </div>\n\n  <div [ngSwitch]="opt" padding>\n    <form *ngSwitchCase="\'signin\'">\n\n      <ion-input type="text" [(ngModel)]="usuario.username" placeholder="{{\'Username\' | translate}}" name="username"></ion-input>\n\n      <ion-input type="password" [(ngModel)]="usuario.password" placeholder="{{\'Password\' | translate}}" name="password"></ion-input>\n\n\n      <div padding text-center>\n        <button ion-button round color="light" icon-right (click)="login()">\n          {{ \'LOGIN\' | translate }} <ion-icon name="log-in"></ion-icon>\n        </button>\n\n      </div>\n\n\n    </form>\n\n    <form  *ngSwitchCase="\'signup\'" padding>\n      <ion-item>\n        <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.nome" name="nome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Lastname\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="usuario.sobrenome" name="sobrenome"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Email\' | translate }}</ion-label>\n        <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n        <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Password\' | translate }}</ion-label>\n        <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'Retry Password\' | translate }}</ion-label>\n        <ion-input type="password"  [(ngModel)]="usuario.repassword" name="repassword"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label>{{ \'Date of birth\' | translate }}</ion-label>\n        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n        placeholder="{{\'Select Date\' | translate}}" max="{{ maxDataNasc() | date:\'yyyy-MM-dd\' }}"\n        name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>\n      </ion-item>\n\n      <div padding text-center>\n        <button ion-button round color="light" icon-right (click)="cadastrar()">\n          {{ \'SIGNUP\' | translate }} <ion-icon name="person-add"></ion-icon>\n        </button>\n      </div>\n    </form>\n\n\n  </div>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/pages/login/login.html"*/
         })
         /**
         * @author: KMR
@@ -619,7 +619,7 @@ var CriarEventoComponent = (function () {
         var _this = this;
         this.local = new __WEBPACK_IMPORTED_MODULE_5__models_local__["a" /* Local */]();
         this.local.id = -1;
-        this.seguimento = 'esporte';
+        this.passo = 1;
         var loading = this.loading();
         loading.present();
         this.esporteService.buscaMeusEsportes().subscribe(function (dados) { return _this.esportes = dados; }, function (erro) {
@@ -632,7 +632,8 @@ var CriarEventoComponent = (function () {
     CriarEventoComponent.prototype.selecionaEsporte = function (esporte) {
         this.evento.esporte = esporte;
         this.evento.local = new __WEBPACK_IMPORTED_MODULE_5__models_local__["a" /* Local */]();
-        this.seguimento = 'local';
+        this.evento.vagas = esporte.qtdMaximo;
+        this.avancar();
         this.buscaLocal(esporte);
     };
     CriarEventoComponent.prototype.buscaLocal = function (esporte, nome) {
@@ -648,6 +649,9 @@ var CriarEventoComponent = (function () {
             _this.toastService.toast("Erro ao buscar os locais, tente novamente mais tarde!");
         });
     };
+    CriarEventoComponent.prototype.checkContato = function (contato) {
+        contato.checked = !contato.checked;
+    };
     CriarEventoComponent.prototype.getContatos = function () {
         var _this = this;
         var options = new __WEBPACK_IMPORTED_MODULE_9__ionic_native_contacts__["a" /* ContactFindOptions */]();
@@ -655,42 +659,69 @@ var CriarEventoComponent = (function () {
         options.multiple = true;
         var fields = ['displayName', 'name', 'phoneNumbers', 'emails'];
         this.contacts.find(fields, options).then(function (dados) {
-            _this.meusContatos = dados;
+            _this.meusContatos = dados.map(function (x) {
+                x.checked = false;
+                return x;
+            });
             _this.temContatos = true;
             console.log(JSON.stringify(dados[1]));
         });
     };
     CriarEventoComponent.prototype.voltar = function () {
-        switch (this.seguimento) {
+        switch (this.passo) {
             // case 'esporte':
-            case 'local':
-                this.seguimento = 'esporte';
+            case 2:
+                this.passo = 1;
                 break;
-            case 'convidados':
-                this.seguimento = 'local';
+            case 3:
+                this.passo = 2;
+            case 4:
+                this.passo = 3;
+                break;
         }
     };
     CriarEventoComponent.prototype.avancar = function () {
-        switch (this.seguimento) {
-            case 'esporte':
-                this.seguimento = 'local';
+        switch (this.passo) {
+            case 1:
+                this.passo = 2;
                 break;
-            case 'local':
-                this.seguimento = 'convidados';
+            case 2:
+                this.passo = 3;
+            case 3:
+                this.passo = 4;
                 break;
         }
     };
     CriarEventoComponent.prototype.concluir = function () {
-        console.log(JSON.stringify(this.evento));
+        var _this = this;
+        //Lista de convidados do celular
+        var convidados = this.meusContatos.filter(function (x) { return x.checked; });
+        //LISTA PARA TESTES EM BROWSER
+        // let convidados = `[{"_objectInstance":{"id":"3","rawId":"1","displayName":"Daniel","name":{"givenName":"Daniel","formatted":"Daniel "},"nickname":null,"phoneNumbers":[{"id":"5","pref":false,"value":"41 9774-3774","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"4","rawId":"6","displayName":"Tia Keyla","name":{"familyName":"Keyla","givenName":"Tia","formatted":"Tia Keyla"},"nickname":null,"phoneNumbers":[{"id":"30","pref":false,"value":"+55 41 9620-2901","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"7","rawId":"23","displayName":"Caroline","name":{"givenName":"Caroline","formatted":"Caroline "},"nickname":null,"phoneNumbers":[{"id":"115","pref":false,"value":"+55 45 9842-1001","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true}]`;
+        convidados = JSON.parse(convidados);
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.criarEvento(this.evento, convidados).subscribe(function (dados) {
+            loading.dismiss();
+            console.log(dados);
+            _this.toastService.toast("Evento criado com sucesso!");
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Erro ao criar o evento: " + erro);
+        });
+        // console.log(JSON.stringify(this.evento));
     };
     CriarEventoComponent.prototype.podeAvancar = function () {
-        switch (this.seguimento) {
-            case 'esporte':
+        switch (this.passo) {
+            case 1:
                 return !(this.evento.esporte.id == null);
-            case 'local':
+            case 2:
+                return !(this.evento.dataRealizacao == null || this.evento.horario == null);
+            case 3:
                 return !(this.evento.local.id == 0);
             // break;
-            case 'convidados':
+            case 4:
                 return true;
         }
         return false;
@@ -698,6 +729,14 @@ var CriarEventoComponent = (function () {
     CriarEventoComponent.prototype.filtraLocal = function () {
         console.log("Filtrando o local");
         this.buscaLocal(this.evento.esporte, this.search);
+    };
+    CriarEventoComponent.prototype.maxData = function () {
+        var max = new Date();
+        max.setFullYear(max.getFullYear() + 1);
+        return max;
+    };
+    CriarEventoComponent.prototype.minData = function () {
+        return new Date();
     };
     CriarEventoComponent.prototype.loading = function () {
         return this.loadingCtrl.create({
@@ -707,7 +746,7 @@ var CriarEventoComponent = (function () {
     };
     CriarEventoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'criar-evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/`<ion-header padding>\n\n  <ion-navbar hideBackButton="false">\n    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-segment [(ngModel)]="seguimento" name="seguimento">\n    <ion-segment-button value="esporte">\n      Esporte\n    </ion-segment-button>\n    <ion-segment-button [disabled]="podeAvancar()" value="local">\n      Local\n    </ion-segment-button>\n    <ion-segment-button [disabled]="!podeAvancar()" value="convidados">\n      Convidados\n    </ion-segment-button>\n  </ion-segment>\n\n  <!-- <ion-list *ngIf="seguimento == \'convidados\'"> -->\n  <!-- <ion-list>\n  <ion-list-header>\n  Convidar Amigos\n</ion-list-header>\n\n<ion-item *ngFor="let contato of meusContatos">\n{{contato.displayName}}\n</ion-item>\n\n</ion-list> -->\n\n<ion-list [ngSwitch]="seguimento">\n  <ion-list *ngSwitchCase="\'esporte\'">\n\n    <ion-item *ngFor="let esporte of esportes" >\n      <ion-grid>\n        <ion-row>\n          <ion-col col-4>\n            <ion-thumbnail item-start>\n              <img [src]="Util.pathAvatar(\'avatar5.jpg\')" style="padding: 5px">\n            </ion-thumbnail>\n          </ion-col>\n          <ion-col col-4>\n            <h2>{{esporte.nome}}</h2>\n          </ion-col>\n          <ion-col col-4>\n            <button ion-button (click)="selecionaEsporte(esporte)">Selecionar</button>\n          </ion-col>\n        </ion-row>\n      </ion-grid>\n    </ion-item>\n  </ion-list>\n\n  <ion-list *ngSwitchCase="\'local\'">\n\n\n    <div [hidden]="evento.local.id != -1">\n      <ion-item>\n        <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n        <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>\n      </ion-item>\n      <ion-item>\n        <ion-label stacked>Bairro</ion-label>\n        <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>\n      </ion-item>\n    </div>\n\n    <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">\n      <ion-list-header>\n        Escolha um local\n      </ion-list-header>\n      <ion-item>\n        <ion-label stacked>{{ \'SEARCH_TITLE\' | translate }}</ion-label>\n        <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>\n      </ion-item>\n\n\n      <ion-item>\n        <ion-label>Criar um novo</ion-label>\n        <ion-radio [value]="local"></ion-radio>\n      </ion-item>\n\n      <ion-item *ngFor="let l of locais">\n        <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>\n        <ion-radio [value]="l"></ion-radio>\n      </ion-item>\n\n    </ion-list>\n  </ion-list>\n\n  <ion-list *ngSwitchCase="\'convidados\'">\n    <ion-list *ngIf="temContatos">\n      <ion-list-header>\n        Convidar Amigos\n      </ion-list-header>\n\n      <ion-item *ngFor="let contato of meusContatos">\n        <ion-col col-4>{{contato.displayName}}</ion-col>\n      </ion-item>\n\n    </ion-list>\n\n  </ion-list>\n</ion-list>\n\n\n\n<ion-fab bottom left>\n\n  <button ion-fab [disabled]="seguimento == \'esporte\'" (click)="voltar()">\n    <ion-icon name="arrow-dropleft-circle"></ion-icon>\n    <div  class="label"dir="rtl"></div>\n  </button>\n\n\n\n</ion-fab>\n\n<ion-fab bottom right>\n\n  <button ion-fab *ngIf="seguimento != \'convidados\'" (click)="avancar()" [disabled]="!podeAvancar()">\n    <ion-icon name="arrow-dropright-circle"></ion-icon>\n    <div class="label"></div>\n  </button>\n\n  <button ion-fab *ngIf="seguimento == \'convidados\'" (click)="concluir()" [disabled]="!podeAvancar()">\n    <ion-icon name="checkmark-circle"></ion-icon>\n    <div  class="label"dir="rtl"></div>\n  </button>\n\n\n</ion-fab>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/,
+            selector: 'criar-evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/`<ion-header padding>\n\n  <ion-navbar hideBackButton="false">\n    <button button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-segment [(ngModel)]="passo" name="passo">\n    <ion-segment-button value="1">\n      Esporte\n    </ion-segment-button>\n    <ion-segment-button value="2">\n      Dados\n    </ion-segment-button>\n    <ion-segment-button [disabled]="podeAvancar()" value="3">\n      Local\n    </ion-segment-button>\n    <ion-segment-button [disabled]="!podeAvancar()" value="4">\n      Convidados\n    </ion-segment-button>\n  </ion-segment>\n\n  <!-- <ion-list *ngIf="passo == \'convidados\'"> -->\n  <!-- <ion-list>\n  <ion-list-header>\n  Convidar Amigos\n</ion-list-header>\n\n<ion-item *ngFor="let contato of meusContatos">\n{{contato.displayName}}\n</ion-item>\n\n</ion-list> -->\n\n<ion-list [ngSwitch]="passo">\n  <ion-list *ngSwitchCase="1">\n\n    <ion-item *ngFor="let esporte of esportes" >\n      <ion-grid>\n        <ion-row>\n          <ion-col col-4>\n            <ion-thumbnail item-start>\n              <img [src]="Util.pathAvatar(\'avatar5.jpg\')" style="padding: 5px">\n            </ion-thumbnail>\n          </ion-col>\n          <ion-col col-4>\n            <h2>{{esporte.nome}}</h2>\n          </ion-col>\n          <ion-col col-4>\n            <button button (click)="selecionaEsporte(esporte)">\n              <ion-icon name="checkmark-circle">\n              </ion-icon></button>\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="2">\n      <ion-item>\n        <ion-label stacked>Sobre o evento</ion-label>\n        <ion-textarea placeholder="Como vai ser o evento?."\n        [(ngModel)]="evento.descricao" name="descricao"></ion-textarea>\n      </ion-item>\n      <ion-item>\n        <ion-label>Data</ion-label>\n        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n        placeholder="{{\'Select Date\' | translate}}"\n        min="{{ minData() | date:\'yyyy-MM-dd\' }}" max="{{ maxData() | date:\'yyyy-MM-dd\' }}"\n        name="eventoData" [(ngModel)]="evento.dataRealizacao"></ion-datetime>\n      </ion-item>\n      <ion-item>\n        <ion-label>Horario</ion-label>\n        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm"\n        placeholder="Selecione o horário" name="horario" [(ngModel)]="evento.horario"></ion-datetime>\n      </ion-item>\n\n      <ion-item>\n        <ion-label>Evento publico</ion-label>\n        <ion-checkbox color="dark" name="eventopublico" [(ngModel)]="evento.publico"></ion-checkbox>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Vagas</ion-label>\n        <ion-input type="number" step="1" max="evento.esporte.qtdMaximo" [(ngModel)]="evento.vagas" name="eventoVagas"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Valor total do evento</ion-label>\n        <ion-input type="number" step="0.01" [(ngModel)]="evento.valor" name="eventoValor"></ion-input>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="3">\n\n      <div [hidden]="evento.local.id != -1">\n        <ion-item>\n          <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>Bairro</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>\n        </ion-item>\n      </div>\n\n      <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">\n        <ion-list-header>\n          Escolha um local\n        </ion-list-header>\n        <ion-item>\n          <ion-label stacked>{{ \'SEARCH_TITLE\' | translate }}</ion-label>\n          <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>\n        </ion-item>\n\n\n        <ion-item>\n          <ion-label>Criar um novo</ion-label>\n          <ion-radio [value]="local"></ion-radio>\n        </ion-item>\n\n        <ion-item *ngFor="let l of locais">\n          <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>\n          <ion-radio [value]="l"></ion-radio>\n        </ion-item>\n\n      </ion-list>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="4">\n      <ion-list *ngIf="temContatos">\n        <ion-list-header>\n          Convidar Amigos\n        </ion-list-header>\n\n        <ion-item *ngFor="let contato of meusContatos">\n          <ion-col col-4>{{contato.displayName}}</ion-col>\n          <ion-col col-4>\n            <button (click)="checkContato(contato)">\n              <ion-icon name="checkmark-circle" *ngIf="!contato.checked"></ion-icon>\n              <ion-icon name="close-circle" *ngIf="contato.checked"></ion-icon>\n\n            </button>\n          </ion-col>\n        </ion-item>\n\n      </ion-list>\n\n    </ion-list>\n  </ion-list>\n\n\n\n  <ion-fab bottom left>\n\n    <button ion-fab [disabled]="passo == 1" (click)="voltar()">\n      <ion-icon name="arrow-dropleft-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n\n  </ion-fab>\n\n  <ion-fab bottom right>\n\n    <button ion-fab *ngIf="passo != 4" (click)="avancar()" [disabled]="!podeAvancar()">\n      <ion-icon name="arrow-dropright-circle"></ion-icon>\n      <div class="label"></div>\n    </button>\n\n    <button ion-fab *ngIf="passo == 4" (click)="concluir()" [disabled]="!podeAvancar()">\n      <ion-icon name="checkmark-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n  </ion-fab>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_esporte_service__["a" /* EsporteService */],
             __WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
@@ -1793,6 +1832,14 @@ var EventoService = (function () {
         var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
         headers = headers.append('Authorization', 'Bearer ' + this.login.getUsuarioLogado().token);
         return this.http.get(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/" + id, { headers: headers }).map(function (x) { return x.data; });
+    };
+    EventoService.prototype.criarEvento = function (evento, convidados) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_1__angular_common_http__["c" /* HttpHeaders */]();
+        var dados = { evento: evento, convidados: convidados };
+        // console.log(dados);
+        console.log(JSON.stringify(dados));
+        headers = headers.append('Authorization', 'Bearer ' + this.login.getUsuarioLogado().token);
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/", dados, { headers: headers });
     };
     EventoService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),

@@ -58,32 +58,32 @@
         <ion-label stacked>{{ 'Email' | translate }}</ion-label>
         <ion-input type="email" [(ngModel)]="usuario.email" name="email"></ion-input>
       </ion-item>
-        <ion-item>
-          <ion-label stacked>{{ 'Username' | translate }}</ion-label>
-          <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>{{ 'Password' | translate }}</ion-label>
-          <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label stacked>{{ 'Retry Password' | translate }}</ion-label>
-          <ion-input type="password"  [(ngModel)]="usuario.repassword" name="repassword"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label>{{ 'Date of birth' | translate }}</ion-label>
-          <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"
-          placeholder="{{'Select Date' | translate}}" max="{{ maxDataNasc() | date:'yyyy-MM-dd' }}"
-          name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>
-        </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'Username' | translate }}</ion-label>
+        <ion-input type="text"  [(ngModel)]="usuario.username" name="username"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'Password' | translate }}</ion-label>
+        <ion-input type="password"  [(ngModel)]="usuario.password" name="password"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{ 'Retry Password' | translate }}</ion-label>
+        <ion-input type="password"  [(ngModel)]="usuario.repassword" name="repassword"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label>{{ 'Date of birth' | translate }}</ion-label>
+        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"
+        placeholder="{{'Select Date' | translate}}" max="{{ maxDataNasc() | date:'yyyy-MM-dd' }}"
+        name="dataNascimento" [(ngModel)]="usuario.dataNascimento"></ion-datetime>
+      </ion-item>
 
-        <div padding text-center>
-          <button ion-button round color="light" icon-right (click)="cadastrar()">
-            {{ 'SIGNUP' | translate }} <ion-icon name="person-add"></ion-icon>
-          </button>
-        </div>
-      </form>
+      <div padding text-center>
+        <button ion-button round color="light" icon-right (click)="cadastrar()">
+          {{ 'SIGNUP' | translate }} <ion-icon name="person-add"></ion-icon>
+        </button>
+      </div>
+    </form>
 
 
-    </div>
-  </ion-content>
+  </div>
+</ion-content>

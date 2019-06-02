@@ -1,7 +1,7 @@
 <ion-header padding>
 
   <ion-navbar hideBackButton="false">
-    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">
+    <button button icon-only menuToggle style="display: block !important;" color="primary">
       <ion-icon name="menu"></ion-icon>
     </button>
 
@@ -13,19 +13,22 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-segment [(ngModel)]="seguimento" name="seguimento">
-    <ion-segment-button value="esporte">
+  <ion-segment [(ngModel)]="passo" name="passo">
+    <ion-segment-button value="1">
       Esporte
     </ion-segment-button>
-    <ion-segment-button [disabled]="podeAvancar()" value="local">
+    <ion-segment-button value="2">
+      Dados
+    </ion-segment-button>
+    <ion-segment-button [disabled]="podeAvancar()" value="3">
       Local
     </ion-segment-button>
-    <ion-segment-button [disabled]="!podeAvancar()" value="convidados">
+    <ion-segment-button [disabled]="!podeAvancar()" value="4">
       Convidados
     </ion-segment-button>
   </ion-segment>
 
-  <!-- <ion-list *ngIf="seguimento == 'convidados'"> -->
+  <!-- <ion-list *ngIf="passo == 'convidados'"> -->
   <!-- <ion-list>
   <ion-list-header>
   Convidar Amigos
@@ -37,8 +40,8 @@
 
 </ion-list> -->
 
-<ion-list [ngSwitch]="seguimento">
-  <ion-list *ngSwitchCase="'esporte'">
+<ion-list [ngSwitch]="passo">
+  <ion-list *ngSwitchCase="1">
 
     <ion-item *ngFor="let esporte of esportes" >
       <ion-grid>
@@ -52,95 +55,138 @@
             <h2>{{esporte.nome}}</h2>
           </ion-col>
           <ion-col col-4>
-            <button ion-button (click)="selecionaEsporte(esporte)">Selecionar</button>
+            <button button (click)="selecionaEsporte(esporte)">
+              <ion-icon name="checkmark-circle">
+              </ion-icon></button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="2">
+      <ion-item>
+        <ion-label stacked>Sobre o evento</ion-label>
+        <ion-textarea placeholder="Como vai ser o evento?."
+        [(ngModel)]="evento.descricao" name="descricao"></ion-textarea>
+      </ion-item>
+      <ion-item>
+        <ion-label>Data</ion-label>
+        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"
+        placeholder="{{'Select Date' | translate}}"
+        min="{{ minData() | date:'yyyy-MM-dd' }}" max="{{ maxData() | date:'yyyy-MM-dd' }}"
+        name="eventoData" [(ngModel)]="evento.dataRealizacao"></ion-datetime>
+      </ion-item>
+      <ion-item>
+        <ion-label>Horario</ion-label>
+        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm"
+        placeholder="Selecione o horário" name="horario" [(ngModel)]="evento.horario"></ion-datetime>
+      </ion-item>
+
+      <ion-item>
+        <ion-label>Evento publico</ion-label>
+        <ion-checkbox color="dark" name="eventopublico" [(ngModel)]="evento.publico"></ion-checkbox>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Vagas</ion-label>
+        <ion-input type="number" step="1" max="evento.esporte.qtdMaximo" [(ngModel)]="evento.vagas" name="eventoVagas"></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label stacked>Valor total do evento</ion-label>
+        <ion-input type="number" step="0.01" [(ngModel)]="evento.valor" name="eventoValor"></ion-input>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="3">
+
+      <div [hidden]="evento.local.id != -1">
+        <ion-item>
+          <ion-label stacked>{{ 'Name' | translate }}</ion-label>
+          <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>{{ 'address' | translate }}</ion-label>
+          <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>Bairro</ion-label>
+          <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>
+        </ion-item>
+      </div>
+
+      <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">
+        <ion-list-header>
+          Escolha um local
+        </ion-list-header>
+        <ion-item>
+          <ion-label stacked>{{ 'SEARCH_TITLE' | translate }}</ion-label>
+          <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+          <ion-label>Criar um novo</ion-label>
+          <ion-radio [value]="local"></ion-radio>
+        </ion-item>
+
+        <ion-item *ngFor="let l of locais">
+          <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>
+          <ion-radio [value]="l"></ion-radio>
+        </ion-item>
+
+      </ion-list>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="4">
+      <ion-list *ngIf="temContatos">
+        <ion-list-header>
+          Convidar Amigos
+        </ion-list-header>
+
+        <ion-item *ngFor="let contato of meusContatos">
+          <ion-col col-4>{{contato.displayName}}</ion-col>
+          <ion-col col-4>
+            <button (click)="checkContato(contato)">
+              <ion-icon name="checkmark-circle" *ngIf="!contato.checked"></ion-icon>
+              <ion-icon name="close-circle" *ngIf="contato.checked"></ion-icon>
+
+            </button>
           </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-item>
-  </ion-list>
+        </ion-item>
 
-  <ion-list *ngSwitchCase="'local'">
-
-
-    <div [hidden]="evento.local.id != -1">
-      <ion-item>
-        <ion-label stacked>{{ 'Name' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label stacked>{{ 'address' | translate }}</ion-label>
-        <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>
-      </ion-item>
-      <ion-item>
-        <ion-label stacked>Bairro</ion-label>
-        <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>
-      </ion-item>
-    </div>
-
-    <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">
-      <ion-list-header>
-        Escolha um local
-      </ion-list-header>
-      <ion-item>
-        <ion-label stacked>{{ 'SEARCH_TITLE' | translate }}</ion-label>
-        <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>
-      </ion-item>
-
-
-      <ion-item>
-        <ion-label>Criar um novo</ion-label>
-        <ion-radio [value]="local"></ion-radio>
-      </ion-item>
-
-      <ion-item *ngFor="let l of locais">
-        <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>
-        <ion-radio [value]="l"></ion-radio>
-      </ion-item>
+      </ion-list>
 
     </ion-list>
   </ion-list>
 
-  <ion-list *ngSwitchCase="'convidados'">
-    <ion-list *ngIf="temContatos">
-      <ion-list-header>
-        Convidar Amigos
-      </ion-list-header>
 
-      <ion-item *ngFor="let contato of meusContatos">
-        <ion-col col-4>{{contato.displayName}}</ion-col>
-      </ion-item>
 
-    </ion-list>
+  <ion-fab bottom left>
 
-  </ion-list>
-</ion-list>
+    <button ion-fab [disabled]="passo == 1" (click)="voltar()">
+      <ion-icon name="arrow-dropleft-circle"></ion-icon>
+      <div  class="label"dir="rtl"></div>
+    </button>
 
 
 
-<ion-fab bottom left>
+  </ion-fab>
 
-  <button ion-fab [disabled]="seguimento == 'esporte'" (click)="voltar()">
-    <ion-icon name="arrow-dropleft-circle"></ion-icon>
-    <div  class="label"dir="rtl"></div>
-  </button>
+  <ion-fab bottom right>
 
+    <button ion-fab *ngIf="passo != 4" (click)="avancar()" [disabled]="!podeAvancar()">
+      <ion-icon name="arrow-dropright-circle"></ion-icon>
+      <div class="label"></div>
+    </button>
 
-
-</ion-fab>
-
-<ion-fab bottom right>
-
-  <button ion-fab *ngIf="seguimento != 'convidados'" (click)="avancar()" [disabled]="!podeAvancar()">
-    <ion-icon name="arrow-dropright-circle"></ion-icon>
-    <div class="label"></div>
-  </button>
-
-  <button ion-fab *ngIf="seguimento == 'convidados'" (click)="concluir()" [disabled]="!podeAvancar()">
-    <ion-icon name="checkmark-circle"></ion-icon>
-    <div  class="label"dir="rtl"></div>
-  </button>
+    <button ion-fab *ngIf="passo == 4" (click)="concluir()" [disabled]="!podeAvancar()">
+      <ion-icon name="checkmark-circle"></ion-icon>
+      <div  class="label"dir="rtl"></div>
+    </button>
 
 
-</ion-fab>
+  </ion-fab>
 
 </ion-content>
