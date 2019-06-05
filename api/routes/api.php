@@ -94,7 +94,7 @@ Route::group([
     Route::put('/usuario/{id}', 'UsuarioController@update')->name('usuario.update');
     Route::delete('/usuario/{id}', 'UsuarioController@destroy')->name('usuario.delete');
     Route::patch('/usuario/atualizageoposicao/{id}', 'UsuarioController@atualizaGeoLocalizacao')->name('usuario.atualizaGeo');
-    
+
 
     Route::get('/usuario/emailteste/{email}', 'UsuarioController@emailteste')->name('usuario.emailteste');
 
@@ -102,6 +102,7 @@ Route::group([
 
     Route::get('/evento', 'EventoController@index')->name('evento.all');
     Route::get('/evento/getEventosUsuario', 'EventoController@getEventosProximosUsuario')->name('evento.getEventosUsuario');
+    Route::get('/evento/getEventosRegiaoUsuario/{lat}/{lng}', 'EventoController@getEventosRegiaoUsuario')->name('evento.getEventosRegiaoUsuario');
     Route::post('/evento', 'EventoController@store')->name('evento.store');
     Route::get('/evento/{id}', 'EventoController@show')->name('evento.show');
     Route::put('/evento/{id}', 'EventoController@update')->name('evento.update');

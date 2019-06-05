@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 $factory->define(App\Esporte::class, function (Faker $faker) {
 
     $esportes = ['Futebol', 'Futebol de Salão', 'Vôlei', 'Basquete'];
+    $imagens = ['soccer.png', 'soccer.png', 'volleyball.png', 'basketball.png'];
 
     return [
         'nome' => $faker->randomElement($esportes),

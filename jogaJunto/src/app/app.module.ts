@@ -32,6 +32,7 @@ import {UsuarioService} from "../services/usuario.service";
 import {EventoComponent} from "../components/evento/evento";
 import {PerfilComponent} from "../components/perfil/perfil";
 import {LogoutComponent} from "../components/logout/logout";
+import { MapsComponent } from '../components/maps/maps';
 import { CriarEventoComponent} from '../components/criar-evento/criar-evento'
 import { Contacts } from '@ionic-native/contacts';
 
@@ -52,6 +53,7 @@ export function createTranslateLoader(http: HttpClient) {
     EventoComponent,
     PerfilComponent,
     LogoutComponent,
+    MapsComponent,
     CriarEventoComponent
   ],
   exports: [
@@ -60,6 +62,7 @@ export function createTranslateLoader(http: HttpClient) {
     EventoComponent,
     PerfilComponent,
     LogoutComponent,
+    MapsComponent,
     CriarEventoComponent
   ],
   imports: [
@@ -85,6 +88,7 @@ export function createTranslateLoader(http: HttpClient) {
     EventoComponent,
     PerfilComponent,
     LogoutComponent,
+    MapsComponent,
     CriarEventoComponent
   ],
   providers: [

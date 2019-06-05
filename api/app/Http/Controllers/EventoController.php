@@ -118,59 +118,35 @@ class EventoController extends Controller
       return response()->json($ex->getMessage(), 400);
     }
 
-    $evento = new Evento();
-    dd($dados->evento);
-  }
+    public function getEventosProximosUsuario() {
+       return UsuarioEventoResource::collection(
+           UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()
+       );
+    }
 
-  /**
-  * Display the specified resource.
-  *
-  * @param  \App\Evento  $evento
-  * @return \Illuminate\Http\Response
-  */
-  public function show($id)
-  {
-    return new EventoResource(Evento::find($id));
-  }
-
-  /**
-  * Show the form for editing the specified resource.
-  *
-  * @param  \App\Evento  $evento
-  * @return \Illuminate\Http\Response
-  */
-  public function edit(Evento $evento)
-  {
-    //
-  }
-
-  /**
-  * Update the specified resource in storage.
-  *
-  * @param  \Illuminate\Http\Request  $request
-  * @param  \App\Evento  $evento
-  * @return \Illuminate\Http\Response
-  */
-  public function update(Request $request, Evento $evento)
-  {
-    //
-  }
-
-  /**
-  * Remove the specified resource from storage.
-  *
-  * @param  \App\Evento  $evento
-  * @return \Illuminate\Http\Response
-  */
-  public function destroy(Evento $evento)
-  {
-    //
-  }
-
-  public function getEventosProximosUsuario() {
-    return UsuarioEventoResource::collection(
-      UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()
-    );
-
-  }
+    public function getEventosRegiaoUsuario($lat, $lng) {
+      $results = DB::select(
+        "
+        SELECT
+        e.*
+        FROM eventos e
+        join locais l on l.id = e.local_id
+        WHERE \"dataRealizacao\" BETWEEN DATE(NOW()) AND DATE( (NOW() + INTERVAL '+ 3 DAYS') )
+        GROUP BY l.id, e.id
+        HAVING (
+           6371 *
+           acos(cos(radians($lat)) *
+           cos(radians(CAST(l.latitude AS DOUBLE PRECISION))) *
+           cos(radians(CAST(l.longitude AS DOUBLE PRECISION)) -
+           radians($lng)) +
+           sin(radians($lat)) *
+           sin(radians(CAST(l.latitude AS DOUBLE PRECISION) )))
+        ) < 10
+        LIMIT 20;
+        "
+      );
+       return EventoResource::collection(
+          Evento::hydrate($results)
+       );
+    }
 }

@@ -1,2 +1,0 @@
-# Referenced at /var/www/html/projeto-integrador-mobile/jogaJunto/platforms/android/app/build/intermediates/manifests/full/debug/AndroidManifest.xml:62
--keep class android.support.multidex.MultiDexApplication { <init>(...); }

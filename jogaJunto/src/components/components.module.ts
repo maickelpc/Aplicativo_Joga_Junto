@@ -5,6 +5,7 @@ import { ConfirmacaoComponent } from './confirmacao/confirmacao';
 import { EventoComponent } from './evento/evento';
 import { PerfilComponent } from './perfil/perfil';
 import { LogoutComponent } from './logout/logout';
+import { MapsComponent } from './maps/maps';
 import { CriarEventoComponent } from './criar-evento/criar-evento';
 import { IonicSelectableModule } from  'ionic-selectable';
 
@@ -15,6 +16,7 @@ import { IonicSelectableModule } from  'ionic-selectable';
     EventoComponent,
     PerfilComponent,
     LogoutComponent,
+    MapsComponent,
     CriarEventoComponent],
   imports: [
     IonicPageModule,
@@ -25,6 +27,7 @@ import { IonicSelectableModule } from  'ionic-selectable';
     EventoComponent,
     PerfilComponent,
     LogoutComponent,
+    MapsComponent,
     CriarEventoComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
