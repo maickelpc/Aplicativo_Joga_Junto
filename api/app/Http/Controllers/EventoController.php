@@ -16,10 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 
-<<<<<<< HEAD
-
-=======
->>>>>>> e07458b328a4061dccb3189d62f6458d95f57f4e
 class EventoController extends Controller
 {
     /**

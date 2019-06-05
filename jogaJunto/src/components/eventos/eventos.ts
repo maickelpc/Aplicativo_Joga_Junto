@@ -60,6 +60,17 @@ export class EventosComponent implements OnInit{
         },
       ()=>console.log('Carregou Lista de Eventos')
     );
+    console.log("Entrando na tela de listagem de eventos");
+    this.evento.evento().subscribe(
+      response =>{
+          this.listaEventos = response;
+          console.log(this.listaEventos);
+      },
+        erro=>{
+    
+        },
+      ()=>console.log('Carregou Lista de Eventos')
+    );
   }
 
   carregaEvento(idEvento):void {
