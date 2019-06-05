@@ -1,4 +1,4 @@
-jogaJunto/.sourcemaps
-jogaJunto/.sourcemaps/*
-jogaJunto/www/build
-jogaJunto/www/build/*
+./jogaJunto/.sourcemaps
+./jogaJunto/.sourcemaps/*
+./jogaJunto/www/build
+./jogaJunto/www/build/*
