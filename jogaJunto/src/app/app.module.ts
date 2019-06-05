@@ -22,6 +22,7 @@ import { LoginService } from '../services/login.service'
 import { ToastService } from '../services/toast.service'
 import { CidadeService } from '../services/cidade.service'
 import { EsporteService } from '../services/esporte.service'
+import { LocalService } from '../services/local.service'
 
 import { Push } from '@ionic-native/push';
 import {EventosComponent} from "../components/eventos/eventos";
@@ -31,6 +32,10 @@ import {UsuarioService} from "../services/usuario.service";
 import {EventoComponent} from "../components/evento/evento";
 import {PerfilComponent} from "../components/perfil/perfil";
 import {LogoutComponent} from "../components/logout/logout";
+import { MapsComponent } from '../components/maps/maps';
+import { CriarEventoComponent} from '../components/criar-evento/criar-evento'
+import { Contacts } from '@ionic-native/contacts';
+
 
 
 // The translate loader needs to know where to load i18n files
@@ -47,14 +52,18 @@ export function createTranslateLoader(http: HttpClient) {
     ConfirmacaoComponent,
     EventoComponent,
     PerfilComponent,
-    LogoutComponent
+    LogoutComponent,
+    MapsComponent,
+    CriarEventoComponent
   ],
   exports: [
     EventosComponent,
     ConfirmacaoComponent,
     EventoComponent,
     PerfilComponent,
-    LogoutComponent
+    LogoutComponent,
+    MapsComponent,
+    CriarEventoComponent
   ],
   imports: [
     IonicSelectableModule,
@@ -78,7 +87,9 @@ export function createTranslateLoader(http: HttpClient) {
     ConfirmacaoComponent,
     EventoComponent,
     PerfilComponent,
-    LogoutComponent
+    LogoutComponent,
+    MapsComponent,
+    CriarEventoComponent
   ],
   providers: [
     Push,
@@ -97,7 +108,9 @@ export function createTranslateLoader(http: HttpClient) {
     EventoService,
     UsuarioService,
     CidadeService,
-    EsporteService
+    EsporteService,
+    LocalService,
+    Contacts
   ]
 })
 export class AppModule { }

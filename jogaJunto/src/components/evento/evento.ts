@@ -1,7 +1,9 @@
 import { Util } from './../../providers/util/util';
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {EventoService} from "../../services/evento.service";
+import {EsporteService} from "../../services/esporte.service";
 import {Evento} from "../../models/evento";
+import {Esporte} from "../../models/esporte";
 import {NavController, NavParams, ViewController} from "ionic-angular";
 
 declare var google: any;
@@ -51,7 +53,7 @@ export class EventoComponent {
               console.log('Carregou Informações do Evento');
               this.mostraMapa();
             }
-      
+
           );
         }
       })

@@ -3,6 +3,7 @@ import { Usuario } from './usuario'
 import { Esporte } from './esporte'
 
 class Evento {
+  id:number
   dataRealizacao : Date
   horario : string
   descricao : string
@@ -15,6 +16,10 @@ class Evento {
   usuarioResponsavel : Usuario
   esporte : Esporte
 
+  constructor(){
+    this.esporte = new Esporte();
+    this.local = new Local();
+  }
 }
 
 class UsuarioEvento{

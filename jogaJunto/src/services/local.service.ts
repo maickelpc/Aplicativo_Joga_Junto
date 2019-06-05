@@ -3,13 +3,14 @@ import { Injectable } from '@angular/core'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs/Observable'
 
+import { Local } from '../models/local'
 import { Esporte } from '../models/esporte'
 
 import { API } from './api.config'
 import {LoginService} from "./login.service";
 
 @Injectable()
-export class EsporteService{
+export class LocalService{
 
   headers = new HttpHeaders();
 
@@ -19,17 +20,13 @@ export class EsporteService{
   }
 
 
-    buscaTodasEsportes(): Observable<any> {
-
-
-      return this.http.get<any>(
-        `${API}/api/esporte?withPositions=1&per_page=500`,
-        {headers: this.headers});
-    }
-
-    buscaMeusEsportes(): Observable<Esporte[]>{
-      return this.http.get<Esporte[]>(
-        `${API}/api/esporte/meus/esportes`,
+    buscaLocalPorEsporte(esporte: Esporte, nome:string): Observable<Local[]>{
+      if (nome != null)
+        nome = '?nome='+nome;
+      else
+        nome = '';
+      return this.http.get<Local[]>(
+        `${API}/api/local/esporte/${esporte.id}${nome}`,
         {headers: this.headers});
 
     }

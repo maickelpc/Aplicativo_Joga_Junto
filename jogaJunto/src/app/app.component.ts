@@ -7,7 +7,7 @@ import { Config, Nav, Platform, Events, MenuController } from 'ionic-angular';
 import { PerfilComponent } from '../components/perfil/perfil'
 
 import { FirstRunPage } from '../pages/pages';
-import {UserProvider} from "../providers/user/user";
+import { UserProvider} from "../providers/user/user";
 import { EventosComponent } from '../components/eventos/eventos';
 import { LogoutComponent } from '../components/logout/logout';
 import { UsuarioService} from '../services/usuario.service'

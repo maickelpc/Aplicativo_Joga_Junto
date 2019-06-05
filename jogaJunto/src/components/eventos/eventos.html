@@ -12,7 +12,119 @@
   </ion-navbar>
 </ion-header>
 
+<ion-content>
+    <div class="map-wrapper">
+      <maps #map>
+      </maps>
+    </div>
+</ion-content>
+<div class="bottom">
+
+
+
 <ion-content padding>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col class="ion-float-right">
+        <div>
+          <h3>float-right</h3>
+          <button ion-button icon-start (click)="criarNovoEvento()">
+            <ion-icon name="add-circle-outline"></ion-icon>
+            Criar Evento
+          </button>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-list>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+    <ion-item>
+      TESTE
+    </ion-item>
+
+  </ion-list>
+
+  <ion-fab bottom right>
+        <button ion-fab ><ion-icon name="md-share"></ion-icon></button>
+        <ion-fab-list side="top">
+
+          <button ion-fab >
+              <ion-icon name="logo-facebook"></ion-icon>
+              <div class="label">Facebook</div>
+          </button>
+
+          <button ion-fab>
+            <ion-icon name="logo-instagram"></ion-icon>
+            <div  class="label"dir="rtl">Instagram</div>
+          </button>
+
+          <button ion-fab >
+            <ion-icon name="logo-twitter"></ion-icon>
+            <div  class="label"dir="rtl">Twitter</div>
+          </button>
+
+          <button ion-fab >
+            <ion-icon name="logo-whatsapp"></ion-icon>
+            <div  class="label"dir="rtl">Whattsapp</div>
+          </button>
+
+      </ion-fab-list>
+  </ion-fab>
+</ion-content>
+<div>
+<div>
   <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
     <ion-card-content>
       <ion-card-title>
@@ -41,4 +153,4 @@
       </ion-row>
     </ion-card-content>
   </ion-card>
-</ion-content>
+</div>

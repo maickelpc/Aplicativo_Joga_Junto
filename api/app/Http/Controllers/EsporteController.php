@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Esporte;
 use App\Http\Resources\Esporte as EsporteResource;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
+Use App\Usuario;
 
 class EsporteController extends Controller
 {
@@ -71,6 +73,14 @@ class EsporteController extends Controller
     public function show($id)
     {
         return new EsporteResource(Esporte::find($id));
+    }
+
+    public function meusEsportes()
+    {
+      $usuario = Auth::user();
+      $esportes = $usuario->posicoes->map(function ($item, $key){ return $item->esporte;})->unique() ;
+
+      return response()->json($esportes);
     }
 
     /**

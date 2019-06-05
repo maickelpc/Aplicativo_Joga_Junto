@@ -19,4 +19,8 @@ export class Util {
     return './assets/img/' + name;
   }
 
+  static pathIcon(name:string):string {
+    return './assets/esportes/' + name;
+  }
+
 }

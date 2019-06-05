@@ -30,10 +30,7 @@ export class PerfilComponent implements OnInit{
   public esportesUsuario = [];
 
 
-  cidadeChange(event: {
-    component: IonicSelectableComponent,
-    value: number
-  }) {
+  cidadeChange(event: {component: IonicSelectableComponent, value: number }) {
     this.usuario.endereco.cidade.id = event.value['id'];
     // console.log('idcidade:', event.value);
   }
@@ -41,6 +38,7 @@ export class PerfilComponent implements OnInit{
   public posicoesSelecionadas : any;
   public usuario: Usuario;
   public Util = Util;
+
   public loading() {
     return this.loadingCtrl.create({
       content: 'Aguarde...',
