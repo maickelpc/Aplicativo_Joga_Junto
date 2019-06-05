@@ -280,7 +280,7 @@ var LoginPage = (function () {
                     break;
                 default:
                     _this.toastService.toast("Ocorreu um erro na sua tentativa de login");
-                    _this.toastService.toast(JSON.stringify(error));
+                    // this.toastService.toast(JSON.stringify(error));
                     _this.errosss = JSON.stringify(error);
             }
             loading.dismiss();
@@ -1784,8 +1784,8 @@ var ToastService = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API; });
-// export const API = 'http://localhost:8000';
-var API = 'http://apijogajunto.maickel.site';
+var API = 'http://localhost:8000';
+// export const API = 'http://apijogajunto.maickel.site';
 //# sourceMappingURL=api.config.js.map
 
 /***/ }),

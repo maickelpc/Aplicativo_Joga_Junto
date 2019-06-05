@@ -154,7 +154,7 @@ export class LoginPage implements OnInit {
               break;
               default:
               this.toastService.toast("Ocorreu um erro na sua tentativa de login");
-              this.toastService.toast(JSON.stringify(error));
+              // this.toastService.toast(JSON.stringify(error));
               this.errosss = JSON.stringify(error);
 
             }

@@ -152,6 +152,7 @@ export class CriarEventoComponent implements OnInit{
         loading.dismiss();
         console.log(dados);
         this.toastService.toast("Evento criado com sucesso!");
+        this.navCtrl.pop();
       },
       erro => {
         loading.dismiss();
