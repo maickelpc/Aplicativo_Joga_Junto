@@ -21,6 +21,7 @@ class Usuario extends Authenticatable
     'score',
     'telefone',
     'latitude',
+    'imagem',
     'longitude'];
   protected $dates = ['dataNascimento','created_at', 'updated_at', 'deleted_at', 'email_verified_at'];
 

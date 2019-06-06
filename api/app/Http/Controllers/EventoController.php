@@ -40,6 +40,10 @@ class EventoController extends Controller
     //
   }
 
+  public function show($id) {
+      return new EventoResource(Evento::find($id));
+  }
+
   /**
   * Store a newly created resource in storage.
   *
@@ -117,6 +121,7 @@ class EventoController extends Controller
       DB::rollback();
       return response()->json($ex->getMessage(), 400);
     }
+  }
 
     public function getEventosProximosUsuario() {
        return UsuarioEventoResource::collection(

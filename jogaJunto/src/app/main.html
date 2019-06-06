@@ -7,8 +7,8 @@
 
   <ion-content class="bg-branco">
 
-    <div padding text-center>
-      <img id="my-avatar" src="./assets/avatar/Raouf.png">
+    <div *ngIf="usuario != null" padding text-center>
+      <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)">
       <h4 ion-text>{{ userProvider.user.fullname }}</h4>
     </div>
 

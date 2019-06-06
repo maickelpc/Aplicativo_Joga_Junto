@@ -11,6 +11,9 @@ import { UserProvider} from "../providers/user/user";
 import { EventosComponent } from '../components/eventos/eventos';
 import { LogoutComponent } from '../components/logout/logout';
 import { UsuarioService} from '../services/usuario.service'
+import { LoginService } from '../services';
+import { Util } from '../providers/util/util';
+import { Usuario } from '../models/usuario';
 
 
 @Component({
@@ -20,6 +23,8 @@ export class MyApp {
   rootPage = 'LoginPage';
 
   @ViewChild(Nav) nav: Nav;
+  public Util = Util;
+  public usuario: Usuario;
 
   pages: any[] = [
     { icon: 'contacts', title: 'Friends', component: 'ListFriendsPage' },
@@ -36,7 +41,8 @@ export class MyApp {
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     events:Events,
-    private usuarioService: UsuarioService) {
+    private usuarioService: UsuarioService,
+    public loginService: LoginService) {
 
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
@@ -53,6 +59,8 @@ export class MyApp {
                     {icon: 'log-out', title:'Sair', component: LogoutComponent}
                     ];
                     this.menuCtrl.enable(true);
+                    this.usuario = loginService.getUsuarioLogado();
+                    console.log(this.usuario);
 
     });
 

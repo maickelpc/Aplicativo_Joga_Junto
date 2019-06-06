@@ -1,6 +1,6 @@
 webpackJsonp([5],{
 
-/***/ 142:
+/***/ 143:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50,32 +50,6 @@ var UserProvider = (function () {
 
 /***/ }),
 
-/***/ 143:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cidade_service__ = __webpack_require__(144);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esporte_service__ = __webpack_require__(84);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__evento_service__ = __webpack_require__(50);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(40);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__login_service__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__usuario_service__ = __webpack_require__(66);
-/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_4__usuario_service__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toast_service__ = __webpack_require__(45);
-/* unused harmony namespace reexport */
-
-
-
-
-
-
-//# sourceMappingURL=index.js.map
-
-/***/ }),
-
 /***/ 144:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -83,7 +57,7 @@ var UserProvider = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CidadeService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -124,7 +98,102 @@ var CidadeService = (function () {
 
 /***/ }),
 
-/***/ 173:
+/***/ 146:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventoComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__providers_util_util__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_evento_service__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+/**
+ * Generated class for the EventoComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var EventoComponent = (function () {
+    function EventoComponent(eventoService, navCtrl, viewCtrl, navParams) {
+        this.eventoService = eventoService;
+        this.navCtrl = navCtrl;
+        this.viewCtrl = viewCtrl;
+        this.navParams = navParams;
+        this.Util = __WEBPACK_IMPORTED_MODULE_0__providers_util_util__["a" /* Util */];
+    }
+    EventoComponent.prototype.ionViewDidLoad = function () {
+        // TESTE DO MAPREF console.log(this.mapRef);
+    };
+    EventoComponent.prototype.ionViewCanEnter = function () {
+        var _this = this;
+        return new Promise(function (resolve, reject) {
+            if (_this.navParams.get('fail')) {
+                reject(true);
+            }
+            else {
+                _this.eventoService.carregaEvento(_this.navParams.get('id')).subscribe(function (response) {
+                    _this.evento = response;
+                    console.log(_this.evento);
+                    resolve(response);
+                }, function (error) {
+                    console.log("Erro ao Carregar Evento" + error);
+                }, function () {
+                    console.log('Carregou Informações do Evento');
+                    _this.mostraMapa();
+                });
+            }
+        });
+    };
+    EventoComponent.prototype.mostraMapa = function () {
+        var localizacao = new google.maps.LatLng(this.evento.local.latitude, this.evento.local.longitude);
+        var options = {
+            center: localizacao,
+            zoom: 4
+        };
+        var map = new google.maps.Map(this.mapRef.nativeElement, options);
+        this.addMarker(localizacao, map);
+    };
+    EventoComponent.prototype.addMarker = function (pos, map) {
+        console.log("Add Marker");
+        return new google.maps.Marker({
+            pos: pos,
+            map: map
+        });
+    };
+    __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_8" /* ViewChild */])('map'),
+        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* ElementRef */])
+    ], EventoComponent.prototype, "mapRef", void 0);
+    EventoComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
+            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n      <ion-buttons left>\n          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n      </ion-buttons>\n\n      <ion-title>\n        Visualizar Evento\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n        <p>{{ evento.descricao }}</p>\n        <p>{{ evento.esporte.nome }} </p>\n        <p>\n          <span icon-start clear small>\n            <ion-icon name="calendar">{{ evento.dataRealizacao.getDate|date:\'dd/MM/yyyy\' }}{{ evento.horario }}</ion-icon>\n          </span>\n        </p>\n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col col-12>\n      <div *ngFor="let p of evento.participantes" style="color: teal">\n          {{ p.nome }} \n      </div>\n    </ion-col>\n  </ion-row>\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_evento_service__["a" /* EventoService */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["s" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* NavParams */]])
+    ], EventoComponent);
+    return EventoComponent;
+}());
+
+//# sourceMappingURL=evento.js.map
+
+/***/ }),
+
+/***/ 174:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -168,7 +237,7 @@ var HttpProvider = (function () {
 
 /***/ }),
 
-/***/ 175:
+/***/ 176:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -176,12 +245,12 @@ var HttpProvider = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(142);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(255);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_toast_service__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirmacao_confirmacao__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_push__ = __webpack_require__(263);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -396,7 +465,7 @@ var LoginPage = (function () {
 
 /***/ }),
 
-/***/ 188:
+/***/ 189:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -409,11 +478,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 188;
+webpackEmptyAsyncContext.id = 189;
 
 /***/ }),
 
-/***/ 254:
+/***/ 255:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -449,12 +518,12 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 254;
+webpackAsyncContext.id = 255;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 255:
+/***/ 256:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -470,115 +539,20 @@ var Usuario = (function () {
 
 /***/ }),
 
-/***/ 257:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventoComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__providers_util_util__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_evento_service__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_ionic_angular__ = __webpack_require__(17);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-/**
- * Generated class for the EventoComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-var EventoComponent = (function () {
-    function EventoComponent(eventoService, navCtrl, viewCtrl, navParams) {
-        this.eventoService = eventoService;
-        this.navCtrl = navCtrl;
-        this.viewCtrl = viewCtrl;
-        this.navParams = navParams;
-        this.Util = __WEBPACK_IMPORTED_MODULE_0__providers_util_util__["a" /* Util */];
-    }
-    EventoComponent.prototype.ionViewDidLoad = function () {
-        // TESTE DO MAPREF console.log(this.mapRef);
-    };
-    EventoComponent.prototype.ionViewCanEnter = function () {
-        var _this = this;
-        return new Promise(function (resolve, reject) {
-            if (_this.navParams.get('fail')) {
-                reject(true);
-            }
-            else {
-                _this.eventoService.carregaEvento(_this.navParams.get('id')).subscribe(function (response) {
-                    _this.evento = response;
-                    console.log(_this.evento);
-                    resolve(response);
-                }, function (error) {
-                    console.log("Erro ao Carregar Evento" + error);
-                }, function () {
-                    console.log('Carregou Informações do Evento');
-                    _this.mostraMapa();
-                });
-            }
-        });
-    };
-    EventoComponent.prototype.mostraMapa = function () {
-        var localizacao = new google.maps.LatLng(this.evento.local.latitude, this.evento.local.longitude);
-        var options = {
-            center: localizacao,
-            zoom: 4
-        };
-        var map = new google.maps.Map(this.mapRef.nativeElement, options);
-        this.addMarker(localizacao, map);
-    };
-    EventoComponent.prototype.addMarker = function (pos, map) {
-        console.log("Add Marker");
-        return new google.maps.Marker({
-            pos: pos,
-            map: map
-        });
-    };
-    __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["_8" /* ViewChild */])('map'),
-        __metadata("design:type", __WEBPACK_IMPORTED_MODULE_1__angular_core__["t" /* ElementRef */])
-    ], EventoComponent.prototype, "mapRef", void 0);
-    EventoComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
-            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n      <ion-buttons left>\n          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n      </ion-buttons>\n\n      <ion-title>\n        Visualizar Evento\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n        <p>{{ evento.descricao }}</p>\n        <p>{{ evento.esporte.nome }} </p>\n        <p>\n          <span icon-start clear small>\n            <ion-icon name="calendar">{{ evento.dataRealizacao.getDate|date:\'dd/MM/yyyy\' }}{{ evento.horario }}</ion-icon>\n          </span>\n        </p>\n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col col-12>\n      <div *ngFor="let p of evento.participantes" style="color: teal">\n          {{ p.nome }} \n      </div>\n    </ion-col>\n  </ion-row>\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_evento_service__["a" /* EventoService */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["n" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["s" /* ViewController */],
-            __WEBPACK_IMPORTED_MODULE_3_ionic_angular__["o" /* NavParams */]])
-    ], EventoComponent);
-    return EventoComponent;
-}());
-
-//# sourceMappingURL=evento.js.map
-
-/***/ }),
-
 /***/ 258:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CriarEventoComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(50);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_esporte_service__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_esporte_service__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_local_service__ = __webpack_require__(259);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_evento__ = __webpack_require__(434);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_local__ = __webpack_require__(260);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_toast_service__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_util_util__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_util_util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_contacts__ = __webpack_require__(261);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -773,7 +747,7 @@ var CriarEventoComponent = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LocalService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -818,7 +792,7 @@ var LocalService = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Local; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__endereco__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__endereco__ = __webpack_require__(87);
 
 var Local = (function () {
     function Local() {
@@ -841,7 +815,7 @@ var Local = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_login_service__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_toast_service__ = __webpack_require__(45);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(86);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -918,11 +892,11 @@ var ConfirmacaoComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PerfilComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_endereco__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_endereco__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_usuario_service__ = __webpack_require__(66);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_cidade_service__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_esporte_service__ = __webpack_require__(84);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_util_util__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_esporte_service__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_util_util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_toast_service__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ionic_angular__ = __webpack_require__(17);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -1075,7 +1049,7 @@ var PerfilComponent = (function () {
     };
     PerfilComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'perfil',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/`<!--\nGenerated template for the MyProfilePage page.\n\nSee http://ionicframework.com/docs/components/#navigation for more info on\nIonic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{\'My Profile\' | translate}}</ion-title>\n    <ion-buttons end>\n      <button (click)="doSubmit()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n\n<ion-content padding-top *ngIf="!isLoading">\n  <form >\n    <div padding>\n      <ion-segment [(ngModel)]="aba" name="abas">\n        <ion-segment-button value="dados">\n          {{\'Data\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="endereco">\n          {{\'Address\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="esporte">\n          {{\'Sport\' | translate}}\n        </ion-segment-button>\n      </ion-segment>\n    </div>\n\n    <div [ngSwitch]="aba">\n      <ion-list *ngSwitchCase="\'dados\'">\n\n        <div text-center style="background-color: white">\n\n          <ion-avatar>\n            <img id="my-avatar" [src]="Util.pathAvatar(\'Dylan.png\')">\n          </ion-avatar>\n          <ion-item-divider  text-center>\n            <!-- <ion-icon name="information-circle"></ion-icon> -->\n            <div color="secondary">\n              <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>\n            </div>\n            <div *ngIf="usuario.endereco !== null" color="secondary">\n              <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>\n            </div>\n          </ion-item-divider>\n        </div>\n\n\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'About me\' | translate}}</h1>\n          <ion-item>\n            <ion-textarea placeholder="Fale um pouco sobre você."\n            [(ngModel)]="usuario.mensagem" name="mensagem"></ion-textarea>\n          </ion-item>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'PHONE\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.telefone"  name="telefone"></ion-input>\n        </ion-item>\n      </ion-list>\n\n      <ion-list *ngSwitchCase="\'endereco\'">\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'Address\' | translate}}</h1>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>CEP: </ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.endereco.cep" name="cep" (blur)="buscaCep()"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.logradouro"  name="logradouro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Number\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.numero"  name="numero"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Neighborhood\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.bairro"  name="bairro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Complement\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.complemento"  name="complemento"></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <ion-label stacked>{{\'City\' | translate}}</ion-label>\n          <ionic-selectable\n          name="cidade"\n          item-content\n          [(ngModel)]="cidade"\n          [items]="cidades"\n          itemValueField="id"\n          itemTextField="name"\n          [canSearch]="true"\n          (onChange)="cidadeChange($event)">\n        </ionic-selectable>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'esporte\'">\n\n      <ion-item-divider color="light" text-center>\n        <h1>{{\'My Sports\' | translate}}</h1>\n      </ion-item-divider >\n\n      <ion-list>\n        <ion-item *ngFor="let esporte of esportesUsuario; let i= index">\n          <ion-label>{{esporte.nome}}</ion-label>\n          <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n          cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n          <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n          [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ion-list>\n\n    <ion-item>\n      <ion-item *ngFor="let esporte of esportes; let i= index">\n        <ion-label>{{esporte.nome}}</ion-label>\n        <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n        cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n        <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n        [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-item>\n\n  <ion-item>\n    <ion-label><ion-icon name="add-circle"></ion-icon>{{\'Add\' | translate}}</ion-label>\n    <ion-select placeholder="Selecione" (ionChange)="adicionaEsporte($event)" >\n      <ion-option *ngFor="let esporte of esportes" [value]="esporte">{{esporte.nome}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n</ion-list>\n</div>\n\n<div padding text text-center>\n  <button ion-button color="primary" icon-right (click)="salvar()">\n    {{ \'Save\' | translate }} <ion-icon name="checkmark"></ion-icon>\n  </button>\n</div>\n</form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/
+            selector: 'perfil',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/`<!--\nGenerated template for the MyProfilePage page.\n\nSee http://ionicframework.com/docs/components/#navigation for more info on\nIonic pages and navigation.\n-->\n<ion-header>\n\n  <ion-navbar>\n    <ion-title>{{\'My Profile\' | translate}}</ion-title>\n    <ion-buttons end>\n      <button (click)="doSubmit()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n\n<ion-content padding-top *ngIf="!isLoading">\n  <form >\n    <div padding>\n      <ion-segment [(ngModel)]="aba" name="abas">\n        <ion-segment-button value="dados">\n          {{\'Data\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="endereco">\n          {{\'Address\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="esporte">\n          {{\'Sport\' | translate}}\n        </ion-segment-button>\n      </ion-segment>\n    </div>\n\n    <div [ngSwitch]="aba">\n      <ion-list *ngSwitchCase="\'dados\'">\n\n        <div text-center style="background-color: white">\n\n          <ion-avatar>\n            <img id="my-avatar" [src]="Util.pathAvatar(\'usuario.imagem\')">\n          </ion-avatar>\n          <ion-item-divider  text-center>\n            <!-- <ion-icon name="information-circle"></ion-icon> -->\n            <div color="secondary">\n              <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>\n            </div>\n            <div *ngIf="usuario.endereco !== null" color="secondary">\n              <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>\n            </div>\n          </ion-item-divider>\n        </div>\n\n\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'About me\' | translate}}</h1>\n          <ion-item>\n            <ion-textarea placeholder="Fale um pouco sobre você."\n            [(ngModel)]="usuario.mensagem" name="mensagem"></ion-textarea>\n          </ion-item>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'PHONE\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.telefone"  name="telefone"></ion-input>\n        </ion-item>\n      </ion-list>\n\n      <ion-list *ngSwitchCase="\'endereco\'">\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'Address\' | translate}}</h1>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>CEP: </ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.endereco.cep" name="cep" (blur)="buscaCep()"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.logradouro"  name="logradouro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Number\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.numero"  name="numero"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Neighborhood\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.bairro"  name="bairro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Complement\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.complemento"  name="complemento"></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <ion-label stacked>{{\'City\' | translate}}</ion-label>\n          <ionic-selectable\n          name="cidade"\n          item-content\n          [(ngModel)]="cidade"\n          [items]="cidades"\n          itemValueField="id"\n          itemTextField="name"\n          [canSearch]="true"\n          (onChange)="cidadeChange($event)">\n        </ionic-selectable>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'esporte\'">\n\n      <ion-item-divider color="light" text-center>\n        <h1>{{\'My Sports\' | translate}}</h1>\n      </ion-item-divider >\n\n      <ion-list>\n        <ion-item *ngFor="let esporte of esportesUsuario; let i= index">\n          <ion-label>{{esporte.nome}}</ion-label>\n          <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n          cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n          <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n          [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ion-list>\n\n    <ion-item>\n      <ion-item *ngFor="let esporte of esportes; let i= index">\n        <ion-label>{{esporte.nome}}</ion-label>\n        <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n        cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n        <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n        [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-item>\n\n  <ion-item>\n    <ion-label><ion-icon name="add-circle"></ion-icon>{{\'Add\' | translate}}</ion-label>\n    <ion-select placeholder="Selecione" (ionChange)="adicionaEsporte($event)" >\n      <ion-option *ngFor="let esporte of esportes" [value]="esporte">{{esporte.nome}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n</ion-list>\n</div>\n\n<div padding text text-center>\n  <button ion-button color="primary" icon-right (click)="salvar()">\n    {{ \'Save\' | translate }} <ion-icon name="checkmark"></ion-icon>\n  </button>\n</div>\n</form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_usuario_service__["a" /* UsuarioService */],
             __WEBPACK_IMPORTED_MODULE_3__services_cidade_service__["a" /* CidadeService */],
@@ -1096,11 +1070,11 @@ var PerfilComponent = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_toast_service__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(176);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1337,10 +1311,10 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(191);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(195);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(109);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngx_translate_core__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ngx_translate_http_loader__ = __webpack_require__(412);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ionic_angular__ = __webpack_require__(17);
@@ -1348,22 +1322,22 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mocks_providers_items__ = __webpack_require__(717);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mocks_messageMocks__ = __webpack_require__(390);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_component__ = __webpack_require__(719);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_http_http__ = __webpack_require__(173);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_util_util__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_http_http__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_util_util__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ionic_input_mask__ = __webpack_require__(720);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_geolocation__ = __webpack_require__(145);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_user_user__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__providers_user_user__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__services_login_service__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_toast_service__ = __webpack_require__(45);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_cidade_service__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_esporte_service__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_esporte_service__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_local_service__ = __webpack_require__(259);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__ionic_native_push__ = __webpack_require__(263);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_eventos_eventos__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__components_eventos_eventos__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_confirmacao_confirmacao__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_evento_service__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__services_evento_service__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_usuario_service__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_evento_evento__ = __webpack_require__(257);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__components_evento_evento__ = __webpack_require__(146);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__components_perfil_perfil__ = __webpack_require__(386);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_logout_logout__ = __webpack_require__(387);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__components_maps_maps__ = __webpack_require__(722);
@@ -1509,10 +1483,10 @@ var AppModule = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(50);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1749,7 +1723,51 @@ var ToastService = (function () {
 
 /***/ }),
 
-/***/ 49:
+/***/ 46:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Util; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+/*
+  Author : KM.Raouf
+  Email : yajuve.25.dz@gmail.com
+*/
+var Util = (function () {
+    function Util() {
+        console.log('Hello UtilProvider Provider');
+    }
+    Util.pathAvatar = function (name) {
+        return './assets/avatar/' + name;
+    };
+    Util.pathImg = function (name) {
+        return './assets/img/' + name;
+    };
+    Util.pathIcon = function (name) {
+        return './assets/esportes/' + name;
+    };
+    Util = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [])
+    ], Util);
+    return Util;
+}());
+
+//# sourceMappingURL=util.js.map
+
+/***/ }),
+
+/***/ 50:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1760,17 +1778,17 @@ var API = 'http://localhost:8000';
 
 /***/ }),
 
-/***/ 50:
+/***/ 51:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventoService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(108);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_service__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1827,50 +1845,6 @@ var EventoService = (function () {
 
 /***/ }),
 
-/***/ 51:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Util; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-/*
-  Author : KM.Raouf
-  Email : yajuve.25.dz@gmail.com
-*/
-var Util = (function () {
-    function Util() {
-        console.log('Hello UtilProvider Provider');
-    }
-    Util.pathAvatar = function (name) {
-        return './assets/avatar/' + name;
-    };
-    Util.pathImg = function (name) {
-        return './assets/img/' + name;
-    };
-    Util.pathIcon = function (name) {
-        return './assets/esportes/' + name;
-    };
-    Util = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
-        __metadata("design:paramtypes", [])
-    ], Util);
-    return Util;
-}());
-
-//# sourceMappingURL=util.js.map
-
-/***/ }),
-
 /***/ 66:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1878,10 +1852,10 @@ var Util = (function () {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UsuarioService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_usuario__ = __webpack_require__(255);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_usuario__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_service__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_geolocation__ = __webpack_require__(145);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -2097,17 +2071,19 @@ var Item = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_login_login__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_login_login__ = __webpack_require__(176);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__ = __webpack_require__(191);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(195);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__ = __webpack_require__(192);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(196);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngx_translate_core__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_perfil_perfil__ = __webpack_require__(386);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_user_user__ = __webpack_require__(142);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_user_user__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_logout_logout__ = __webpack_require__(387);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__services_usuario_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__providers_util_util__ = __webpack_require__(46);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2128,8 +2104,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+
 var MyApp = (function () {
-    function MyApp(menuCtrl, userProvider, translate, platform, config, statusBar, splashScreen, events, usuarioService) {
+    function MyApp(menuCtrl, userProvider, translate, platform, config, statusBar, splashScreen, events, usuarioService, loginService) {
         var _this = this;
         this.menuCtrl = menuCtrl;
         this.userProvider = userProvider;
@@ -2138,7 +2116,9 @@ var MyApp = (function () {
         this.statusBar = statusBar;
         this.splashScreen = splashScreen;
         this.usuarioService = usuarioService;
+        this.loginService = loginService;
         this.rootPage = 'LoginPage';
+        this.Util = __WEBPACK_IMPORTED_MODULE_12__providers_util_util__["a" /* Util */];
         this.pages = [
             { icon: 'contacts', title: 'Friends', component: 'ListFriendsPage' },
             { icon: 'contact', title: 'My Profile', component: 'MyProfilePage' },
@@ -2158,6 +2138,8 @@ var MyApp = (function () {
                 { icon: 'log-out', title: 'Sair', component: __WEBPACK_IMPORTED_MODULE_9__components_logout_logout__["a" /* LogoutComponent */] }
             ];
             _this.menuCtrl.enable(true);
+            _this.usuario = loginService.getUsuarioLogado();
+            console.log(_this.usuario);
         });
         events.subscribe('user:loggedout', function () {
             _this.pages = [
@@ -2202,7 +2184,7 @@ var MyApp = (function () {
         __metadata("design:type", __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["m" /* Nav */])
     ], MyApp.prototype, "nav", void 0);
     MyApp = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/app/main.html"*/`<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Joga Junto</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content class="bg-branco">\n\n    <div padding text-center>\n      <img id="my-avatar" src="./assets/avatar/Raouf.png">\n      <h4 ion-text>{{ userProvider.user.fullname }}</h4>\n    </div>\n\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        <ion-icon [name]="p.icon"></ion-icon> {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n<ion-nav #content [root]="rootPage" persistent=“true”></ion-nav>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/app/main.html"*/
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/app/main.html"*/`<ion-menu [content]="content">\n  <ion-header>\n    <ion-toolbar>\n      <ion-title>Joga Junto</ion-title>\n    </ion-toolbar>\n  </ion-header>\n\n  <ion-content class="bg-branco">\n\n    <div *ngIf="usuario != null" padding text-center>\n      <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)">\n      <h4 ion-text>{{ userProvider.user.fullname }}</h4>\n    </div>\n\n    <ion-list>\n      <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">\n        <ion-icon [name]="p.icon"></ion-icon> {{p.title}}\n      </button>\n    </ion-list>\n  </ion-content>\n\n</ion-menu>\n<ion-nav #content [root]="rootPage" persistent=“true”></ion-nav>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/app/main.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_5_ionic_angular__["k" /* MenuController */],
             __WEBPACK_IMPORTED_MODULE_7__providers_user_user__["a" /* UserProvider */],
@@ -2212,7 +2194,8 @@ var MyApp = (function () {
             __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__["a" /* StatusBar */],
             __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__["a" /* SplashScreen */],
             __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["c" /* Events */],
-            __WEBPACK_IMPORTED_MODULE_10__services_usuario_service__["a" /* UsuarioService */]])
+            __WEBPACK_IMPORTED_MODULE_10__services_usuario_service__["a" /* UsuarioService */],
+            __WEBPACK_IMPORTED_MODULE_11__services__["a" /* LoginService */]])
     ], MyApp);
     return MyApp;
 }());
@@ -2231,10 +2214,11 @@ var MyApp = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_usuario_service__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_util_util__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_evento_service__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_util_util__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_evento_service__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__evento_evento__ = __webpack_require__(146);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2252,11 +2236,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var MapsComponent = (function () {
-    function MapsComponent(geolocation, usuarioService, evento, loadingCtrl) {
+    function MapsComponent(geolocation, usuarioService, evento, navCtrl, loadingCtrl) {
         this.geolocation = geolocation;
         this.usuarioService = usuarioService;
         this.evento = evento;
+        this.navCtrl = navCtrl;
         this.loadingCtrl = loadingCtrl;
         console.log('Hello MapsComponent Component');
     }
@@ -2363,18 +2349,31 @@ var MapsComponent = (function () {
         console.log("Add Esportes Markers");
         var bounds = new google.maps.LatLngBounds();
         var markers = [];
+        var marker;
+        var self = this;
         for (var i = 0; i < this.eventosRegiao.length; i++) {
             var latLng = new google.maps.LatLng(this.eventosRegiao[i].local.latitude, this.eventosRegiao[i].local.longitude);
-            markers[i] = new google.maps.Marker({
+            marker = new google.maps.Marker({
                 position: latLng,
                 map: map,
                 title: this.eventosRegiao[i].descricao,
                 icon: __WEBPACK_IMPORTED_MODULE_6__providers_util_util__["a" /* Util */].pathIcon(this.eventosRegiao[i].esporte.imagem)
             });
-            bounds.extend(markers[i].getPosition());
+            markers.push(marker);
+            var idEvento = this.eventosRegiao[i].id;
+            google.maps.event.addListener(marker, 'click', (function (marker, i, idEvento) {
+                return function () {
+                    self.carregaEvento(idEvento);
+                };
+            })(marker, i, idEvento));
+            bounds.extend(marker.getPosition());
             map.fitBounds(bounds);
-            console.log(this.eventosRegiao[i].esporte.imagem);
+            //console.log(this.eventosRegiao[i].esporte.imagem);
         }
+    };
+    MapsComponent.prototype.carregaEvento = function (idEvento) {
+        var param = { id: idEvento };
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_8__evento_evento__["a" /* EventoComponent */], param);
     };
     MapsComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
@@ -2383,6 +2382,7 @@ var MapsComponent = (function () {
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__["a" /* Geolocation */],
             __WEBPACK_IMPORTED_MODULE_3__services_usuario_service__["a" /* UsuarioService */],
             __WEBPACK_IMPORTED_MODULE_7__services_evento_service__["a" /* EventoService */],
+            __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["n" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_5_ionic_angular__["j" /* LoadingController */]])
     ], MapsComponent);
     return MapsComponent;
@@ -2392,14 +2392,40 @@ var MapsComponent = (function () {
 
 /***/ }),
 
-/***/ 84:
+/***/ 83:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cidade_service__ = __webpack_require__(144);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esporte_service__ = __webpack_require__(85);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__evento_service__ = __webpack_require__(51);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(40);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__login_service__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__usuario_service__ = __webpack_require__(66);
+/* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_4__usuario_service__["a"]; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toast_service__ = __webpack_require__(45);
+/* unused harmony namespace reexport */
+
+
+
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 85:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EsporteService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__api_config__ = __webpack_require__(50);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(40);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2438,17 +2464,17 @@ var EsporteService = (function () {
 
 /***/ }),
 
-/***/ 85:
+/***/ 86:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventosComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__evento_evento__ = __webpack_require__(257);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(143);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__evento_evento__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__criar_evento_criar_evento__ = __webpack_require__(258);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2553,7 +2579,7 @@ var EventosComponent = (function () {
 
 /***/ }),
 
-/***/ 86:
+/***/ 87:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
