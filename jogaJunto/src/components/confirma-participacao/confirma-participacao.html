@@ -1,0 +1,74 @@
+<ion-header padding>
+
+  <ion-navbar hideBackButton="false">
+    <button button icon-only menuToggle style="display: block !important;" color="primary">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title center class="titleicon toolbar-background">
+      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
+    </ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+<ion-content padding>
+
+  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
+    <ion-card-content>
+      <ion-card-title>
+        {{ evento.descricao }}
+
+      </ion-card-title>
+      <ion-row>
+        <ion-col>
+          <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>
+        </ion-col>
+        <ion-col>
+          <p><strong>Local:</strong> {{evento.local.nome}}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+
+        <ion-col>
+          <span icon-start clear small>
+            <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>
+          </span>
+        </ion-col>
+        <ion-col>
+          <span icon-start clear small>
+            <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
+          </span>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col align-self-center>
+          <button ion-button icon-start clear medium (click)="recusarConvite(evento)">
+            <ion-icon name="close"></ion-icon>
+            <div>Recusar</div>
+          </button>
+        </ion-col>
+        <ion-col align-self-center>
+          <button ion-button icon-start clear medium (click)="aceitarConvite(evento)">
+            <ion-icon name="checkmark"></ion-icon>
+            <div>Confirmar</div>
+          </button>
+        </ion-col>
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+
+
+
+<ion-fab bottom left>
+
+  <button >
+    <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>
+    <div  class="label"dir="rtl"></div>
+  </button>
+</ion-fab>
+
+
+</ion-content>

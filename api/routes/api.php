@@ -98,7 +98,7 @@ Route::group([
 
     Route::get('/usuario/emailteste/{email}', 'UsuarioController@emailteste')->name('usuario.emailteste');
 
-
+    
 
     Route::get('/evento', 'EventoController@index')->name('evento.all');
     Route::get('/evento/getEventosUsuario', 'EventoController@getEventosProximosUsuario')->name('evento.getEventosUsuario');
@@ -107,6 +107,12 @@ Route::group([
     Route::get('/evento/{id}', 'EventoController@show')->name('evento.show');
     Route::put('/evento/{id}', 'EventoController@update')->name('evento.update');
     Route::delete('/evento/{id}', 'EventoController@destroy')->name('evento.delete');
+  
+    Route::get('/evento/meus/eventosPendentes/{id?}', 'EventoController@getEventosPendentes')->name("ASDASAAGOJSGOegegwrgJF");
+    Route::get('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite')->name("ASDASAAafffsdGOJSGOegegwrgJF");
+    Route::get('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite')->name("ASDasdASAAGOJSGOegegwrgJF");
+    
+
 });
 
 

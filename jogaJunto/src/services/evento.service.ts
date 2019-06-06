@@ -16,7 +16,11 @@ export class EventoService{
 
   private usuario: Usuario;
 
-  constructor(private http:HttpClient, private login:LoginService, private storage: Storage){}
+  private headers = new HttpHeaders();
+
+  constructor(private http:HttpClient, private login:LoginService, private storage: Storage){
+    this.headers = this.headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+  }
 
   evento (): Observable<UsuarioEvento[]>{
 
@@ -42,13 +46,36 @@ export class EventoService{
       `${API}/api/evento/getEventosRegiaoUsuario/`+this.login.getUsuarioLogado().latitude+`/`+this.login.getUsuarioLogado().longitude,
       {headers: headers}).map(x => x.data);
     }
-    
+
     criarEvento(evento: Evento, convidados: any): Observable<Evento> {
-      let headers = new HttpHeaders();
+
       let dados = {evento: evento, convidados: convidados};
       // console.log(dados);
       console.log(JSON.stringify(dados));
-      headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
-      return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: headers});
+
+      return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: this.headers});
     }
+
+    buscaMeusEventosPendentes(): Observable<Evento[]>{
+
+      return this.http.get<any>(`${API}/api/evento/meus/eventosPendentes/`,  {headers: this.headers})
+      .map(x => x.data);
+
+    }
+
+    aceitarConvite(evento: Evento):Observable<any>{
+
+      return this.http.patch<any>(`${API}/api/evento/meus/aceitarconvite/${evento.id}/`, {}, {headers: this.headers})
+
+    }
+
+    recusarConvite(evento: Evento):Observable<any>{
+
+      return this.http.delete<any>(`${API}/api/evento/meus/recusarconvite/${evento.id}/`,  {headers: this.headers})
+
+    }
+
+
+
+
   }

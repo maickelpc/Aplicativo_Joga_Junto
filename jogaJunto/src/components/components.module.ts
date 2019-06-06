@@ -8,6 +8,7 @@ import { LogoutComponent } from './logout/logout';
 import { MapsComponent } from './maps/maps';
 import { CriarEventoComponent } from './criar-evento/criar-evento';
 import { IonicSelectableModule } from  'ionic-selectable';
+import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-participacao';
 
 
 @NgModule({
@@ -17,7 +18,8 @@ import { IonicSelectableModule } from  'ionic-selectable';
     PerfilComponent,
     LogoutComponent,
     MapsComponent,
-    CriarEventoComponent],
+    CriarEventoComponent,
+    ConfirmaParticipacaoComponent],
   imports: [
     IonicPageModule,
 		IonicSelectableModule
@@ -28,7 +30,8 @@ import { IonicSelectableModule } from  'ionic-selectable';
     PerfilComponent,
     LogoutComponent,
     MapsComponent,
-    CriarEventoComponent],
+    CriarEventoComponent,
+    ConfirmaParticipacaoComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
 	    EventoComponent,

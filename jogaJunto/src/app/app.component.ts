@@ -9,6 +9,7 @@ import { PerfilComponent } from '../components/perfil/perfil'
 import { FirstRunPage } from '../pages/pages';
 import { UserProvider} from "../providers/user/user";
 import { EventosComponent } from '../components/eventos/eventos';
+import { ConfirmaParticipacaoComponent } from '../components/confirma-participacao/confirma-participacao';
 import { LogoutComponent } from '../components/logout/logout';
 import { UsuarioService} from '../services/usuario.service'
 
@@ -24,7 +25,8 @@ export class MyApp {
   pages: any[] = [
     { icon: 'contacts', title: 'Friends', component: 'ListFriendsPage' },
     { icon: 'contact', title: 'My Profile', component: 'MyProfilePage' },
-    { icon: 'log-out', title: 'Logout', component: 'LoginPage' }
+    { icon: 'log-out', title: 'Logout', component: 'LoginPage' },
+
   ];
 
   constructor(
@@ -50,7 +52,9 @@ export class MyApp {
       this.pages = [
                     {title:'Home', component: EventosComponent},
                     {title:'Perfil', component: PerfilComponent},
-                    {icon: 'log-out', title:'Sair', component: LogoutComponent}
+                    {title:'Convites', component: ConfirmaParticipacaoComponent},
+                    {icon: 'log-out', title:'Sair', component: LogoutComponent},
+
                     ];
                     this.menuCtrl.enable(true);
 
