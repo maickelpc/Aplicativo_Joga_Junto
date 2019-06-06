@@ -1,12 +1,14 @@
-<!--
-Generated template for the MyProfilePage page.
 
-See http://ionicframework.com/docs/components/#navigation for more info on
-Ionic pages and navigation.
--->
 <ion-header>
 
-  <ion-navbar>
+  <ion-navbar hideBackButton="false">
+    <button button icon-only menuToggle style="display: block !important;" color="primary">
+      <ion-icon name="menu"></ion-icon>
+    </button>
+
+    <ion-title center class="titleicon toolbar-background">
+      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
+    </ion-title>
     <ion-title>{{'My Profile' | translate}}</ion-title>
     <ion-buttons end>
       <button (click)="doSubmit()" ion-button icon-only >

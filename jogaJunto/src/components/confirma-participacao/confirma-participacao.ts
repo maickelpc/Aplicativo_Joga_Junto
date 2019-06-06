@@ -28,8 +28,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
 
     private eventoService: EventoService,
     public navCtrl: NavController,
-    public viewCtrl: ViewController,
-    public navParams: NavParams,
     private toastService: ToastService,
     private loadingCtrl: LoadingController,
   ) {  }
@@ -105,6 +103,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
     });
   }
   voltar(){
-    this.navCtrl.pop();
+    this.navCtrl.popToRoot();
   }
 }

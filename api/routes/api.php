@@ -109,8 +109,8 @@ Route::group([
     Route::delete('/evento/{id}', 'EventoController@destroy')->name('evento.delete');
   
     Route::get('/evento/meus/eventosPendentes/{id?}', 'EventoController@getEventosPendentes')->name("ASDASAAGOJSGOegegwrgJF");
-    Route::get('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite')->name("ASDASAAafffsdGOJSGOegegwrgJF");
-    Route::get('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite')->name("ASDasdASAAGOJSGOegegwrgJF");
+    Route::patch('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite')->name("ASDASAAafffsdGOJSGOegegwrgJF");
+    Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite')->name("ASDasdASAAGOJSGOegegwrgJF");
     
 
 });

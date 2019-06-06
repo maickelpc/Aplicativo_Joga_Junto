@@ -14,6 +14,15 @@
 
 <ion-content padding>
 
+  <div *ngIf="listaEventos?.length == 0">
+    <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>
+    <p>Aproveite seu dia!</p>
+    <button >
+      <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>
+      <div  class="label"dir="rtl"></div>
+    </button>
+  </div>
+
   <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
     <ion-card-content>
       <ion-card-title>
