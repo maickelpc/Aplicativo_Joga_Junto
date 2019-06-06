@@ -4,10 +4,11 @@ import { Observable } from 'rxjs/Observable';
 import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/usuario';
 import { Endereco } from '../../models/endereco';
-import { LoadingController } from 'ionic-angular';
+import { LoadingController, NavController } from 'ionic-angular';
 import { Util } from '../../providers/util/util';
 import { EventoService } from '../../services/evento.service';
 import { Evento } from '../../models/evento';
+import { EventoComponent } from '../evento/evento';
 
 declare var google : any;
 
@@ -34,6 +35,7 @@ export class MapsComponent implements OnInit {
   constructor(public geolocation: Geolocation,
               private usuarioService: UsuarioService,
               private evento:EventoService,
+              public navCtrl: NavController,
               private loadingCtrl: LoadingController) {
     console.log('Hello MapsComponent Component');
     
@@ -155,20 +157,33 @@ export class MapsComponent implements OnInit {
     console.log("Add Esportes Markers")
     var bounds = new google.maps.LatLngBounds();
     var markers = [];
+    var marker;
+    var self = this;
 
     for (var i = 0; i < this.eventosRegiao.length; i++) {
 
         var latLng = new google.maps.LatLng(this.eventosRegiao[i].local.latitude, this.eventosRegiao[i].local.longitude);
-        markers[i] = new google.maps.Marker({
+        marker = new google.maps.Marker({
             position: latLng,
             map: map,
             title: this.eventosRegiao[i].descricao,
             icon: Util.pathIcon(this.eventosRegiao[i].esporte.imagem)
         });
-
-        bounds.extend(markers[i].getPosition());
+        markers.push(marker);
+        var idEvento = this.eventosRegiao[i].id;
+        google.maps.event.addListener(marker, 'click', (function(marker, i, idEvento) {
+          return function() {
+              self.carregaEvento(idEvento);
+          }
+        })(marker, i, idEvento));
+        bounds.extend(marker.getPosition());
         map.fitBounds(bounds);
-        console.log(this.eventosRegiao[i].esporte.imagem);
+        //console.log(this.eventosRegiao[i].esporte.imagem);
     }
+  }
+
+  carregaEvento(idEvento):void {
+    let param = { id: idEvento };
+    this.navCtrl.push(EventoComponent, param);
 }
 }

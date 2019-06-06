@@ -10,7 +10,7 @@ use App\Endereco;
 use DB;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-
+use Exception;
 
 use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
 use App\Http\Resources\Evento as EventoResource;
@@ -40,6 +40,10 @@ class EventoController extends Controller
   public function create()
   {
     //
+  }
+
+  public function show($id) {
+      return new EventoResource(Evento::find($id));
   }
 
   /**
@@ -185,7 +189,6 @@ class EventoController extends Controller
 
   return response()->json('Erro', 400);
 }
-
     public function getEventosProximosUsuario() {
        return UsuarioEventoResource::collection(
            UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()

@@ -21,6 +21,7 @@ class Usuario {
   updated_at : Date
   deleted_at: Date
   email_verified_at: Date
+  imagem: string
 
   exp : Number
   token: string
