@@ -16,6 +16,7 @@ class Evento {
   usuarioResponsavel : Usuario
   esporte : Esporte
 
+  participantes: UsuarioEvento[]
   constructor(){
     this.esporte = new Esporte();
     this.local = new Local();
@@ -23,10 +24,11 @@ class Evento {
 }
 
 class UsuarioEvento{
+  id: number
   usuario : Usuario
   evento : Evento
   local: Local
-  situacao : EventoSituacao
+  situacao : string
   dataConfirmacao : Date
   dataCancelamento : Date
   dataExclusao : Date
@@ -37,6 +39,7 @@ class UsuarioEvento{
 
 
 class Avaliacao{
+
   usuarioAvaliado : UsuarioEvento
   UsuarioAvaliador : Usuario
   score : number

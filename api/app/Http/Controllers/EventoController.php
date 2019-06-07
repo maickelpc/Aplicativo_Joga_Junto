@@ -43,7 +43,7 @@ class EventoController extends Controller
   }
 
   public function show($id) {
-      return new EventoResource(Evento::find($id));
+      return new EventoResource(Evento::with('participantes', 'participantes.usuario')->find($id));
   }
 
   /**
@@ -89,10 +89,17 @@ class EventoController extends Controller
       $evento->horario = $eventoDados->horario;
       $evento->descricao = $eventoDados->descricao;
       $evento->vagas = $eventoDados->vagas;
-      $evento->publico = $eventoDados->publico;
-      $evento->valorCusto = $eventoDados->valor;
+      $evento->publico = isset($eventoDados->publico) ? $eventoDados->publico : false;
+      $evento->valorCusto = isset($eventoDados->valor) ? $eventoDados->valor : 0;
 
       $evento->save();
+
+      $eventoUsuario = new UsuarioEvento();
+      $eventoUsuario->usuario_id = Auth::user()->id;
+      $eventoUsuario->evento_id = $evento->id;
+      $eventoUsuario->dataConfirmacao = Carbon::now();
+      $eventoUsuario->situacao = 'CONFIRMADO';
+      $eventoUsuario->save();
 
 
       $notControler = new NotificacaoController();
@@ -170,6 +177,30 @@ class EventoController extends Controller
     
  }
 
+ public function cancelarParticipacao($eventoId, Request $request){
+  try{
+    DB::beginTransaction();
+
+      $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
+      ->where('situacao', 'CONFIRMADO')->firstOrFail();
+
+      $participacao->situacao = "CANCELADO";
+      $participacao->dataCancelamento = Carbon::now();
+      $participacao->justificativa = $request->json()->get('justificativa');
+    
+      $participacao->save();
+
+    DB::commit();
+    return response()->json('Cancelamento de particação efetuado com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar cancelar a participação: ' . $e->getMessage(), 400);
+  }
+
+  return response()->json('Erro', 400);
+ }
+
  public function recusarConvite($eventoId) {
   try{
     DB::beginTransaction();
@@ -215,7 +246,12 @@ class EventoController extends Controller
         ) < 10
         LIMIT 20;
         "
-      );
+        );
+        //$results = collect($results)->map(function($dado){return ($dado->id);})->toArray();
+       
+        //$results = Evento::with('participantes', 'participantes.usuario')->whereIn('id',$results)->get();
+        
+       
        return EventoResource::collection(
           Evento::hydrate($results)
        );

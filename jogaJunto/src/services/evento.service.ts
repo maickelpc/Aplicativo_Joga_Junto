@@ -75,7 +75,10 @@ export class EventoService{
 
     }
 
+    cancelarParticipacao(id: number, justificativa: string): Observable<any>{
 
+      return this.http.put<any>(`${API}/api/evento/meus/cancelarParticipacao/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+    }
 
 
   }

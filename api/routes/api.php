@@ -108,9 +108,10 @@ Route::group([
     Route::put('/evento/{id}', 'EventoController@update')->name('evento.update');
     Route::delete('/evento/{id}', 'EventoController@destroy')->name('evento.delete');
   
-    Route::get('/evento/meus/eventosPendentes/{id?}', 'EventoController@getEventosPendentes')->name("ASDASAAGOJSGOegegwrgJF");
-    Route::patch('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite')->name("ASDASAAafffsdGOJSGOegegwrgJF");
-    Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite')->name("ASDasdASAAGOJSGOegegwrgJF");
+    Route::get('/evento/meus/eventosPendentes/{id?}', 'EventoController@getEventosPendentes');
+    Route::patch('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite');
+    Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite');
+    Route::put('/evento/meus/cancelarParticipacao/{eventoId}', 'EventoController@cancelarParticipacao');
     
 
 });
