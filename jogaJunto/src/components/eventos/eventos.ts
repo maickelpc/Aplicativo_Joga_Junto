@@ -56,7 +56,7 @@ export class EventosComponent implements OnInit{
           console.log(this.listaEventos);
       },
         erro=>{
-    
+
         },
       ()=>console.log('Carregou Lista de Eventos')
     );
@@ -67,7 +67,7 @@ export class EventosComponent implements OnInit{
           console.log(this.listaEventos);
       },
         erro=>{
-    
+
         },
       ()=>console.log('Carregou Lista de Eventos')
     );
@@ -92,7 +92,7 @@ export class EventosComponent implements OnInit{
               }
 
 
-              console.log(this.usuario);
+              // console.log(this.usuario);
               loading.dismiss();
               resolve(response);
             },

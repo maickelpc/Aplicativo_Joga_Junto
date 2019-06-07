@@ -8,14 +8,16 @@ use App\UsuarioEvento;
 use App\Local;
 use App\Endereco;
 use DB;
-
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
+use Exception;
 
 use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
 use App\Http\Resources\Evento as EventoResource;
 use App\Http\Controllers\NotificacaoController;
 use App\Notificacao;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+
 
 
 class EventoController extends Controller
@@ -41,7 +43,7 @@ class EventoController extends Controller
   }
 
   public function show($id) {
-      return new EventoResource(Evento::find($id));
+      return new EventoResource(Evento::with('participantes', 'participantes.usuario')->find($id));
   }
 
   /**
@@ -87,10 +89,17 @@ class EventoController extends Controller
       $evento->horario = $eventoDados->horario;
       $evento->descricao = $eventoDados->descricao;
       $evento->vagas = $eventoDados->vagas;
-      $evento->publico = $eventoDados->publico;
-      $evento->valorCusto = $eventoDados->valor;
+      $evento->publico = isset($eventoDados->publico) ? $eventoDados->publico : false;
+      $evento->valorCusto = isset($eventoDados->valor) ? $eventoDados->valor : 0;
 
       $evento->save();
+
+      $eventoUsuario = new UsuarioEvento();
+      $eventoUsuario->usuario_id = Auth::user()->id;
+      $eventoUsuario->evento_id = $evento->id;
+      $eventoUsuario->dataConfirmacao = Carbon::now();
+      $eventoUsuario->situacao = 'CONFIRMADO';
+      $eventoUsuario->save();
 
 
       $notControler = new NotificacaoController();
@@ -123,6 +132,94 @@ class EventoController extends Controller
     }
   }
 
+  public function getEventosPendentes($usuarioId=null){
+
+    
+    if($usuarioId == null)
+      $usuarioId = Auth::user()->id;
+
+      $eventosId = DB::table('usuario_evento')
+      ->join('eventos', 'eventos.id', '=', 'usuario_evento.evento_id')
+      ->where('usuario_evento.usuario_id',$usuarioId)
+      ->where('usuario_evento.situacao', 'PENDENTE')
+      ->where('usuario_evento.deleted_at', NULL)
+      ->where('eventos.dataRealizacao', '>=', Carbon::now())->select('eventos.id')->get()->map(function($dado){return ($dado->id);})->toArray();
+      
+
+      return EventoResource::collection(
+        Evento::whereIn('id', $eventosId)->get()
+      );
+
+  }
+
+  
+  
+  public function aceitarConvite($eventoId) {
+    try{
+      DB::beginTransaction();
+
+        $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
+        ->where('situacao', 'PENDENTE')->firstOrFail();
+
+        $participacao->situacao = 'CONFIRMADO';
+        $participacao->dataConfirmacao = Carbon::now();
+        $participacao->save();
+
+      DB::commit();
+      return response()->json('Convite Aceito com sucesso');
+    }catch(Exception $e){
+      DB::rollback();
+
+      return response()->json('Erro ao tentar Aceitar o convite: ' . $e->getMessage(), 400);
+    }
+
+    return response()->json('Erro', 400);
+    
+ }
+
+ public function cancelarParticipacao($eventoId, Request $request){
+  try{
+    DB::beginTransaction();
+
+      $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
+      ->where('situacao', 'CONFIRMADO')->firstOrFail();
+
+      $participacao->situacao = "CANCELADO";
+      $participacao->dataCancelamento = Carbon::now();
+      $participacao->justificativa = $request->json()->get('justificativa');
+    
+      $participacao->save();
+
+    DB::commit();
+    return response()->json('Cancelamento de particação efetuado com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar cancelar a participação: ' . $e->getMessage(), 400);
+  }
+
+  return response()->json('Erro', 400);
+ }
+
+ public function recusarConvite($eventoId) {
+  try{
+    DB::beginTransaction();
+
+      $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
+      ->where('situacao', 'PENDENTE')->firstOrFail();
+
+      $participacao->delete();
+
+    DB::commit();
+    return response()->json('Convite Aceito com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar Aceitar o convite: ' . $e->getMessage(), 400);
+  }
+
+  return response()->json('Erro', 400);
+}
     public function getEventosProximosUsuario() {
        return UsuarioEventoResource::collection(
            UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()
@@ -149,7 +246,12 @@ class EventoController extends Controller
         ) < 10
         LIMIT 20;
         "
-      );
+        );
+        //$results = collect($results)->map(function($dado){return ($dado->id);})->toArray();
+       
+        //$results = Evento::with('participantes', 'participantes.usuario')->whereIn('id',$results)->get();
+        
+       
        return EventoResource::collection(
           Evento::hydrate($results)
        );

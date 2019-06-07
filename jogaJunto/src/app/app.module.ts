@@ -15,7 +15,7 @@ import { HttpProvider } from '../providers/http/http';
 import { Util } from '../providers/util/util';
 import { InputMaskModule } from 'ionic-input-mask';
 import { Geolocation } from '@ionic-native/geolocation';
-
+import { ConfirmaParticipacaoComponent } from '../components/confirma-participacao/confirma-participacao';
 
 import { UserProvider } from '../providers/user/user';
 import { LoginService } from '../services/login.service'
@@ -54,7 +54,8 @@ export function createTranslateLoader(http: HttpClient) {
     PerfilComponent,
     LogoutComponent,
     MapsComponent,
-    CriarEventoComponent
+    CriarEventoComponent,
+    ConfirmaParticipacaoComponent
   ],
   exports: [
     EventosComponent,
@@ -63,7 +64,8 @@ export function createTranslateLoader(http: HttpClient) {
     PerfilComponent,
     LogoutComponent,
     MapsComponent,
-    CriarEventoComponent
+    CriarEventoComponent,
+    ConfirmaParticipacaoComponent
   ],
   imports: [
     IonicSelectableModule,
@@ -89,7 +91,8 @@ export function createTranslateLoader(http: HttpClient) {
     PerfilComponent,
     LogoutComponent,
     MapsComponent,
-    CriarEventoComponent
+    CriarEventoComponent,
+    ConfirmaParticipacaoComponent
   ],
   providers: [
     Push,

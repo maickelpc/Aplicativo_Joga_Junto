@@ -29,18 +29,46 @@
         <p>{{ evento.esporte.nome }} </p>
         <p>
           <span icon-start clear small>
-            <ion-icon name="calendar">{{ evento.dataRealizacao.getDate|date:'dd/MM/yyyy' }}{{ evento.horario }}</ion-icon>
+            <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}
           </span>
         </p>
+        <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>
     </ion-col>
   </ion-row>
   <ion-row>
     <ion-col col-12>
-      <div *ngFor="let p of evento.participantes" style="color: teal">
-          {{ p.nome }} 
+      <h4>Confirmados</h4>
+      <div *ngFor="let p of participantesConfirmados" style="color: teal">
+          <p>{{ p.usuario.nome }}</p>
+      </div>
+      <h4>Pendentes</h4>
+      <div *ngFor="let p of participantesPendentes" style="color: teal">
+          <p>{{ p.usuario.nome }}</p>
       </div>
     </ion-col>
   </ion-row>
+
+
+  <ion-fab bottom right *ngIf="euOrganizo">
+
+    <button >
+      <ion-icon name="close"></ion-icon>
+      <div class="label">Cancelar Evento</div>
+    </button>
+
+  </ion-fab>
+
+  <ion-fab bottom right *ngIf="euParticipo  ">
+
+    <button   (click)="confirmarCancelar()">
+      <ion-icon name="close"></ion-icon>
+      <div class="label">Cancelar participação</div>
+    </button>
+
+
+  </ion-fab>
+
+
   <ion-row padding>
     <div id="map" #map></div>
   </ion-row>
