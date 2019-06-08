@@ -35,7 +35,7 @@ import {LogoutComponent} from "../components/logout/logout";
 import { MapsComponent } from '../components/maps/maps';
 import { CriarEventoComponent} from '../components/criar-evento/criar-evento'
 import { Contacts } from '@ionic-native/contacts';
-
+import { StarRatingModule } from 'ionic3-star-rating';
 
 
 // The translate loader needs to know where to load i18n files
@@ -70,6 +70,7 @@ export function createTranslateLoader(http: HttpClient) {
   imports: [
     IonicSelectableModule,
     BrowserModule,
+    StarRatingModule,
     HttpClientModule,
     TranslateModule.forRoot({
       loader: {

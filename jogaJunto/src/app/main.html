@@ -6,11 +6,28 @@
   </ion-header>
 
   <ion-content class="bg-branco">
-
-    <div *ngIf="usuario != null" padding text-center>
-      <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)">
-      <h4 ion-text>{{ userProvider.user.fullname }}</h4>
-    </div>
+<ion-grid>
+  <!-- Header do Menu - Perfil -->
+  <ion-row *ngIf="usuario != null" class="menu-header">
+    <ion-col>
+        <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)" width="30">
+    </ion-col>
+    <ion-col style="vertical-align: center">
+      <h4 ion-text>{{ usuario.nome }}</h4>
+      <p>
+        <ionic3-star-rating 
+          activeIcon = "star"
+          defaultIcon = "star-outline"
+          activeColor = "yellow" 
+          defaultColor = "#f4f4f4"
+          readonly="true"
+          [rating]="usuario.score">
+        </ionic3-star-rating>
+      </p>
+    </ion-col>
+  </ion-row>
+</ion-grid>
+    
 
     <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
