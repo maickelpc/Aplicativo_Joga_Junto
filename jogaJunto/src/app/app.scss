@@ -17,11 +17,20 @@
 
 
 #my-avatar {
-  width: 150px;
-  height: 150px;
+  width: 100px;
+  height: 100px;
   margin: auto;
   border-radius: 50%;
   border: 2px dotted #cccccc;
+}
+
+.menu-header {
+  background-color: #741b75;
+}
+
+.menu-header ion-row ion-col h4,
+.menu-header ion-row ion-col p {
+  color: white;
 }
 
 img.circle {
