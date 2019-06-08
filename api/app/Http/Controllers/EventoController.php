@@ -220,6 +220,28 @@ class EventoController extends Controller
 
   return response()->json('Erro', 400);
 }
+
+public function cancelarEvento($eventoId) {
+  return response()->json("Ok");
+  try{
+    DB::beginTransaction();
+
+      $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
+      ->where('situacao', 'PENDENTE')->firstOrFail();
+
+      $participacao->delete();
+
+    DB::commit();
+    return response()->json('Convite Aceito com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar Aceitar o convite: ' . $e->getMessage(), 400);
+  }
+
+  return response()->json('Erro', 400);
+}
+
     public function getEventosProximosUsuario() {
        return UsuarioEventoResource::collection(
            UsuarioEvento::where(['usuario_id' => Auth::user()->id, 'situacao' => 'PENDENTE'])->get()

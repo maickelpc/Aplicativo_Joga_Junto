@@ -48,19 +48,28 @@
     </ion-col>
   </ion-row>
 
+  <ion-row *ngIf="(evento.dataCancelamento != null)">
+    <H1>Evento Cancelado</H1>
+    <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : 'dd/MM/yy hh:mm'}}h</p>
+  </ion-row>
 
-  <ion-fab bottom right *ngIf="euOrganizo">
+  <ion-row *ngIf="(encerrado)">
+    <H1>Evento Encerrado</H1>
+    <!-- <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : 'dd/MM/yy hh:mm'}}h</p> -->
+  </ion-row>
 
-    <button >
+  <ion-fab bottom right *ngIf="euOrganizo" >
+
+    <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar Evento</div>
     </button>
 
   </ion-fab>
 
-  <ion-fab bottom right *ngIf="euParticipo  ">
+  <ion-fab bottom right *ngIf="euParticipo">
 
-    <button   (click)="confirmarCancelar()">
+    <button (click)="confirmarCancelar()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar participação</div>
     </button>

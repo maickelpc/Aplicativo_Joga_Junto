@@ -112,6 +112,7 @@ Route::group([
     Route::patch('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite');
     Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite');
     Route::put('/evento/meus/cancelarParticipacao/{eventoId}', 'EventoController@cancelarParticipacao');
+    Route::put('/evento/meus/cancelarevento/{eventoId}', 'EventoController@cancelarEvento');
     
 
 });

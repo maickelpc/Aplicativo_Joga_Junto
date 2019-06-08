@@ -25,6 +25,8 @@ export class EventoComponent {
 
   public evento: Evento;
   public Util = Util;
+  cancelado: boolean = false;
+  encerrado : boolean = false;
   euParticipo : boolean = false;
   euOrganizo : boolean = false;
   @ViewChild('map') mapRef: ElementRef;
@@ -57,6 +59,21 @@ export class EventoComponent {
         this.eventoService.carregaEvento(this.navParams.get('id')).subscribe(
           response =>{
             this.evento = response;
+            this.cancelado = this.evento.dataCancelamento != null;
+            let dataRealizacao = this.evento.dataRealizacao.toString().split('/')
+            let horas = this.evento.horario.split(':');
+            let agora = new Date();
+            let data = new Date();
+
+            data.setDate(parseInt(dataRealizacao[0]));
+            data.setMonth(parseInt(dataRealizacao[1]));
+            data.setFullYear(parseInt(dataRealizacao[2]));
+
+            data.setHours(parseInt(horas[0]));
+            data.setMinutes(parseInt(horas[1]));
+
+            this.encerrado = (data < agora);
+
             this.euOrganizo = this.evento.usuarioResponsavel.id == this.loginService.getUsuarioLogado().id;
             this.euParticipo = (this.evento.participantes.
               filter( x => x.usuario.id == this.loginService.getUsuarioLogado().id && x.situacao == "CONFIRMADO").length > 0) ;
@@ -97,10 +114,56 @@ export class EventoComponent {
       });
     }
 
+    confirmarCancelarEvento() {
+      let alert = this.alertCtrl.create({
+        title: 'Confirmação de cancelamento do evento',
+        inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min:3  } ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Confirmar',
+            handler: data => {
+              this.cancelarEvento(data.justificativa);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    cancelarEvento(justificativa: string){
+      let loading = this.loading();
+      loading.present();
+      console.log("Motivo: " + justificativa);
+      console.log(this.evento);
+      this.eventoService.cancelarEvento(this.evento.id, justificativa).subscribe(
+        dados => {
+          loading.dismiss();
+          this.toastService.toast("Evento Cancelado!");
+          this.evento.dataCancelamento = new Date();
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível cancelar o evento, tente novamente")
+
+        }
+      )
+    }
+
+
     confirmarCancelar() {
       let alert = this.alertCtrl.create({
         title: 'Confirmação de Saída de evento',
-        inputs: [{ name: 'justificativa', placeholder: 'Justificativa'  } ],
+        inputs: [{ name: 'justificativa', placeholder: 'Justificativa' , min:3 } ],
         buttons: [
           {
             text: 'Cancel',
@@ -121,7 +184,7 @@ export class EventoComponent {
       alert.present();
     }
 
-    removeUsuario
+
 
     cancelarParticipacao(justificativa: string){
       let loading = this.loading();
