@@ -31,7 +31,6 @@ export class CriarEventoComponent implements OnInit{
   constructor(
     private esporteService: EsporteService,
     private eventoService: EventoService,
-    public navCtrl: NavController,
     public viewCtrl: ViewController,
     public navParams: NavParams,
     private toastService: ToastService,
@@ -76,7 +75,7 @@ export class CriarEventoComponent implements OnInit{
     this.localService.buscaLocalPorEsporte(esporte, nome).subscribe(
       dados => {
         this.locais = dados;
-        console.log(this.locais)},
+      },
       erro => {
         console.log(erro);
         this.toastService.toast("Erro ao buscar os locais, tente novamente mais tarde!");
@@ -108,30 +107,15 @@ export class CriarEventoComponent implements OnInit{
   }
 
   voltar(){
-    switch(this.passo){
-      // case 'esporte':
-      case 2:
-        this.passo = 1;
-        break;
-      case 3:
-        this.passo = 2;
-      case 4:
-        this.passo = 3;
-        break;
+    if(this.passo > 1){
+      this.passo--;
     }
   }
 
   avancar(){
-    switch(this.passo){
-      case 1:
-        this.passo = 2;
-        break;
-      case 2:
-        this.passo = 3;
-      case 3:
-        this.passo = 4;
-        break;
-    }
+    if(this.passo < 4)
+      this.passo++;
+
   }
 
   concluir(){
@@ -152,7 +136,7 @@ export class CriarEventoComponent implements OnInit{
         loading.dismiss();
         console.log(dados);
         this.toastService.toast("Evento criado com sucesso!");
-        this.navCtrl.pop();
+        this.viewCtrl.dismiss();
       },
       erro => {
         loading.dismiss();
@@ -170,9 +154,10 @@ export class CriarEventoComponent implements OnInit{
       case 1:
          return !(this.evento.esporte.id == null);
      case 2:
-        return !(this.evento.dataRealizacao == null || this.evento.horario == null);
-      case 3:
         return !(this.evento.local.id == 0);
+      case 3:
+      return !(this.evento.dataRealizacao == null || this.evento.horario == null || this.evento.descricao.length == 0);
+
         // break;
       case 4:
         return true;

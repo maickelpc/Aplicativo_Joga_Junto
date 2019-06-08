@@ -10,6 +10,7 @@ use Validator;
 use Tymon\JWTAuth\JWT;
 use Illuminate\Support\Facades\Auth;
 use App\Mail\SendConviteEvento;
+use App\Mail\SendNotificacao;
 
 class NotificacaoController extends Controller
 {
@@ -21,6 +22,132 @@ class NotificacaoController extends Controller
   public function index()
   {
     return NotificacaoResource::collection(Notificacao::paginate());
+  }
+
+  
+
+  public function notificarPedidoParticipacao($participante, $evento){
+
+    
+    $esporte = $evento->esporte->nome;
+    $usuario = $participante->usuario;
+    $convidante = $evento->usuarioResponsavel->nome;
+    $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+    
+    $notificacao = new Notificacao();
+    $notificacao->usuario_id = $evento->usuarioResponsavel_id;
+    $notificacao->usuario_envio_id = $usuario->id;
+
+    $notificacao->titulo = "$usuario->nome pediu para entrar na sua partida de $esporte";
+    $notificacao->mensagem =
+    "Olá $convidante, o $usuario->nome está solicitando participação na partida de $esporte dia $dataHora. Mensagem: $participante->justificativa";
+    $notificacao->save();
+    
+  
+    try{
+      // TODO: Criar um JOB para executar independente
+      Mail::to("maickelpc@gmail.com") //Mail::to($usuario->email)
+      ->send( new SendNotificacao($notificacao));
+    }catch(Exception $ex){
+      //throw new Exception("Não foi possível validar o seu email!");
+    }
+  }
+
+public function notificarRemocaoParticipacao($usuarioEvento, $evento){
+
+  $notificacao = new Notificacao();
+  $esporte = $evento->esporte->nome;
+  $convidante = $evento->usuarioResponsavel->nome;
+  $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+  $notificacao->usuario_id = $usuarioEvento->usuario_id;
+  $usuario = $usuarioEvento->usuario;
+  $notificacao->usuario_envio_id = $evento->usuarioResponsavel_id;
+  $notificacao->titulo = "Participação Excluida por $convidante";
+  $notificacao->mensagem =
+  "Olá $usuario->nome, o $convidante excluiu sua participação na partida de $esporte dia $dataHora por $usuarioEvento->justificativa";
+  $notificacao->save();
+
+
+  try{
+    // TODO: Criar um JOB para executar independente
+    Mail::to($usuario->email)
+    ->send( new SendNotificacao($notificacao));
+  }catch(Exception $ex){
+    //throw new Exception("Não foi possível validar o seu email!");
+  }
+}
+
+public function notificarRecusaParticipacao($usuarioEvento, $evento){
+
+  $notificacao = new Notificacao();
+  $esporte = $evento->esporte->nome;
+  $convidante = $evento->usuarioResponsavel->nome;
+  $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+  $notificacao->usuario_id = $usuarioEvento->usuario_id;
+  $usuario = $usuarioEvento->usuario;
+  $notificacao->usuario_envio_id = $evento->usuarioResponsavel_id;
+  $notificacao->titulo = "Participação Não aceita por $convidante";
+  $notificacao->mensagem =
+  "Olá $usuario->nome, o $convidante não aceitou sua participação na partida de $esporte dia $dataHora por $usuarioEvento->justificativa";
+  $notificacao->save();
+
+
+  try{
+    // TODO: Criar um JOB para executar independente
+   Mail::to($usuario->email)
+    ->send( new SendNotificacao($notificacao));
+  }catch(Exception $ex){
+    //throw new Exception("Não foi possível validar o seu email!");
+  }
+}
+
+
+public function notificarAceiteParticipacao($usuarioEvento, $evento){
+
+  $notificacao = new Notificacao();
+  $esporte = $evento->esporte->nome;
+  $convidante = $evento->usuarioResponsavel->nome;
+  $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+  $notificacao->usuario_id = $usuarioEvento->usuario_id;
+  $usuario = $usuarioEvento->usuario;
+  $notificacao->usuario_envio_id = $evento->usuarioResponsavel_id;
+  $notificacao->titulo = "Participação Aceita por $convidante";
+  $notificacao->mensagem =
+  "Olá $usuario->nome, o $convidante aceitou sua participação na partida de $esporte dia $dataHora.";
+  $notificacao->save();
+
+
+  try{
+    // TODO: Criar um JOB para executar independente
+    Mail::to($usuario->email)
+    ->send( new SendNotificacao($notificacao));
+  }catch(Exception $ex){
+    //throw new Exception("Não foi possível validar o seu email!");
+  }
+}
+
+  public function notificarCancelamentoEvento($usuarioEvento, $evento){
+
+    $notificacao = new Notificacao();
+    $esporte = $evento->esporte->nome;
+    $convidante = $evento->usuarioResponsavel->nome;
+    $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+    $notificacao->usuario_id = $usuarioEvento->usuario_id;
+    $usuario = $usuarioEvento->usuario;
+    $notificacao->usuario_envio_id = $evento->usuarioResponsavel_id;
+    $notificacao->titulo = "Cancelamento para partida de $esporte do $convidante";
+    $notificacao->mensagem =
+    "Olá $usuario->nome, informamos que a partida de $esporte do $convidante que seria realizada em $dataHora, foi cancelada por motivo de $evento->justificativaCancelamento";
+    $notificacao->save();
+
+
+    try{
+      // TODO: Criar um JOB para executar independente
+      Mail::to($usuario->email)
+      ->send( new SendNotificacao($notificacao));
+    }catch(Exception $ex){
+      //throw new Exception("Não foi possível validar o seu email!");
+    }
   }
 
   public function notificarConvite($usuario, $evento){
@@ -38,7 +165,7 @@ class NotificacaoController extends Controller
     $notificacao->save();
 
     try{
-      // TODO: Criar um JOB para executar independente 
+      // TODO: Criar um JOB para executar independente
       Mail::to($usuario->email)
       ->send( new SendConviteEvento($notificacao, $evento));
     }catch(Exception $ex){

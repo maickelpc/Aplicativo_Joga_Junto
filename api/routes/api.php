@@ -113,8 +113,13 @@ Route::group([
     Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite');
     Route::put('/evento/meus/cancelarParticipacao/{eventoId}', 'EventoController@cancelarParticipacao');
     Route::put('/evento/meus/cancelarevento/{eventoId}', 'EventoController@cancelarEvento');
-    
+    Route::put('/evento/meus/aceitarparticipante/{id}', 'EventoController@aceitarParticipante');
+    Route::put('/evento/meus/recusarparticipante/{id}', 'EventoController@recusarParticipante');
+    Route::put('/evento/meus/removerparticipante/{id}', 'EventoController@removerParticipante');
 
+    Route::post('/evento/meus/solicitarparticipacao/{id}', 'UsuarioEventoController@solicitarParticipacao');
+    
+    
 });
 
 

@@ -17,7 +17,7 @@ declare var google : any;
   templateUrl: 'maps.html'
 })
 export class MapsComponent implements OnInit {
-  
+
 
   text: string;
   public map;
@@ -36,10 +36,7 @@ export class MapsComponent implements OnInit {
               private usuarioService: UsuarioService,
               private evento:EventoService,
               public navCtrl: NavController,
-              private loadingCtrl: LoadingController) {
-    console.log('Hello MapsComponent Component');
-    
-  }
+              private loadingCtrl: LoadingController) { }
 
   ngOnInit(): void {
     this.map =this.createMap();
@@ -52,18 +49,18 @@ export class MapsComponent implements OnInit {
     this.evento.eventosRegiao().subscribe(
       response =>{
           this.eventosRegiao = response;
-          console.log(this.eventosRegiao);
+          // console.log(this.eventosRegiao);
           this.addMarkers(this.map);
       },
         erro=>{
-
-        },
-      ()=>console.log('Carregou Lista de Eventos da Região')
+          console.log("Erro ao buscar eventos na regiao");
+          console.log(erro);
+        }
     );
   }
 
   createMap(location = new google.maps.LatLng(40.712784,-74.005942)){
-    console.log('init location ' + location)
+    // console.log('init location ' + location)
     let mapOptions = {
       center: location,
       zoom:15,
@@ -95,9 +92,9 @@ export class MapsComponent implements OnInit {
       .then(resp => {
         let lat = resp.coords.latitude;
         let lng = resp.coords.longitude;
-        console.log('lat '+ lat +' == '+ 'long '+lng )
+        // console.log('lat '+ lat +' == '+ 'long '+lng )
         let location = new google.maps.LatLng(lat, lng);
-        console.log('current location '+location)
+        // console.log('current location '+location)
         observable.next(location);
 
         this.addMarker(location, this.map);
@@ -106,7 +103,7 @@ export class MapsComponent implements OnInit {
 
     return locationObs;
   }
-  
+
   addMapEventListeners(){
     google.maps.event.addListener(this.map, 'dragstart', () => {
       this.isMapIdle = false;
@@ -130,7 +127,7 @@ export class MapsComponent implements OnInit {
               }
 
 
-              console.log(this.usuario);
+              // console.log(this.usuario);
               loading.dismiss();
               resolve(response);
             },
@@ -143,7 +140,7 @@ export class MapsComponent implements OnInit {
   }
 
   addMarker(pos, map) {
-    console.log("Add Custom Marker")
+    // console.log("Add Custom Marker")
 
     var marker = new google.maps.Marker({
       map: map,
@@ -154,7 +151,6 @@ export class MapsComponent implements OnInit {
   }
 
   addMarkers(map) {
-    console.log("Add Esportes Markers")
     var bounds = new google.maps.LatLngBounds();
     var markers = [];
     var marker;

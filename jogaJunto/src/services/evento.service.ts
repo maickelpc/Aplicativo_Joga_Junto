@@ -50,9 +50,6 @@ export class EventoService{
     criarEvento(evento: Evento, convidados: any): Observable<Evento> {
 
       let dados = {evento: evento, convidados: convidados};
-      // console.log(dados);
-      console.log(JSON.stringify(dados));
-
       return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: this.headers});
     }
 
@@ -85,5 +82,25 @@ export class EventoService{
       return this.http.put<any>(`${API}/api/evento/meus/cancelarevento/${id}/`,{justificativa: justificativa},  {headers: this.headers})
     }
 
+
+    aceitarParticipanteEvento(id: number): Observable<any>{
+
+      return this.http.put<any>(`${API}/api/evento/meus/aceitarparticipante/${id}/`,{},  {headers: this.headers})
+    }
+
+    recusarParticipanteEvento(id: number, justificativa: string): Observable<any>{
+
+      return this.http.put<any>(`${API}/api/evento/meus/recusarparticipante/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+    }
+
+    removerParticipanteEvento(id: number, justificativa: string): Observable<any>{
+
+      return this.http.put<any>(`${API}/api/evento/meus/removerparticipante/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+    }
+
+    solicitarParticipacao(id: number, mensagem: string): Observable<UsuarioEvento>{
+
+      return this.http.post<any>(`${API}/api/evento/meus/solicitarparticipacao/${id}/`,{mensagem: mensagem},  {headers: this.headers})
+    }
 
   }

@@ -8,7 +8,7 @@ import { ToastService } from '../../services/toast.service'
 import { LoadingController } from 'ionic-angular'
 import { Util } from "../../providers/util/util";
 
-
+import {EventosComponent} from '../eventos/eventos'
 /**
  * Generated class for the ConfirmaParticipacaoComponent component.
  *
@@ -103,6 +103,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
     });
   }
   voltar(){
-    this.navCtrl.popToRoot();
+    this.navCtrl.setRoot(EventosComponent);
   }
 }

@@ -8,7 +8,7 @@ import { Usuario } from '../../models/usuario';
 import { Endereco } from '../../models/endereco';
 import { UsuarioService } from '../../services';
 import {CriarEventoComponent} from "../criar-evento/criar-evento";
-
+import {ConfirmaParticipacaoComponent} from '../confirma-participacao/confirma-participacao'
 /**
  * Generated class for the EventosComponent component.
  *
@@ -45,31 +45,24 @@ export class EventosComponent implements OnInit{
           console.log(this.listaEventos);
       },
         erro=>{
-
-        },
-      ()=>console.log('Carregou Lista de Eventos do Usuário')
+          console.log(erro);
+        }
     );
-    console.log("Entrando na tela de listagem de eventos");
     this.evento.evento().subscribe(
       response =>{
           this.listaEventos = response;
-          console.log(this.listaEventos);
       },
         erro=>{
-
-        },
-      ()=>console.log('Carregou Lista de Eventos')
+          console.log(erro);
+        }
     );
-    console.log("Entrando na tela de listagem de eventos");
     this.evento.evento().subscribe(
       response =>{
           this.listaEventos = response;
-          console.log(this.listaEventos);
       },
         erro=>{
-
-        },
-      ()=>console.log('Carregou Lista de Eventos')
+          console.log(erro);
+        }
     );
   }
 
@@ -90,9 +83,6 @@ export class EventosComponent implements OnInit{
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
-
-
-              // console.log(this.usuario);
               loading.dismiss();
               resolve(response);
             },
@@ -103,7 +93,15 @@ export class EventosComponent implements OnInit{
 
       });
     }
+
+
   criarNovoEvento(){
     this.navCtrl.push(CriarEventoComponent);
   }
+
+  notificacoes(){
+    this.navCtrl.push(ConfirmaParticipacaoComponent);
+  }
+
+
 }

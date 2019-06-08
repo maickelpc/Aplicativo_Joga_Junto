@@ -1,17 +1,15 @@
-
 <ion-header>
 
-  <ion-navbar hideBackButton="false">
-    <button button icon-only menuToggle style="display: block !important;" color="primary">
-      <ion-icon name="menu"></ion-icon>
+  <ion-navbar>
+    <ion-title>Meu Perfil</ion-title>
+    <ion-buttons left>
+    <button ion-button icon-only (click)="voltar()">
+      <ion-icon name="arrow-back"></ion-icon>
     </button>
 
-    <ion-title center class="titleicon toolbar-background">
-      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
-    </ion-title>
-    <ion-title>{{'My Profile' | translate}}</ion-title>
+    </ion-buttons>
     <ion-buttons end>
-      <button (click)="doSubmit()" ion-button icon-only >
+      <button (click)="salvar()" ion-button icon-only >
         <ion-icon name="checkmark"></ion-icon>
       </button>
     </ion-buttons>
@@ -19,7 +17,6 @@
 
 
 </ion-header>
-
 
 <ion-content padding-top *ngIf="!isLoading">
   <form >
