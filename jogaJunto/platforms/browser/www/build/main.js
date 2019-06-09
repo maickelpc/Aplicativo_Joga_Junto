@@ -142,6 +142,8 @@ var EventoComponent = (function () {
         this.toastService = toastService;
         this.loadingCtrl = loadingCtrl;
         this.Util = __WEBPACK_IMPORTED_MODULE_0__providers_util_util__["a" /* Util */];
+        this.cancelado = false;
+        this.encerrado = false;
         this.euParticipo = false;
         this.euOrganizo = false;
         this.participantesConfirmados = [];
@@ -159,6 +161,17 @@ var EventoComponent = (function () {
             else {
                 _this.eventoService.carregaEvento(_this.navParams.get('id')).subscribe(function (response) {
                     _this.evento = response;
+                    _this.cancelado = _this.evento.dataCancelamento != null;
+                    var dataRealizacao = _this.evento.dataRealizacao.toString().split('/');
+                    var horas = _this.evento.horario.split(':');
+                    var agora = new Date();
+                    var data = new Date();
+                    data.setDate(parseInt(dataRealizacao[0]));
+                    data.setMonth(parseInt(dataRealizacao[1]));
+                    data.setFullYear(parseInt(dataRealizacao[2]));
+                    data.setHours(parseInt(horas[0]));
+                    data.setMinutes(parseInt(horas[1]));
+                    _this.encerrado = (data < agora);
                     _this.euOrganizo = _this.evento.usuarioResponsavel.id == _this.loginService.getUsuarioLogado().id;
                     _this.euParticipo = (_this.evento.participantes.
                         filter(function (x) { return x.usuario.id == _this.loginService.getUsuarioLogado().id && x.situacao == "CONFIRMADO"; }).length > 0);
@@ -190,11 +203,50 @@ var EventoComponent = (function () {
             map: map
         });
     };
+    EventoComponent.prototype.confirmarCancelarEvento = function () {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Confirmação de cancelamento do evento',
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: function (data) {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Confirmar',
+                    handler: function (data) {
+                        _this.cancelarEvento(data.justificativa);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.cancelarEvento = function (justificativa) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        console.log("Motivo: " + justificativa);
+        console.log(this.evento);
+        this.eventoService.cancelarEvento(this.evento.id, justificativa).subscribe(function (dados) {
+            loading.dismiss();
+            _this.toastService.toast("Evento Cancelado!");
+            _this.evento.dataCancelamento = new Date();
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível cancelar o evento, tente novamente");
+        });
+    };
     EventoComponent.prototype.confirmarCancelar = function () {
         var _this = this;
         var alert = this.alertCtrl.create({
             title: 'Confirmação de Saída de evento',
-            inputs: [{ name: 'justificativa', placeholder: 'Justificativa' }],
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
             buttons: [
                 {
                     text: 'Cancel',
@@ -242,7 +294,7 @@ var EventoComponent = (function () {
     ], EventoComponent.prototype, "mapRef", void 0);
     EventoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
-            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n      <ion-buttons left>\n          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n      </ion-buttons>\n\n      <ion-title>\n        Visualizar Evento\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n        <p>{{ evento.descricao }}</p>\n        <p>{{ evento.esporte.nome }} </p>\n        <p>\n          <span icon-start clear small>\n            <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}\n          </span>\n        </p>\n        <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>\n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col col-12>\n      <h4>Confirmados</h4>\n      <div *ngFor="let p of participantesConfirmados" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n      <h4>Pendentes</h4>\n      <div *ngFor="let p of participantesPendentes" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n    </ion-col>\n  </ion-row>\n\n\n  <ion-fab bottom right *ngIf="euOrganizo">\n\n    <button >\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar Evento</div>\n    </button>\n\n  </ion-fab>\n\n  <ion-fab bottom right *ngIf="euParticipo  ">\n\n    <button   (click)="confirmarCancelar()">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar participação</div>\n    </button>\n\n\n  </ion-fab>\n\n\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
+            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n      <ion-buttons left>\n          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n      </ion-buttons>\n\n      <ion-title>\n        Visualizar Evento\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n        <p>{{ evento.descricao }}</p>\n        <p>{{ evento.esporte.nome }} </p>\n        <p>\n          <span icon-start clear small>\n            <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}\n          </span>\n        </p>\n        <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>\n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col col-12>\n      <h4>Confirmados</h4>\n      <div *ngFor="let p of participantesConfirmados" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n      <h4>Pendentes</h4>\n      <div *ngFor="let p of participantesPendentes" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n    </ion-col>\n  </ion-row>\n\n  <ion-row *ngIf="(evento.dataCancelamento != null)">\n    <H1>Evento Cancelado</H1>\n    <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : \'dd/MM/yy hh:mm\'}}h</p>\n  </ion-row>\n\n  <ion-row *ngIf="(encerrado)">\n    <H1>Evento Encerrado</H1>\n    <!-- <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : \'dd/MM/yy hh:mm\'}}h</p> -->\n  </ion-row>\n\n  <ion-fab bottom right *ngIf="euOrganizo" >\n\n    <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar Evento</div>\n    </button>\n\n  </ion-fab>\n\n  <ion-fab bottom right *ngIf="euParticipo">\n\n    <button (click)="confirmarCancelar()" [disabled]="(evento.dataCancelamento != null)">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar participação</div>\n    </button>\n\n\n  </ion-fab>\n\n\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_evento_service__["a" /* EventoService */],
             __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["o" /* NavController */],
@@ -1975,6 +2027,9 @@ var EventoService = (function () {
     };
     EventoService.prototype.cancelarParticipacao = function (id, justificativa) {
         return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/cancelarParticipacao/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
+    };
+    EventoService.prototype.cancelarEvento = function (id, justificativa) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/cancelarevento/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
     };
     EventoService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
