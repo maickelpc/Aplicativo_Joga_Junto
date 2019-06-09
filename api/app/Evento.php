@@ -41,7 +41,5 @@ class Evento extends Model
     return $this->hasMany('App\UsuarioEvento', 'evento_id');
   }
 
-  public function participacaoUsuario(){
 
-  }
 }

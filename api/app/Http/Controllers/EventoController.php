@@ -134,7 +134,7 @@ class EventoController extends Controller
 
   public function getEventosPendentes($usuarioId=null){
 
-    
+
     if($usuarioId == null)
       $usuarioId = Auth::user()->id;
 
@@ -143,8 +143,10 @@ class EventoController extends Controller
       ->where('usuario_evento.usuario_id',$usuarioId)
       ->where('usuario_evento.situacao', 'PENDENTE')
       ->where('usuario_evento.deleted_at', NULL)
+      ->where('usuario_evento.dataConfirmacao', NULL)
+      ->where('usuario_evento.dataExclusao', NULL)
       ->where('eventos.dataRealizacao', '>=', Carbon::now())->select('eventos.id')->get()->map(function($dado){return ($dado->id);})->toArray();
-      
+
 
       return EventoResource::collection(
         Evento::whereIn('id', $eventosId)->get()
@@ -152,8 +154,8 @@ class EventoController extends Controller
 
   }
 
-  
-  
+
+
   public function aceitarConvite($eventoId) {
     try{
       DB::beginTransaction();
@@ -174,7 +176,7 @@ class EventoController extends Controller
     }
 
     return response()->json('Erro', 400);
-    
+
  }
 
  public function cancelarParticipacao($eventoId, Request $request){
@@ -182,12 +184,12 @@ class EventoController extends Controller
     DB::beginTransaction();
 
       $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
-      ->where('situacao', 'CONFIRMADO')->firstOrFail();
+      ->whereIn('situacao', ['CONFIRMADO', 'PENDENTE'])->firstOrFail();
 
       $participacao->situacao = "CANCELADO";
       $participacao->dataCancelamento = Carbon::now();
       $participacao->justificativa = $request->json()->get('justificativa');
-    
+
       $participacao->save();
 
     DB::commit();
@@ -200,6 +202,9 @@ class EventoController extends Controller
 
   return response()->json('Erro', 400);
  }
+
+
+
 
  public function recusarConvite($eventoId) {
   try{
@@ -221,22 +226,140 @@ class EventoController extends Controller
   return response()->json('Erro', 400);
 }
 
-public function cancelarEvento($eventoId) {
-  return response()->json("Ok");
+public function aceitarParticipante($UsuarioEventoId) {
   try{
     DB::beginTransaction();
 
-      $participacao = UsuarioEvento::where('usuario_id', Auth::user()->id)->where('evento_id', $eventoId)
-      ->where('situacao', 'PENDENTE')->firstOrFail();
+      $participante = UsuarioEvento::with('usuario', 'evento')->findOrFail($UsuarioEventoId);
 
-      $participacao->delete();
+      throw_if($participante->evento->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pode Aceitar participantes");
+      $evento = $participante->evento;
+      $dataEvento = $evento->dataRealizacao;
+      $horario = explode(':', $evento->horario);
+      $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+      throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode aceitar novos participantes");
 
-    DB::commit();
-    return response()->json('Convite Aceito com sucesso');
+      $participante->dataConfirmacao = Carbon::now();
+      $participante->situacao = "CONFIRMADO";
+      $participante->save();
+
+      $notControler = new NotificacaoController();
+      $notControler->notificarAceiteParticipacao($participante, $evento);
+
+      DB::commit();
+    return response()->json('Participante aceito com sucesso');
   }catch(Exception $e){
     DB::rollback();
 
-   return response()->json('Erro ao tentar Aceitar o convite: ' . $e->getMessage(), 400);
+   return response()->json('Erro ao tentar Aceitar o participante: ' . $e->getMessage(), 400);
+  }
+
+}
+
+public function recusarParticipante($UsuarioEventoId, Request $request) {
+  try{
+    DB::beginTransaction();
+
+      $participante = UsuarioEvento::with('usuario', 'evento')->findOrFail($UsuarioEventoId);
+
+      throw_if($participante->evento->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pode Recusar participantes");
+      $evento = $participante->evento;
+      $dataEvento = $evento->dataRealizacao;
+      $horario = explode(':', $evento->horario);
+      $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+      throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode recusar participantes");
+
+
+      $participante->justificativa =  $request->json()->get('justificativa');
+      $participante->save();
+
+      $notControler = new NotificacaoController();
+
+
+      $notControler->notificarRecusaParticipacao($participante, $evento);
+      $participante->delete();
+
+      DB::commit();
+    return response()->json('Participante recusado com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar recusar o participante: ' . $e->getMessage(), 400);
+  }
+}
+
+
+
+public function removerParticipante($UsuarioEventoId, Request $request) {
+
+  try{
+    DB::beginTransaction();
+
+      $participante = UsuarioEvento::with('usuario', 'evento')->findOrFail($UsuarioEventoId);
+
+      throw_if($participante->evento->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pode remover participantes");
+      $evento = $participante->evento;
+      $dataEvento = $evento->dataRealizacao;
+      $horario = explode(':', $evento->horario);
+      $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+      throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode remover participantes");
+
+
+      $participante->justificativa =  $request->json()->get('justificativa');
+      $participante->dataExclusao = Carbon::now();
+      $participante->situacao = "EXCLUIDO";
+      $participante->save();
+
+      $notControler = new NotificacaoController();
+
+
+      $notControler->notificarRemocaoParticipacao($participante, $evento);
+      $participante->delete();
+
+      DB::commit();
+    return response()->json('Participante removido com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar remover o participante: ' . $e->getMessage(), 400);
+  }
+}
+
+public function cancelarEvento($eventoId, Request $request) {
+
+  try{
+    DB::beginTransaction();
+
+      $evento = Evento::with( 'participantes')->findOrFail($eventoId);
+      throw_if($evento->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pode cancelar o evento");
+      $dataEvento = $evento->dataRealizacao;
+      $horario = explode(':', $evento->horario);
+
+      $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+      throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode ser cancelado");
+
+
+      $evento->dataCancelamento = Carbon::now();
+      $evento->justificativaCancelamento = $request->json()->get('justificativa');
+      $evento->save();
+
+      $notControler = new NotificacaoController();
+
+      foreach ($evento->participantes as $participante) {
+
+        if($participante->dataCancelamento == null && $participante->dataExclusao == null){
+
+          $notControler->notificarCancelamentoEvento($participante, $evento);
+        }
+      }
+
+
+    DB::commit();
+    return response()->json('Evento cancelado com sucesso');
+  }catch(Exception $e){
+    DB::rollback();
+
+   return response()->json('Erro ao tentar Cancelar o evento: ' . $e->getMessage(), 400);
   }
 
   return response()->json('Erro', 400);
@@ -256,6 +379,7 @@ public function cancelarEvento($eventoId) {
         FROM eventos e
         join locais l on l.id = e.local_id
         WHERE \"dataRealizacao\" BETWEEN DATE(NOW()) AND DATE( (NOW() + INTERVAL '+ 3 DAYS') )
+        AND \"dataCancelamento\" IS NULL
         GROUP BY l.id, e.id
         HAVING (
            6371 *
@@ -270,10 +394,10 @@ public function cancelarEvento($eventoId) {
         "
         );
         //$results = collect($results)->map(function($dado){return ($dado->id);})->toArray();
-       
+
         //$results = Evento::with('participantes', 'participantes.usuario')->whereIn('id',$results)->get();
-        
-       
+
+
        return EventoResource::collection(
           Evento::hydrate($results)
        );

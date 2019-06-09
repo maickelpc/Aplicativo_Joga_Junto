@@ -37,7 +37,7 @@ export class LoginService{
   setCredenciais(login: String, senha: String){
     let credenciais = {login : login, senha: senha}
     this.storage.set(CREDENCIAIS, JSON.stringify(credenciais));
-    // .then(()=> console.log("Guardou as credenciais"));
+
   }
 
   getCredenciais(){
@@ -80,9 +80,7 @@ export class LoginService{
         let userTemp = JSON.parse(atob(data[1]));
         this.usuario = userTemp;
         this.usuario.token = user.token.toString();
-        // console.log(JSON.stringify(this.usuario))
         this.storage.set(LOGGEDIN, JSON.stringify(this.usuario)).then(
-          data => console.log("GRAVOU")
         ).catch(
           error => console.log("NAO GRAVOU")
         );

@@ -1,14 +1,14 @@
-<ion-header padding>
+<ion-header>
 
-  <ion-navbar hideBackButton="false">
-    <button button icon-only menuToggle style="display: block !important;" color="primary">
-      <ion-icon name="menu"></ion-icon>
+  <ion-navbar>
+    <ion-title>Meus Convites</ion-title>
+    <ion-buttons left>
+    <button ion-button icon-only (click)="voltar()">
+      <!-- <ion-icon name="arrow-back"></ion-icon> -->
     </button>
-
-    <ion-title center class="titleicon toolbar-background">
-      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />
-    </ion-title>
+    </ion-buttons>
   </ion-navbar>
+
 
 </ion-header>
 
@@ -17,10 +17,7 @@
   <div *ngIf="listaEventos?.length == 0">
     <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>
     <p>Aproveite seu dia!</p>
-    <button >
-      <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>
-      <div  class="label"dir="rtl"></div>
-    </button>
+
   </div>
 
   <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
@@ -74,7 +71,7 @@
 <ion-fab bottom left>
 
   <button >
-    <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>
+    <ion-icon name="arrow-back" (click)="voltar()">Voltar</ion-icon>
     <div  class="label"dir="rtl"></div>
   </button>
 </ion-fab>

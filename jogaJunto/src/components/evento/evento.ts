@@ -6,7 +6,7 @@ import {EsporteService} from "../../services/esporte.service";
 import {Evento} from "../../models/evento";
 import {Esporte} from "../../models/esporte";
 import {Usuario} from "../../models/usuario";
-import {NavController, NavParams, ViewController, AlertController} from "ionic-angular";
+import { NavParams, ViewController, AlertController} from "ionic-angular";
 import { ToastService } from '../../services/toast.service'
 import { LoadingController } from 'ionic-angular'
 declare var google: any;
@@ -32,7 +32,6 @@ export class EventoComponent {
   @ViewChild('map') mapRef: ElementRef;
 
   constructor(private eventoService: EventoService,
-    public navCtrl: NavController,
     public viewCtrl: ViewController,
     public navParams: NavParams,
     private loginService: LoginService,
@@ -50,6 +49,8 @@ export class EventoComponent {
 
   participantesConfirmados = [];
   participantesPendentes = [];
+  solicitacoesPendentes = [];
+  minhaSolicitacaoPendente: any;
 
   ionViewCanEnter() {
     return new Promise((resolve, reject) =>{
@@ -77,15 +78,21 @@ export class EventoComponent {
             this.euOrganizo = this.evento.usuarioResponsavel.id == this.loginService.getUsuarioLogado().id;
             this.euParticipo = (this.evento.participantes.
               filter( x => x.usuario.id == this.loginService.getUsuarioLogado().id && x.situacao == "CONFIRMADO").length > 0) ;
+
               this.participantesConfirmados = this.evento.participantes.filter( x => x.situacao == "CONFIRMADO");
-              this.participantesPendentes = this.evento.participantes.filter( x => x.situacao == "PENDENTE");
+              this.participantesPendentes = this.evento.participantes.filter( x => x.situacao == "PENDENTE" && x.dataConfirmacao == null);
+              this.solicitacoesPendentes = this.evento.participantes.filter( x => x.situacao == "PENDENTE" && x.dataConfirmacao != null);
+
+              this.minhaSolicitacaoPendente = this.solicitacoesPendentes.filter(x=> x.usuario_id == this.loginService.getUsuarioLogado().id)[0];
+
+
               resolve(response);
             },
             error=>{
               console.log("Erro ao Carregar Evento"+error)
             },
             ()=> {
-              console.log('Carregou Informações do Evento');
+              // console.log('Carregou Informações do Evento');
               this.mostraMapa();
             }
 
@@ -107,7 +114,7 @@ export class EventoComponent {
     }
 
     addMarker(pos, map) {
-      console.log("Add Marker")
+      // console.log("Add Marker")
       return new google.maps.Marker({
         pos,
         map
@@ -123,7 +130,7 @@ export class EventoComponent {
             text: 'Cancel',
             role: 'cancel',
             handler: data => {
-              console.log('Cancel clicked');
+              // console.log('Cancel clicked');
             }
           },
           {
@@ -142,8 +149,6 @@ export class EventoComponent {
     cancelarEvento(justificativa: string){
       let loading = this.loading();
       loading.present();
-      console.log("Motivo: " + justificativa);
-      console.log(this.evento);
       this.eventoService.cancelarEvento(this.evento.id, justificativa).subscribe(
         dados => {
           loading.dismiss();
@@ -160,7 +165,7 @@ export class EventoComponent {
     }
 
 
-    confirmarCancelar() {
+    confirmarCancelarParticipacao() {
       let alert = this.alertCtrl.create({
         title: 'Confirmação de Saída de evento',
         inputs: [{ name: 'justificativa', placeholder: 'Justificativa' , min:3 } ],
@@ -169,7 +174,7 @@ export class EventoComponent {
             text: 'Cancel',
             role: 'cancel',
             handler: data => {
-              console.log('Cancel clicked');
+
             }
           },
           {
@@ -189,14 +194,13 @@ export class EventoComponent {
     cancelarParticipacao(justificativa: string){
       let loading = this.loading();
       loading.present();
-      console.log("Motivo: " + justificativa);
-      console.log(this.evento);
       this.eventoService.cancelarParticipacao(this.evento.id, justificativa).subscribe(
         dados => {
-          console.log(dados);
           loading.dismiss();
           this.toastService.toast("Cancelamento efetivado!");
           this.participantesConfirmados = this.participantesConfirmados.filter(x => x.usuario.id != this.loginService.getUsuarioLogado().id);
+          this.participantesPendentes = this.participantesPendentes.filter(x => x.usuario.id != this.loginService.getUsuarioLogado().id);
+          this.minhaSolicitacaoPendente = null;
         },
         erro => {
           loading.dismiss();
@@ -208,8 +212,181 @@ export class EventoComponent {
     }
 
 
+    // Area de aceitar / recusar parcitipantes
 
 
+    confirmarAceitarParticipanteEvento(solicitacao) {
+      let alert = this.alertCtrl.create({
+        title: 'Aceitar Participante ' + solicitacao.usuario.nome,
+        // inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min:3  } ],
+        buttons: [
+          {
+            text: 'Voltar',
+            role: 'cancel',
+            handler: data => {
+              console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Confirmar',
+            handler: () => {
+              this.aceitarParticipanteEvento(solicitacao.id);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    aceitarParticipanteEvento(idSolicitacao: number){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.aceitarParticipanteEvento(idSolicitacao).subscribe(
+        dados => {
+          loading.dismiss();
+          let i =this.solicitacoesPendentes.filter(x => x.id == idSolicitacao);
+          this.participantesConfirmados.push(i[0]);
+          this.solicitacoesPendentes = this.solicitacoesPendentes.filter(x => x.id != idSolicitacao);
+          this.toastService.toast("Convidado Aceito!");
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível efetivar o aceite, tente novamente mais tarde.")
+
+        }
+      )
+    }
+
+
+    confirmarRecusarParticipanteEvento(solicitacao) {
+      let alert = this.alertCtrl.create({
+        title: 'Recusar Participante: ' + solicitacao.usuario.nome,
+        inputs: [{ name: 'justificativa', placeholder: 'Justificativa' , min:3 } ],
+        buttons: [
+          {
+            text: 'Voltar',
+            role: 'cancel',
+            handler: data => {}
+          },
+          {
+            text: 'Confirmar',
+            handler: data => {
+              this.recusarParticipanteEvento(solicitacao.id, data.justificativa);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    recusarParticipanteEvento(idSolicitacao: number, justificativa: string){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.recusarParticipanteEvento(idSolicitacao, justificativa).subscribe(
+        dados => {
+          loading.dismiss();
+          this.solicitacoesPendentes = this.solicitacoesPendentes.filter(x => x.id != idSolicitacao);
+          this.toastService.toast("Usuário Recusado!");
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível recusar a solicitacao tente novamente mais tarde.")
+
+        }
+      )
+    }
+
+
+    confirmarRemoverParticipanteEvento(solicitacao) {
+      let alert = this.alertCtrl.create({
+        title: 'Remover: ' + solicitacao.usuario.nome + ' do evento',
+        inputs: [{ name: 'justificativa', placeholder: 'Justificativa' , min:3 } ],
+        buttons: [
+          {
+            text: 'Voltar',
+            role: 'cancel',
+            handler: data => {}
+          },
+          {
+            text: 'Confirmar',
+            handler: data => {
+              this.removerParticipanteEvento(solicitacao.id, data.justificativa);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    removerParticipanteEvento(idSolicitacao: number, justificativa: string){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.removerParticipanteEvento(idSolicitacao, justificativa).subscribe(
+        dados => {
+          loading.dismiss();
+          this.participantesPendentes = this.participantesPendentes.filter(x => x.id != idSolicitacao);
+          this.participantesConfirmados = this.participantesConfirmados.filter(x => x.id != idSolicitacao);
+          this.toastService.toast("Usuário Removido!");
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível remover, tente novamente mais tarde.")
+
+        }
+      )
+    }
+
+    confirmarSolicitarParticipacao(evento) {
+      let alert = this.alertCtrl.create({
+        title: 'Solicitar Participação',
+        inputs: [{ name: 'mensagem', placeholder: 'Mensagem' , min:3 } ],
+        buttons: [
+          {
+            text: 'Voltar',
+            role: 'cancel',
+            handler: data => {}
+          },
+          {
+            text: 'Solicitar',
+            handler: data => {
+              this.solicitarParticipacao(evento.id, data.mensagem);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    solicitarParticipacao(idEvento: number, justificativa: string){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.solicitarParticipacao(idEvento, justificativa).subscribe(
+        dados => {
+          loading.dismiss();
+
+          this.minhaSolicitacaoPendente = dados;
+          this.solicitacoesPendentes.push(dados);
+          this.toastService.toast("Solicitação enviada, aguarde a análise do organizador!");
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível enviar sua solicitação, tente novamente mais tarde.")
+
+        }
+      )
+    }
 
 
 

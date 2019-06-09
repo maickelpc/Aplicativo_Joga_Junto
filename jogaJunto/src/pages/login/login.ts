@@ -168,7 +168,6 @@ export class LoginPage implements OnInit {
         cadastrar(){
           let loading = this.loading();
           loading.present();
-          console.log(JSON.stringify(this.usuario));
           this.loginService.cadastrar(this.usuario)
           .subscribe(
             x => {

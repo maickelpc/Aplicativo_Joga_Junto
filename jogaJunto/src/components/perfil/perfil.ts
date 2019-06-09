@@ -8,7 +8,12 @@ import { EsporteService } from '../../services/esporte.service'
 import { Util } from "../../providers/util/util";
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { ToastService } from '../../services/toast.service'
-import { LoadingController } from 'ionic-angular';
+import { LoadingController ,ViewController, NavController } from 'ionic-angular';
+import { EventosComponent} from '../eventos/eventos'
+
+import { NavParams,  AlertController} from "ionic-angular";
+
+// import {NavController, NavParams, , AlertController} from "ionic-angular";
 /**
  * Generated class for the PerfilComponent component.
  *
@@ -47,6 +52,8 @@ export class PerfilComponent implements OnInit{
   }
 
   constructor(
+    public navCtrl: NavController,
+    public viewCtrl: ViewController,
     private usuarioService: UsuarioService,
     private cidadeService: CidadeService,
     private esporteService: EsporteService,
@@ -169,9 +176,6 @@ export class PerfilComponent implements OnInit{
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
-
-
-              console.log(this.usuario);
               this.buscaCidades();
               this.buscaEsportes();
               loading.dismiss();
@@ -183,6 +187,11 @@ export class PerfilComponent implements OnInit{
             });
 
       })
+  }
+
+  voltar(){
+    this.navCtrl.setRoot(EventosComponent);
+    // this.viewCtrl.dismiss().then()
   }
 
 }

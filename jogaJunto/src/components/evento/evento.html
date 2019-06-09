@@ -2,13 +2,13 @@
 
 <ion-header>
   <ion-navbar>
-      <ion-buttons left>
-          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>
-      </ion-buttons>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>
+    </ion-buttons>
 
-      <ion-title>
-        Visualizar Evento
-      </ion-title>
+    <ion-title>
+      Visualizar Evento
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
@@ -25,38 +25,99 @@
       </ion-card>
     </ion-col>
     <ion-col col-7>
-        <p>{{ evento.descricao }}</p>
-        <p>{{ evento.esporte.nome }} </p>
-        <p>
-          <span icon-start clear small>
-            <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}
-          </span>
-        </p>
-        <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col col-12>
-      <h4>Confirmados</h4>
-      <div *ngFor="let p of participantesConfirmados" style="color: teal">
-          <p>{{ p.usuario.nome }}</p>
-      </div>
-      <h4>Pendentes</h4>
-      <div *ngFor="let p of participantesPendentes" style="color: teal">
-          <p>{{ p.usuario.nome }}</p>
-      </div>
+      <p>{{ evento.descricao }}</p>
+      <p>{{ evento.esporte.nome }} </p>
+      <p>
+        <span icon-start clear small>
+          <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}
+        </span>
+      </p>
+      <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>
     </ion-col>
   </ion-row>
 
   <ion-row *ngIf="(evento.dataCancelamento != null)">
     <H1>Evento Cancelado</H1>
     <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : 'dd/MM/yy hh:mm'}}h</p>
+    <p>Motivo: {{evento.justificativaCancelamento}}</p>
   </ion-row>
 
   <ion-row *ngIf="(encerrado)">
     <H1>Evento Encerrado</H1>
     <!-- <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : 'dd/MM/yy hh:mm'}}h</p> -->
   </ion-row>
+
+  <div *ngIf="minhaSolicitacaoPendente != null">
+
+    <h4>Participação Solicitada</h4>
+    <ion-row style="color: teal">
+      <ion-col col-8>
+        <p>{{ minhaSolicitacaoPendente.dataConfirmacao | date }}</p>
+      </ion-col>
+      <ion-col col-4>
+        <p>Cancelar
+          <button (click)="confirmarCancelarParticipacao()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+        </p>
+
+      </ion-col>
+
+    </ion-row>
+
+  </div>
+
+  <div *ngIf="euOrganizo && !encerrado && !cancelado && solicitacoesPendentes.length > 0">
+
+    <h4>Solicitações pendentes</h4>
+    <ion-row *ngFor="let p of solicitacoesPendentes" style="color: teal">
+      <ion-col col-8>
+        <p>{{ p.usuario.nome }}</p>
+      </ion-col>
+      <ion-col col-2>
+        <button (click)="confirmarAceitarParticipanteEvento(p)">
+          <ion-icon name="checkmark"></ion-icon>
+        </button>
+      </ion-col>
+      <ion-col col-2>
+        <button (click)="confirmarRecusarParticipanteEvento(p)">
+          <ion-icon name="close"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+
+  </div>
+
+  <ion-row>
+    <ion-col col-6>
+      <h4>Confirmados</h4>
+      <div *ngFor="let p of participantesConfirmados" style="color: teal">
+        <p>{{ p.usuario.nome }}
+          <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
+          <ion-icon name="close"></ion-icon>
+        </button></p>
+      </div>
+    </ion-col>
+
+    <ion-col col-6 *ngIf="euParticipo">
+      <h4>Pendentes</h4>
+      <div *ngFor="let p of participantesPendentes" style="color: teal">
+        <p>{{ p.usuario.nome }}
+          <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
+        <ion-icon name="close"></ion-icon>
+      </button></p>
+      </div>
+    </ion-col>
+  </ion-row>
+
+  <ion-fab bottom right *ngIf="!euParticipo" >
+
+    <button (click)="confirmarSolicitarParticipacao(evento)" [disabled]="(!evento.publico || minhaSolicitacaoPendente != null)">
+      <ion-icon name="add-circle"></ion-icon>
+      <div class="label">Solicitar Participação</div>
+    </button>
+
+  </ion-fab>
 
   <ion-fab bottom right *ngIf="euOrganizo" >
 
@@ -67,9 +128,9 @@
 
   </ion-fab>
 
-  <ion-fab bottom right *ngIf="euParticipo">
+  <ion-fab bottom right *ngIf="!euOrganizo && euParticipo">
 
-    <button (click)="confirmarCancelar()" [disabled]="(evento.dataCancelamento != null)">
+    <button (click)="confirmarCancelarParticipacao()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar participação</div>
     </button>
