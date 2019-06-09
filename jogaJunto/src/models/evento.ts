@@ -20,6 +20,7 @@ class Evento {
   constructor(){
     this.esporte = new Esporte();
     this.local = new Local();
+    this.descricao = '';
   }
 }
 

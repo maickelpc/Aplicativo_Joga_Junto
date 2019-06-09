@@ -132,9 +132,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 * Components.
 */
 var EventoComponent = (function () {
-    function EventoComponent(eventoService, navCtrl, viewCtrl, navParams, loginService, alertCtrl, toastService, loadingCtrl) {
+    function EventoComponent(eventoService, viewCtrl, navParams, loginService, alertCtrl, toastService, loadingCtrl) {
         this.eventoService = eventoService;
-        this.navCtrl = navCtrl;
         this.viewCtrl = viewCtrl;
         this.navParams = navParams;
         this.loginService = loginService;
@@ -142,10 +141,13 @@ var EventoComponent = (function () {
         this.toastService = toastService;
         this.loadingCtrl = loadingCtrl;
         this.Util = __WEBPACK_IMPORTED_MODULE_0__providers_util_util__["a" /* Util */];
+        this.cancelado = false;
+        this.encerrado = false;
         this.euParticipo = false;
         this.euOrganizo = false;
         this.participantesConfirmados = [];
         this.participantesPendentes = [];
+        this.solicitacoesPendentes = [];
     }
     EventoComponent.prototype.ionViewDidLoad = function () {
         // TESTE DO MAPREF console.log(this.mapRef);
@@ -159,16 +161,29 @@ var EventoComponent = (function () {
             else {
                 _this.eventoService.carregaEvento(_this.navParams.get('id')).subscribe(function (response) {
                     _this.evento = response;
+                    _this.cancelado = _this.evento.dataCancelamento != null;
+                    var dataRealizacao = _this.evento.dataRealizacao.toString().split('/');
+                    var horas = _this.evento.horario.split(':');
+                    var agora = new Date();
+                    var data = new Date();
+                    data.setDate(parseInt(dataRealizacao[0]));
+                    data.setMonth(parseInt(dataRealizacao[1]));
+                    data.setFullYear(parseInt(dataRealizacao[2]));
+                    data.setHours(parseInt(horas[0]));
+                    data.setMinutes(parseInt(horas[1]));
+                    _this.encerrado = (data < agora);
                     _this.euOrganizo = _this.evento.usuarioResponsavel.id == _this.loginService.getUsuarioLogado().id;
                     _this.euParticipo = (_this.evento.participantes.
                         filter(function (x) { return x.usuario.id == _this.loginService.getUsuarioLogado().id && x.situacao == "CONFIRMADO"; }).length > 0);
                     _this.participantesConfirmados = _this.evento.participantes.filter(function (x) { return x.situacao == "CONFIRMADO"; });
-                    _this.participantesPendentes = _this.evento.participantes.filter(function (x) { return x.situacao == "PENDENTE"; });
+                    _this.participantesPendentes = _this.evento.participantes.filter(function (x) { return x.situacao == "PENDENTE" && x.dataConfirmacao == null; });
+                    _this.solicitacoesPendentes = _this.evento.participantes.filter(function (x) { return x.situacao == "PENDENTE" && x.dataConfirmacao != null; });
+                    _this.minhaSolicitacaoPendente = _this.solicitacoesPendentes.filter(function (x) { return x.usuario_id == _this.loginService.getUsuarioLogado().id; })[0];
                     resolve(response);
                 }, function (error) {
                     console.log("Erro ao Carregar Evento" + error);
                 }, function () {
-                    console.log('Carregou Informações do Evento');
+                    // console.log('Carregou Informações do Evento');
                     _this.mostraMapa();
                 });
             }
@@ -184,23 +199,59 @@ var EventoComponent = (function () {
         this.addMarker(localizacao, map);
     };
     EventoComponent.prototype.addMarker = function (pos, map) {
-        console.log("Add Marker");
+        // console.log("Add Marker")
         return new google.maps.Marker({
             pos: pos,
             map: map
         });
     };
-    EventoComponent.prototype.confirmarCancelar = function () {
+    EventoComponent.prototype.confirmarCancelarEvento = function () {
         var _this = this;
         var alert = this.alertCtrl.create({
-            title: 'Confirmação de Saída de evento',
-            inputs: [{ name: 'justificativa', placeholder: 'Justificativa' }],
+            title: 'Confirmação de cancelamento do evento',
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
             buttons: [
                 {
                     text: 'Cancel',
                     role: 'cancel',
                     handler: function (data) {
-                        console.log('Cancel clicked');
+                        // console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Confirmar',
+                    handler: function (data) {
+                        _this.cancelarEvento(data.justificativa);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.cancelarEvento = function (justificativa) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.cancelarEvento(this.evento.id, justificativa).subscribe(function (dados) {
+            loading.dismiss();
+            _this.toastService.toast("Evento Cancelado!");
+            _this.evento.dataCancelamento = new Date();
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível cancelar o evento, tente novamente");
+        });
+    };
+    EventoComponent.prototype.confirmarCancelarParticipacao = function () {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Confirmação de Saída de evento',
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: function (data) {
                     }
                 },
                 {
@@ -217,17 +268,163 @@ var EventoComponent = (function () {
         var _this = this;
         var loading = this.loading();
         loading.present();
-        console.log("Motivo: " + justificativa);
-        console.log(this.evento);
         this.eventoService.cancelarParticipacao(this.evento.id, justificativa).subscribe(function (dados) {
-            console.log(dados);
             loading.dismiss();
             _this.toastService.toast("Cancelamento efetivado!");
             _this.participantesConfirmados = _this.participantesConfirmados.filter(function (x) { return x.usuario.id != _this.loginService.getUsuarioLogado().id; });
+            _this.participantesPendentes = _this.participantesPendentes.filter(function (x) { return x.usuario.id != _this.loginService.getUsuarioLogado().id; });
+            _this.minhaSolicitacaoPendente = null;
         }, function (erro) {
             loading.dismiss();
             console.log(erro);
             _this.toastService.toast("Não foi possível cancelar sua participação, tente novamente");
+        });
+    };
+    // Area de aceitar / recusar parcitipantes
+    EventoComponent.prototype.confirmarAceitarParticipanteEvento = function (solicitacao) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Aceitar Participante ' + solicitacao.usuario.nome,
+            // inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min:3  } ],
+            buttons: [
+                {
+                    text: 'Voltar',
+                    role: 'cancel',
+                    handler: function (data) {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Confirmar',
+                    handler: function () {
+                        _this.aceitarParticipanteEvento(solicitacao.id);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.aceitarParticipanteEvento = function (idSolicitacao) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.aceitarParticipanteEvento(idSolicitacao).subscribe(function (dados) {
+            loading.dismiss();
+            var i = _this.solicitacoesPendentes.filter(function (x) { return x.id == idSolicitacao; });
+            _this.participantesConfirmados.push(i[0]);
+            _this.solicitacoesPendentes = _this.solicitacoesPendentes.filter(function (x) { return x.id != idSolicitacao; });
+            _this.toastService.toast("Convidado Aceito!");
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível efetivar o aceite, tente novamente mais tarde.");
+        });
+    };
+    EventoComponent.prototype.confirmarRecusarParticipanteEvento = function (solicitacao) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Recusar Participante: ' + solicitacao.usuario.nome,
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
+            buttons: [
+                {
+                    text: 'Voltar',
+                    role: 'cancel',
+                    handler: function (data) { }
+                },
+                {
+                    text: 'Confirmar',
+                    handler: function (data) {
+                        _this.recusarParticipanteEvento(solicitacao.id, data.justificativa);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.recusarParticipanteEvento = function (idSolicitacao, justificativa) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.recusarParticipanteEvento(idSolicitacao, justificativa).subscribe(function (dados) {
+            loading.dismiss();
+            _this.solicitacoesPendentes = _this.solicitacoesPendentes.filter(function (x) { return x.id != idSolicitacao; });
+            _this.toastService.toast("Usuário Recusado!");
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível recusar a solicitacao tente novamente mais tarde.");
+        });
+    };
+    EventoComponent.prototype.confirmarRemoverParticipanteEvento = function (solicitacao) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Remover: ' + solicitacao.usuario.nome + ' do evento',
+            inputs: [{ name: 'justificativa', placeholder: 'Justificativa', min: 3 }],
+            buttons: [
+                {
+                    text: 'Voltar',
+                    role: 'cancel',
+                    handler: function (data) { }
+                },
+                {
+                    text: 'Confirmar',
+                    handler: function (data) {
+                        _this.removerParticipanteEvento(solicitacao.id, data.justificativa);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.removerParticipanteEvento = function (idSolicitacao, justificativa) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.removerParticipanteEvento(idSolicitacao, justificativa).subscribe(function (dados) {
+            loading.dismiss();
+            _this.participantesPendentes = _this.participantesPendentes.filter(function (x) { return x.id != idSolicitacao; });
+            _this.participantesConfirmados = _this.participantesConfirmados.filter(function (x) { return x.id != idSolicitacao; });
+            _this.toastService.toast("Usuário Removido!");
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível remover, tente novamente mais tarde.");
+        });
+    };
+    EventoComponent.prototype.confirmarSolicitarParticipacao = function (evento) {
+        var _this = this;
+        var alert = this.alertCtrl.create({
+            title: 'Solicitar Participação',
+            inputs: [{ name: 'mensagem', placeholder: 'Mensagem', min: 3 }],
+            buttons: [
+                {
+                    text: 'Voltar',
+                    role: 'cancel',
+                    handler: function (data) { }
+                },
+                {
+                    text: 'Solicitar',
+                    handler: function (data) {
+                        _this.solicitarParticipacao(evento.id, data.mensagem);
+                    }
+                }
+            ]
+        });
+        alert.present();
+    };
+    EventoComponent.prototype.solicitarParticipacao = function (idEvento, justificativa) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.solicitarParticipacao(idEvento, justificativa).subscribe(function (dados) {
+            loading.dismiss();
+            _this.minhaSolicitacaoPendente = dados;
+            _this.solicitacoesPendentes.push(dados);
+            _this.toastService.toast("Solicitação enviada, aguarde a análise do organizador!");
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Não foi possível enviar sua solicitação, tente novamente mais tarde.");
         });
     };
     EventoComponent.prototype.loading = function () {
@@ -242,10 +439,9 @@ var EventoComponent = (function () {
     ], EventoComponent.prototype, "mapRef", void 0);
     EventoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["m" /* Component */])({
-            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n      <ion-buttons left>\n          <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n      </ion-buttons>\n\n      <ion-title>\n        Visualizar Evento\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n        <p>{{ evento.descricao }}</p>\n        <p>{{ evento.esporte.nome }} </p>\n        <p>\n          <span icon-start clear small>\n            <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}\n          </span>\n        </p>\n        <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>\n    </ion-col>\n  </ion-row>\n  <ion-row>\n    <ion-col col-12>\n      <h4>Confirmados</h4>\n      <div *ngFor="let p of participantesConfirmados" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n      <h4>Pendentes</h4>\n      <div *ngFor="let p of participantesPendentes" style="color: teal">\n          <p>{{ p.usuario.nome }}</p>\n      </div>\n    </ion-col>\n  </ion-row>\n\n\n  <ion-fab bottom right *ngIf="euOrganizo">\n\n    <button >\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar Evento</div>\n    </button>\n\n  </ion-fab>\n\n  <ion-fab bottom right *ngIf="euParticipo  ">\n\n    <button   (click)="confirmarCancelar()">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar participação</div>\n    </button>\n\n\n  </ion-fab>\n\n\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
+            selector: 'evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n    </ion-buttons>\n\n    <ion-title>\n      Visualizar Evento\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding class="bg-branco">\n  <ion-row>\n    <ion-col col-5>\n      <ion-card>\n        <img [src]="Util.pathImg(evento.local.imagem)"/>\n        <ion-card-content style="background-color: white">\n          <p>\n            {{ evento.local.descricao }}\n          </p>\n        </ion-card-content>\n      </ion-card>\n    </ion-col>\n    <ion-col col-7>\n      <p>{{ evento.descricao }}</p>\n      <p>{{ evento.esporte.nome }} </p>\n      <p>\n        <span icon-start clear small>\n          <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}\n        </span>\n      </p>\n      <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>\n    </ion-col>\n  </ion-row>\n\n  <ion-row *ngIf="(evento.dataCancelamento != null)">\n    <H1>Evento Cancelado</H1>\n    <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : \'dd/MM/yy hh:mm\'}}h</p>\n    <p>Motivo: {{evento.justificativaCancelamento}}</p>\n  </ion-row>\n\n  <ion-row *ngIf="(encerrado)">\n    <H1>Evento Encerrado</H1>\n    <!-- <p>Cancelado por {{evento.usuarioResponsavel.nome}} em {{evento.dataCancelamento | date : \'dd/MM/yy hh:mm\'}}h</p> -->\n  </ion-row>\n\n  <div *ngIf="minhaSolicitacaoPendente != null">\n\n    <h4>Participação Solicitada</h4>\n    <ion-row style="color: teal">\n      <ion-col col-8>\n        <p>{{ minhaSolicitacaoPendente.dataConfirmacao | date }}</p>\n      </ion-col>\n      <ion-col col-4>\n        <p>Cancelar\n          <button (click)="confirmarCancelarParticipacao()">\n            <ion-icon name="close"></ion-icon>\n          </button>\n        </p>\n\n      </ion-col>\n\n    </ion-row>\n\n  </div>\n\n  <div *ngIf="euOrganizo && !encerrado && !cancelado && solicitacoesPendentes.length > 0">\n\n    <h4>Solicitações pendentes</h4>\n    <ion-row *ngFor="let p of solicitacoesPendentes" style="color: teal">\n      <ion-col col-8>\n        <p>{{ p.usuario.nome }}</p>\n      </ion-col>\n      <ion-col col-2>\n        <button (click)="confirmarAceitarParticipanteEvento(p)">\n          <ion-icon name="checkmark"></ion-icon>\n        </button>\n      </ion-col>\n      <ion-col col-2>\n        <button (click)="confirmarRecusarParticipanteEvento(p)">\n          <ion-icon name="close"></ion-icon>\n        </button>\n      </ion-col>\n    </ion-row>\n\n  </div>\n\n  <ion-row>\n    <ion-col col-6>\n      <h4>Confirmados</h4>\n      <div *ngFor="let p of participantesConfirmados" style="color: teal">\n        <p>{{ p.usuario.nome }}\n          <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">\n          <ion-icon name="close"></ion-icon>\n        </button></p>\n      </div>\n    </ion-col>\n\n    <ion-col col-6 *ngIf="euParticipo">\n      <h4>Pendentes</h4>\n      <div *ngFor="let p of participantesPendentes" style="color: teal">\n        <p>{{ p.usuario.nome }}\n          <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">\n        <ion-icon name="close"></ion-icon>\n      </button></p>\n      </div>\n    </ion-col>\n  </ion-row>\n\n  <ion-fab bottom right *ngIf="!euParticipo" >\n\n    <button (click)="confirmarSolicitarParticipacao(evento)" [disabled]="(!evento.publico || minhaSolicitacaoPendente != null)">\n      <ion-icon name="add-circle"></ion-icon>\n      <div class="label">Solicitar Participação</div>\n    </button>\n\n  </ion-fab>\n\n  <ion-fab bottom right *ngIf="euOrganizo" >\n\n    <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar Evento</div>\n    </button>\n\n  </ion-fab>\n\n  <ion-fab bottom right *ngIf="!euOrganizo && euParticipo">\n\n    <button (click)="confirmarCancelarParticipacao()" [disabled]="(evento.dataCancelamento != null)">\n      <ion-icon name="close"></ion-icon>\n      <div class="label">Cancelar participação</div>\n    </button>\n\n\n  </ion-fab>\n\n\n  <ion-row padding>\n    <div id="map" #map></div>\n  </ion-row>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/evento/evento.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_evento_service__["a" /* EventoService */],
-            __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["o" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["t" /* ViewController */],
             __WEBPACK_IMPORTED_MODULE_4_ionic_angular__["p" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_3__services_login_service__["a" /* LoginService */],
@@ -260,7 +456,118 @@ var EventoComponent = (function () {
 
 /***/ }),
 
-/***/ 174:
+/***/ 147:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConfirmaParticipacaoComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_toast_service__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(52);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+/**
+ * Generated class for the ConfirmaParticipacaoComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var ConfirmaParticipacaoComponent = (function () {
+    function ConfirmaParticipacaoComponent(eventoService, navCtrl, toastService, loadingCtrl) {
+        this.eventoService = eventoService;
+        this.navCtrl = navCtrl;
+        this.toastService = toastService;
+        this.loadingCtrl = loadingCtrl;
+    }
+    ConfirmaParticipacaoComponent.prototype.ngOnInit = function () {
+        this.buscaEventosPendentes();
+    };
+    ConfirmaParticipacaoComponent.prototype.buscaEventosPendentes = function () {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.buscaMeusEventosPendentes().subscribe(function (dados) {
+            _this.listaEventos = dados;
+            loading.dismiss();
+            console.log(dados);
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.listaEventos = [];
+            _this.toastService.toast("Erro ao carregar a lista de eventos, tente novamente mais tarde!");
+        });
+    };
+    ConfirmaParticipacaoComponent.prototype.aceitarConvite = function (evento) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.aceitarConvite(evento).subscribe(function (dados) {
+            _this.listaEventos = _this.listaEventos.filter(function (x) { return x.id != evento.id; });
+            loading.dismiss();
+            _this.toastService.toast("Sua participacao foi confirmada no evento do " + evento.usuarioResponsavel.nome + "!");
+            console.log(dados);
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Erro ao tentar aceitar o convite, tente novamente mais tarde!");
+        });
+    };
+    ConfirmaParticipacaoComponent.prototype.recusarConvite = function (evento) {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        this.eventoService.recusarConvite(evento).subscribe(function (dados) {
+            _this.listaEventos = _this.listaEventos.filter(function (x) { return x.id != evento.id; });
+            loading.dismiss();
+            _this.toastService.toast("O convite para o evento do " + evento.usuarioResponsavel.nome + "  foi recusado!");
+            console.log(dados);
+        }, function (erro) {
+            loading.dismiss();
+            console.log(erro);
+            _this.toastService.toast("Erro ao tentar recusar o convite, tente novamente mais tarde!");
+        });
+    };
+    ConfirmaParticipacaoComponent.prototype.loading = function () {
+        return this.loadingCtrl.create({
+            content: 'Aguarde...',
+            dismissOnPageChange: true
+        });
+    };
+    ConfirmaParticipacaoComponent.prototype.voltar = function () {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_4__eventos_eventos__["a" /* EventosComponent */]);
+    };
+    ConfirmaParticipacaoComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'confirma-participacao',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirma-participacao/confirma-participacao.html"*/`<ion-header>\n\n  <ion-navbar>\n    <ion-title>Meus Convites</ion-title>\n    <ion-buttons left>\n    <button ion-button icon-only (click)="voltar()">\n      <!-- <ion-icon name="arrow-back"></ion-icon> -->\n    </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n<ion-content padding>\n\n  <div *ngIf="listaEventos?.length == 0">\n    <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>\n    <p>Aproveite seu dia!</p>\n\n  </div>\n\n  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">\n    <ion-card-content>\n      <ion-card-title>\n        {{ evento.descricao }}\n\n      </ion-card-title>\n      <ion-row>\n        <ion-col>\n          <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>\n        </ion-col>\n        <ion-col>\n          <p><strong>Local:</strong> {{evento.local.nome}}</p>\n        </ion-col>\n      </ion-row>\n      <ion-row>\n\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>\n          </span>\n        </ion-col>\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="alarm">{{ evento.horario }}</ion-icon>\n          </span>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col align-self-center>\n          <button ion-button icon-start clear medium (click)="recusarConvite(evento)">\n            <ion-icon name="close"></ion-icon>\n            <div>Recusar</div>\n          </button>\n        </ion-col>\n        <ion-col align-self-center>\n          <button ion-button icon-start clear medium (click)="aceitarConvite(evento)">\n            <ion-icon name="checkmark"></ion-icon>\n            <div>Confirmar</div>\n          </button>\n        </ion-col>\n      </ion-row>\n    </ion-card-content>\n  </ion-card>\n\n\n\n\n<ion-fab bottom left>\n\n  <button >\n    <ion-icon name="arrow-back" (click)="voltar()">Voltar</ion-icon>\n    <div  class="label"dir="rtl"></div>\n  </button>\n</ion-fab>\n\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirma-participacao/confirma-participacao.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["o" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_3__services_toast_service__["a" /* ToastService */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* LoadingController */]])
+    ], ConfirmaParticipacaoComponent);
+    return ConfirmaParticipacaoComponent;
+}());
+
+//# sourceMappingURL=confirma-participacao.js.map
+
+/***/ }),
+
+/***/ 175:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -304,22 +611,22 @@ var HttpProvider = (function () {
 
 /***/ }),
 
-/***/ 176:
+/***/ 177:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LoginPage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ngx_translate_core__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__providers_user_user__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(174);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(256);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_http_http__ = __webpack_require__(175);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_usuario__ = __webpack_require__(257);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_toast_service__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirmacao_confirmacao__ = __webpack_require__(262);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_push__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirmacao_confirmacao__ = __webpack_require__(263);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__ionic_native_push__ = __webpack_require__(264);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -454,7 +761,6 @@ var LoginPage = (function () {
         var _this = this;
         var loading = this.loading();
         loading.present();
-        console.log(JSON.stringify(this.usuario));
         this.loginService.cadastrar(this.usuario)
             .subscribe(function (x) {
             // console.log("Deu Certo " + JSON.stringify(this.usuario));
@@ -532,7 +838,7 @@ var LoginPage = (function () {
 
 /***/ }),
 
-/***/ 189:
+/***/ 190:
 /***/ (function(module, exports) {
 
 function webpackEmptyAsyncContext(req) {
@@ -545,11 +851,11 @@ function webpackEmptyAsyncContext(req) {
 webpackEmptyAsyncContext.keys = function() { return []; };
 webpackEmptyAsyncContext.resolve = webpackEmptyAsyncContext;
 module.exports = webpackEmptyAsyncContext;
-webpackEmptyAsyncContext.id = 189;
+webpackEmptyAsyncContext.id = 190;
 
 /***/ }),
 
-/***/ 255:
+/***/ 256:
 /***/ (function(module, exports, __webpack_require__) {
 
 var map = {
@@ -585,12 +891,12 @@ function webpackAsyncContext(req) {
 webpackAsyncContext.keys = function webpackAsyncContextKeys() {
 	return Object.keys(map);
 };
-webpackAsyncContext.id = 255;
+webpackAsyncContext.id = 256;
 module.exports = webpackAsyncContext;
 
 /***/ }),
 
-/***/ 256:
+/***/ 257:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -606,21 +912,21 @@ var Usuario = (function () {
 
 /***/ }),
 
-/***/ 258:
+/***/ 259:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return CriarEventoComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_esporte_service__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_local_service__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_esporte_service__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_local_service__ = __webpack_require__(260);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_evento__ = __webpack_require__(436);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_local__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__models_local__ = __webpack_require__(261);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__services_toast_service__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_util_util__ = __webpack_require__(47);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_contacts__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__ionic_native_contacts__ = __webpack_require__(262);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -642,10 +948,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 var CriarEventoComponent = (function () {
-    function CriarEventoComponent(esporteService, eventoService, navCtrl, viewCtrl, navParams, toastService, loadingCtrl, localService, contacts) {
+    function CriarEventoComponent(esporteService, eventoService, viewCtrl, navParams, toastService, loadingCtrl, localService, contacts) {
         this.esporteService = esporteService;
         this.eventoService = eventoService;
-        this.navCtrl = navCtrl;
         this.viewCtrl = viewCtrl;
         this.navParams = navParams;
         this.toastService = toastService;
@@ -684,7 +989,6 @@ var CriarEventoComponent = (function () {
         this.evento.local = new __WEBPACK_IMPORTED_MODULE_5__models_local__["a" /* Local */]();
         this.localService.buscaLocalPorEsporte(esporte, nome).subscribe(function (dados) {
             _this.locais = dados;
-            console.log(_this.locais);
         }, function (erro) {
             console.log(erro);
             _this.toastService.toast("Erro ao buscar os locais, tente novamente mais tarde!");
@@ -709,29 +1013,13 @@ var CriarEventoComponent = (function () {
         });
     };
     CriarEventoComponent.prototype.voltar = function () {
-        switch (this.passo) {
-            // case 'esporte':
-            case 2:
-                this.passo = 1;
-                break;
-            case 3:
-                this.passo = 2;
-            case 4:
-                this.passo = 3;
-                break;
+        if (this.passo > 1) {
+            this.passo--;
         }
     };
     CriarEventoComponent.prototype.avancar = function () {
-        switch (this.passo) {
-            case 1:
-                this.passo = 2;
-                break;
-            case 2:
-                this.passo = 3;
-            case 3:
-                this.passo = 4;
-                break;
-        }
+        if (this.passo < 4)
+            this.passo++;
     };
     CriarEventoComponent.prototype.concluir = function () {
         //Lista de convidados do celular
@@ -746,7 +1034,7 @@ var CriarEventoComponent = (function () {
             loading.dismiss();
             console.log(dados);
             _this.toastService.toast("Evento criado com sucesso!");
-            _this.navCtrl.pop();
+            _this.viewCtrl.dismiss();
         }, function (erro) {
             loading.dismiss();
             console.log(erro);
@@ -759,9 +1047,9 @@ var CriarEventoComponent = (function () {
             case 1:
                 return !(this.evento.esporte.id == null);
             case 2:
-                return !(this.evento.dataRealizacao == null || this.evento.horario == null);
-            case 3:
                 return !(this.evento.local.id == 0);
+            case 3:
+                return !(this.evento.dataRealizacao == null || this.evento.horario == null || this.evento.descricao.length == 0);
             // break;
             case 4:
                 return true;
@@ -788,11 +1076,10 @@ var CriarEventoComponent = (function () {
     };
     CriarEventoComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'criar-evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/`<ion-header padding>\n\n  <ion-navbar hideBackButton="false">\n    <button button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n  <ion-segment [(ngModel)]="passo" name="passo">\n    <ion-segment-button value="1">\n      Esporte\n    </ion-segment-button>\n    <ion-segment-button value="2">\n      Dados\n    </ion-segment-button>\n    <ion-segment-button [disabled]="podeAvancar()" value="3">\n      Local\n    </ion-segment-button>\n    <ion-segment-button [disabled]="!podeAvancar()" value="4">\n      Convidados\n    </ion-segment-button>\n  </ion-segment>\n\n  <!-- <ion-list *ngIf="passo == \'convidados\'"> -->\n  <!-- <ion-list>\n  <ion-list-header>\n  Convidar Amigos\n</ion-list-header>\n\n<ion-item *ngFor="let contato of meusContatos">\n{{contato.displayName}}\n</ion-item>\n\n</ion-list> -->\n\n<ion-list [ngSwitch]="passo">\n  <ion-list *ngSwitchCase="1">\n\n    <ion-item *ngFor="let esporte of esportes" >\n      <ion-grid>\n        <ion-row>\n          <ion-col col-4>\n            <ion-thumbnail item-start>\n              <img [src]="Util.pathAvatar(\'avatar5.jpg\')" style="padding: 5px">\n            </ion-thumbnail>\n          </ion-col>\n          <ion-col col-4>\n            <h2>{{esporte.nome}}</h2>\n          </ion-col>\n          <ion-col col-4>\n            <button button (click)="selecionaEsporte(esporte)">\n              <ion-icon name="checkmark-circle">\n              </ion-icon></button>\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="2">\n      <ion-item>\n        <ion-label stacked>Sobre o evento</ion-label>\n        <ion-textarea placeholder="Como vai ser o evento?."\n        [(ngModel)]="evento.descricao" name="descricao"></ion-textarea>\n      </ion-item>\n      <ion-item>\n        <ion-label>Data</ion-label>\n        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n        placeholder="{{\'Select Date\' | translate}}"\n        min="{{ minData() | date:\'yyyy-MM-dd\' }}" max="{{ maxData() | date:\'yyyy-MM-dd\' }}"\n        name="eventoData" [(ngModel)]="evento.dataRealizacao"></ion-datetime>\n      </ion-item>\n      <ion-item>\n        <ion-label>Horario</ion-label>\n        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm"\n        placeholder="Selecione o horário" name="horario" [(ngModel)]="evento.horario"></ion-datetime>\n      </ion-item>\n\n      <ion-item>\n        <ion-label>Evento publico</ion-label>\n        <ion-checkbox color="dark" name="eventopublico" [(ngModel)]="evento.publico"></ion-checkbox>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Vagas</ion-label>\n        <ion-input type="number" step="1" max="evento.esporte.qtdMaximo" [(ngModel)]="evento.vagas" name="eventoVagas"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Valor total do evento</ion-label>\n        <ion-input type="number" step="0.01" [(ngModel)]="evento.valor" name="eventoValor"></ion-input>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="3">\n\n      <div [hidden]="evento.local.id != -1">\n        <ion-item>\n          <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>Bairro</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>\n        </ion-item>\n      </div>\n\n      <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">\n        <ion-list-header>\n          Escolha um local\n        </ion-list-header>\n        <ion-item>\n          <ion-label stacked>{{ \'SEARCH_TITLE\' | translate }}</ion-label>\n          <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>\n        </ion-item>\n\n\n        <ion-item>\n          <ion-label>Criar um novo</ion-label>\n          <ion-radio [value]="local"></ion-radio>\n        </ion-item>\n\n        <ion-item *ngFor="let l of locais">\n          <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>\n          <ion-radio [value]="l"></ion-radio>\n        </ion-item>\n\n      </ion-list>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="4">\n      <ion-list *ngIf="temContatos">\n        <ion-list-header>\n          Convidar Amigos\n        </ion-list-header>\n\n        <ion-item *ngFor="let contato of meusContatos">\n          <ion-col col-4>{{contato.displayName}}</ion-col>\n          <ion-col col-4>\n            <button (click)="checkContato(contato)">\n              <ion-icon name="checkmark-circle" *ngIf="!contato.checked"></ion-icon>\n              <ion-icon name="close-circle" *ngIf="contato.checked"></ion-icon>\n\n            </button>\n          </ion-col>\n        </ion-item>\n\n      </ion-list>\n\n    </ion-list>\n  </ion-list>\n\n\n\n  <ion-fab bottom left>\n\n    <button ion-fab [disabled]="passo == 1" (click)="voltar()">\n      <ion-icon name="arrow-dropleft-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n\n  </ion-fab>\n\n  <ion-fab bottom right>\n\n    <button ion-fab *ngIf="passo != 4" (click)="avancar()" [disabled]="!podeAvancar()">\n      <ion-icon name="arrow-dropright-circle"></ion-icon>\n      <div class="label"></div>\n    </button>\n\n    <button ion-fab *ngIf="passo == 4" (click)="concluir()" [disabled]="!podeAvancar()">\n      <ion-icon name="checkmark-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n  </ion-fab>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/,
+            selector: 'criar-evento',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/`<!-- Generated template for the EventoComponent component -->\n\n<ion-header>\n  <ion-navbar>\n    <ion-buttons left>\n      <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>\n    </ion-buttons>\n\n    <ion-title>\n      Criar Evento\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content padding>\n  <ion-segment [(ngModel)]="passo" name="passo">\n    <ion-segment-button value="1">\n      Esporte\n    </ion-segment-button>\n    <ion-segment-button value="2">\n      Dados\n    </ion-segment-button>\n    <ion-segment-button [disabled]="podeAvancar()" value="3">\n      Local\n    </ion-segment-button>\n    <ion-segment-button [disabled]="!podeAvancar()" value="4">\n      Convidados\n    </ion-segment-button>\n  </ion-segment>\n\n<ion-list [ngSwitch]="passo">\n  <ion-list *ngSwitchCase="1">\n    <div class="helper"> Selecione um esporte </div>\n    <ion-item *ngFor="let esporte of esportes" >\n      <ion-grid>\n        <ion-row>\n          <ion-col col-4>\n            <ion-thumbnail item-start>\n              <img [src]="Util.pathAvatar(\'avatar5.jpg\')" style="padding: 5px">\n            </ion-thumbnail>\n          </ion-col>\n          <ion-col col-4>\n            <h2>{{esporte.nome}}</h2>\n          </ion-col>\n          <ion-col col-4>\n            <button button (click)="selecionaEsporte(esporte)">\n              <ion-icon name="checkmark-circle">\n              </ion-icon></button>\n            </ion-col>\n          </ion-row>\n        </ion-grid>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="2">\n      <div class="helper"> Escolha (ou crie) um local </div>\n      <div [hidden]="evento.local.id != -1">\n        <ion-item>\n          <ion-label stacked>{{ \'Name\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.nome" name="nomeLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.logradouro" name="enderecoLocal"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>Bairro</ion-label>\n          <ion-input type="text" [(ngModel)]="local.endereco.bairro" name="bairroLocal"></ion-input>\n        </ion-item>\n      </div>\n\n      <ion-list radio-group [(ngModel)]="evento.local" name="evento.local">\n\n        <ion-item>\n          <ion-label stacked>{{ \'SEARCH_TITLE\' | translate }}</ion-label>\n          <ion-input type="text" (ionChange)="filtraLocal()" [(ngModel)]="search"  name="searchLocal"></ion-input>\n        </ion-item>\n\n\n        <ion-item>\n          <ion-label>Criar um novo</ion-label>\n          <ion-radio [value]="local"></ion-radio>\n        </ion-item>\n\n        <ion-item *ngFor="let l of locais">\n          <ion-label>{{l.nome}} / {{l.endereco.bairro}}</ion-label>\n          <ion-radio [value]="l"></ion-radio>\n        </ion-item>\n\n      </ion-list>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="3">\n      <div class="helper"> Preencha os dados do Evento </div>\n      <ion-item>\n        <ion-label stacked>Descrição do Evento</ion-label>\n        <ion-textarea placeholder=""\n        [(ngModel)]="evento.descricao" name="descricao"></ion-textarea>\n      </ion-item>\n      <ion-item>\n        <ion-label>Data</ion-label>\n        <ion-datetime pickerFormat="DD MMMM YYYY" displayFormat="DD MMMM YYYY"\n        placeholder="{{\'Select Date\' | translate}}"\n        min="{{ minData() | date:\'yyyy-MM-dd\' }}" max="{{ maxData() | date:\'yyyy-MM-dd\' }}"\n        name="eventoData" [(ngModel)]="evento.dataRealizacao"></ion-datetime>\n      </ion-item>\n      <ion-item>\n        <ion-label>Horario</ion-label>\n        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm"\n        placeholder="Selecione o horário" name="horario" [(ngModel)]="evento.horario"></ion-datetime>\n      </ion-item>\n\n      <ion-item>\n        <ion-label>Evento publico</ion-label>\n        <ion-checkbox color="dark" name="eventopublico" [(ngModel)]="evento.publico"></ion-checkbox>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Vagas</ion-label>\n        <ion-input type="number" step="1" max="evento.esporte.qtdMaximo" [(ngModel)]="evento.vagas" name="eventoVagas"></ion-input>\n      </ion-item>\n\n      <ion-item>\n        <ion-label stacked>Valor total do evento</ion-label>\n        <ion-input type="number" step="0.01" [(ngModel)]="evento.valor" name="eventoValor"></ion-input>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="4">\n\n      <ion-list *ngIf="temContatos">\n        <div class="helper">  Escolha quais amigos convidar </div>\n\n        <ion-item *ngFor="let contato of meusContatos">\n          <ion-col col-4>{{contato.displayName}}</ion-col>\n          <ion-col col-4>\n            <button (click)="checkContato(contato)">\n              <ion-icon name="checkmark-circle" *ngIf="!contato.checked"></ion-icon>\n              <ion-icon name="close-circle" *ngIf="contato.checked"></ion-icon>\n\n            </button>\n          </ion-col>\n        </ion-item>\n\n      </ion-list>\n\n    </ion-list>\n  </ion-list>\n\n\n\n  <ion-fab bottom left>\n\n    <button ion-fab [disabled]="passo == 1" (click)="voltar()">\n      <ion-icon name="arrow-dropleft-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n  </ion-fab>\n\n  <ion-fab bottom right>\n\n    <button ion-fab *ngIf="passo != 4" (click)="avancar()" [disabled]="!podeAvancar()">\n      <ion-icon name="arrow-dropright-circle"></ion-icon>\n      <div class="label"></div>\n    </button>\n\n    <button ion-fab *ngIf="passo == 4" (click)="concluir()" [disabled]="!podeAvancar()">\n      <ion-icon name="checkmark-circle"></ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n\n\n  </ion-fab>\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/criar-evento/criar-evento.html"*/,
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_esporte_service__["a" /* EsporteService */],
             __WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
-            __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["o" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["t" /* ViewController */],
             __WEBPACK_IMPORTED_MODULE_6_ionic_angular__["p" /* NavParams */],
             __WEBPACK_IMPORTED_MODULE_7__services_toast_service__["a" /* ToastService */],
@@ -807,7 +1094,7 @@ var CriarEventoComponent = (function () {
 
 /***/ }),
 
-/***/ 259:
+/***/ 260:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -854,7 +1141,7 @@ var LocalService = (function () {
 
 /***/ }),
 
-/***/ 260:
+/***/ 261:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -873,7 +1160,7 @@ var Local = (function () {
 
 /***/ }),
 
-/***/ 262:
+/***/ 263:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -882,7 +1169,7 @@ var Local = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_login_service__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_toast_service__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__eventos_eventos__ = __webpack_require__(52);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -961,7 +1248,7 @@ var ConfirmacaoComponent = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(51);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
@@ -995,7 +1282,6 @@ var LoginService = (function () {
     LoginService.prototype.setCredenciais = function (login, senha) {
         var credenciais = { login: login, senha: senha };
         this.storage.set(CREDENCIAIS, JSON.stringify(credenciais));
-        // .then(()=> console.log("Guardou as credenciais"));
     };
     LoginService.prototype.getCredenciais = function () {
         var credenciais = null;
@@ -1029,8 +1315,7 @@ var LoginService = (function () {
             var userTemp = JSON.parse(atob(data[1]));
             _this.usuario = userTemp;
             _this.usuario.token = user.token.toString();
-            // console.log(JSON.stringify(this.usuario))
-            _this.storage.set(LOGGEDIN, JSON.stringify(_this.usuario)).then(function (data) { return console.log("GRAVOU"); }).catch(function (error) { return console.log("NAO GRAVOU"); });
+            _this.storage.set(LOGGEDIN, JSON.stringify(_this.usuario)).then().catch(function (error) { return console.log("NAO GRAVOU"); });
             _this.setCredenciais(username, password);
         });
     };
@@ -1135,19 +1420,20 @@ var ToastService = (function () {
 
 /***/ }),
 
-/***/ 386:
+/***/ 387:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PerfilComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__models_endereco__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_usuario_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_usuario_service__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_cidade_service__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_esporte_service__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__services_esporte_service__ = __webpack_require__(86);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__providers_util_util__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__services_toast_service__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7_ionic_angular__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__eventos_eventos__ = __webpack_require__(52);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1165,6 +1451,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
+// import {NavController, NavParams, , AlertController} from "ionic-angular";
 /**
  * Generated class for the PerfilComponent component.
  *
@@ -1172,7 +1460,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
  * Components.
  */
 var PerfilComponent = (function () {
-    function PerfilComponent(usuarioService, cidadeService, esporteService, toastService, loadingCtrl) {
+    function PerfilComponent(navCtrl, viewCtrl, usuarioService, cidadeService, esporteService, toastService, loadingCtrl) {
+        this.navCtrl = navCtrl;
+        this.viewCtrl = viewCtrl;
         this.usuarioService = usuarioService;
         this.cidadeService = cidadeService;
         this.esporteService = esporteService;
@@ -1285,7 +1575,6 @@ var PerfilComponent = (function () {
                 if (_this.usuario.endereco == null) {
                     _this.usuario.endereco = new __WEBPACK_IMPORTED_MODULE_1__models_endereco__["a" /* Endereco */]();
                 }
-                console.log(_this.usuario);
                 _this.buscaCidades();
                 _this.buscaEsportes();
                 loading.dismiss();
@@ -1296,11 +1585,17 @@ var PerfilComponent = (function () {
             });
         });
     };
+    PerfilComponent.prototype.voltar = function () {
+        this.navCtrl.setRoot(__WEBPACK_IMPORTED_MODULE_8__eventos_eventos__["a" /* EventosComponent */]);
+        // this.viewCtrl.dismiss().then()
+    };
     PerfilComponent = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'perfil',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/`\n<ion-header>\n\n  <ion-navbar hideBackButton="false">\n    <button button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n    <ion-title>{{\'My Profile\' | translate}}</ion-title>\n    <ion-buttons end>\n      <button (click)="doSubmit()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n\n<ion-content padding-top *ngIf="!isLoading">\n  <form >\n    <div padding>\n      <ion-segment [(ngModel)]="aba" name="abas">\n        <ion-segment-button value="dados">\n          {{\'Data\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="endereco">\n          {{\'Address\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="esporte">\n          {{\'Sport\' | translate}}\n        </ion-segment-button>\n      </ion-segment>\n    </div>\n\n    <div [ngSwitch]="aba">\n      <ion-list *ngSwitchCase="\'dados\'">\n\n        <div text-center style="background-color: white">\n\n          <ion-avatar>\n            <img id="my-avatar" [src]="Util.pathAvatar(\'usuario.imagem\')">\n          </ion-avatar>\n          <ion-item-divider  text-center>\n            <!-- <ion-icon name="information-circle"></ion-icon> -->\n            <div color="secondary">\n              <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>\n            </div>\n            <div *ngIf="usuario.endereco !== null" color="secondary">\n              <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>\n            </div>\n          </ion-item-divider>\n        </div>\n\n\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'About me\' | translate}}</h1>\n          <ion-item>\n            <ion-textarea placeholder="Fale um pouco sobre você."\n            [(ngModel)]="usuario.mensagem" name="mensagem"></ion-textarea>\n          </ion-item>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'PHONE\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.telefone"  name="telefone"></ion-input>\n        </ion-item>\n      </ion-list>\n\n      <ion-list *ngSwitchCase="\'endereco\'">\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'Address\' | translate}}</h1>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>CEP: </ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.endereco.cep" name="cep" (blur)="buscaCep()"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.logradouro"  name="logradouro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Number\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.numero"  name="numero"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Neighborhood\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.bairro"  name="bairro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Complement\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.complemento"  name="complemento"></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <ion-label stacked>{{\'City\' | translate}}</ion-label>\n          <ionic-selectable\n          name="cidade"\n          item-content\n          [(ngModel)]="cidade"\n          [items]="cidades"\n          itemValueField="id"\n          itemTextField="name"\n          [canSearch]="true"\n          (onChange)="cidadeChange($event)">\n        </ionic-selectable>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'esporte\'">\n\n      <ion-item-divider color="light" text-center>\n        <h1>{{\'My Sports\' | translate}}</h1>\n      </ion-item-divider >\n\n      <ion-list>\n        <ion-item *ngFor="let esporte of esportesUsuario; let i= index">\n          <ion-label>{{esporte.nome}}</ion-label>\n          <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n          cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n          <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n          [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ion-list>\n\n    <ion-item>\n      <ion-item *ngFor="let esporte of esportes; let i= index">\n        <ion-label>{{esporte.nome}}</ion-label>\n        <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n        cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n        <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n        [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-item>\n\n  <ion-item>\n    <ion-label><ion-icon name="add-circle"></ion-icon>{{\'Add\' | translate}}</ion-label>\n    <ion-select placeholder="Selecione" (ionChange)="adicionaEsporte($event)" >\n      <ion-option *ngFor="let esporte of esportes" [value]="esporte">{{esporte.nome}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n</ion-list>\n</div>\n\n<div padding text text-center>\n  <button ion-button color="primary" icon-right (click)="salvar()">\n    {{ \'Save\' | translate }} <ion-icon name="checkmark"></ion-icon>\n  </button>\n</div>\n</form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/
+            selector: 'perfil',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/`<ion-header>\n\n  <ion-navbar>\n    <ion-title>Meu Perfil</ion-title>\n    <ion-buttons left>\n    <button ion-button icon-only (click)="voltar()">\n      <ion-icon name="arrow-back"></ion-icon>\n    </button>\n\n    </ion-buttons>\n    <ion-buttons end>\n      <button (click)="salvar()" ion-button icon-only >\n        <ion-icon name="checkmark"></ion-icon>\n      </button>\n    </ion-buttons>\n  </ion-navbar>\n\n\n</ion-header>\n\n<ion-content padding-top *ngIf="!isLoading">\n  <form >\n    <div padding>\n      <ion-segment [(ngModel)]="aba" name="abas">\n        <ion-segment-button value="dados">\n          {{\'Data\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="endereco">\n          {{\'Address\' | translate}}\n        </ion-segment-button>\n        <ion-segment-button value="esporte">\n          {{\'Sport\' | translate}}\n        </ion-segment-button>\n      </ion-segment>\n    </div>\n\n    <div [ngSwitch]="aba">\n      <ion-list *ngSwitchCase="\'dados\'">\n\n        <div text-center style="background-color: white">\n\n          <ion-avatar>\n            <img id="my-avatar" [src]="Util.pathAvatar(\'usuario.imagem\')">\n          </ion-avatar>\n          <ion-item-divider  text-center>\n            <!-- <ion-icon name="information-circle"></ion-icon> -->\n            <div color="secondary">\n              <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>\n            </div>\n            <div *ngIf="usuario.endereco !== null" color="secondary">\n              <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>\n            </div>\n          </ion-item-divider>\n        </div>\n\n\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'About me\' | translate}}</h1>\n          <ion-item>\n            <ion-textarea placeholder="Fale um pouco sobre você."\n            [(ngModel)]="usuario.mensagem" name="mensagem"></ion-textarea>\n          </ion-item>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>{{ \'Username\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'Fullname\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'EMAIL\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.email"  name="email"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'PHONE\' | translate }}</ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.telefone"  name="telefone"></ion-input>\n        </ion-item>\n      </ion-list>\n\n      <ion-list *ngSwitchCase="\'endereco\'">\n        <ion-item-divider color="light" text-center>\n          <h1>{{\'Address\' | translate}}</h1>\n        </ion-item-divider >\n\n        <ion-item>\n          <ion-label stacked>CEP: </ion-label>\n          <ion-input text-center type="text" [(ngModel)]="usuario.endereco.cep" name="cep" (blur)="buscaCep()"></ion-input>\n        </ion-item>\n\n        <ion-item>\n          <ion-label stacked>{{ \'address\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.logradouro"  name="logradouro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Number\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.numero"  name="numero"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Neighborhood\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.bairro"  name="bairro"></ion-input>\n        </ion-item>\n        <ion-item>\n          <ion-label stacked>{{ \'Complement\' | translate }}</ion-label>\n          <ion-input text-center type="email" [(ngModel)]="usuario.endereco.complemento"  name="complemento"></ion-input>\n        </ion-item>\n\n\n\n        <ion-item>\n          <ion-label stacked>{{\'City\' | translate}}</ion-label>\n          <ionic-selectable\n          name="cidade"\n          item-content\n          [(ngModel)]="cidade"\n          [items]="cidades"\n          itemValueField="id"\n          itemTextField="name"\n          [canSearch]="true"\n          (onChange)="cidadeChange($event)">\n        </ionic-selectable>\n      </ion-item>\n    </ion-list>\n\n    <ion-list *ngSwitchCase="\'esporte\'">\n\n      <ion-item-divider color="light" text-center>\n        <h1>{{\'My Sports\' | translate}}</h1>\n      </ion-item-divider >\n\n      <ion-list>\n        <ion-item *ngFor="let esporte of esportesUsuario; let i= index">\n          <ion-label>{{esporte.nome}}</ion-label>\n          <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n          cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n          <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n          [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n        </ion-select>\n      </ion-item>\n    </ion-list>\n\n    <ion-item>\n      <ion-item *ngFor="let esporte of esportes; let i= index">\n        <ion-label>{{esporte.nome}}</ion-label>\n        <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"\n        cancelText="Voltar" okText="Ok!" name="posicoesSelecionadas">\n        <ion-option *ngFor="let p of esporte.posicoes" [value]="p"\n        [selected]="possuiPosicao(p.id)">{{p.nome}}</ion-option>\n      </ion-select>\n    </ion-item>\n  </ion-item>\n\n  <ion-item>\n    <ion-label><ion-icon name="add-circle"></ion-icon>{{\'Add\' | translate}}</ion-label>\n    <ion-select placeholder="Selecione" (ionChange)="adicionaEsporte($event)" >\n      <ion-option *ngFor="let esporte of esportes" [value]="esporte">{{esporte.nome}}</ion-option>\n    </ion-select>\n  </ion-item>\n\n</ion-list>\n</div>\n\n<div padding text text-center>\n  <button ion-button color="primary" icon-right (click)="salvar()">\n    {{ \'Save\' | translate }} <ion-icon name="checkmark"></ion-icon>\n  </button>\n</div>\n</form>\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/perfil/perfil.html"*/
         }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_2__services_usuario_service__["a" /* UsuarioService */],
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_7_ionic_angular__["o" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_7_ionic_angular__["t" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_2__services_usuario_service__["a" /* UsuarioService */],
             __WEBPACK_IMPORTED_MODULE_3__services_cidade_service__["a" /* CidadeService */],
             __WEBPACK_IMPORTED_MODULE_4__services_esporte_service__["a" /* EsporteService */],
             __WEBPACK_IMPORTED_MODULE_6__services_toast_service__["a" /* ToastService */],
@@ -1313,126 +1608,17 @@ var PerfilComponent = (function () {
 
 /***/ }),
 
-/***/ 387:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ConfirmaParticipacaoComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_toast_service__ = __webpack_require__(33);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-/**
- * Generated class for the ConfirmaParticipacaoComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-var ConfirmaParticipacaoComponent = (function () {
-    function ConfirmaParticipacaoComponent(eventoService, navCtrl, toastService, loadingCtrl) {
-        this.eventoService = eventoService;
-        this.navCtrl = navCtrl;
-        this.toastService = toastService;
-        this.loadingCtrl = loadingCtrl;
-    }
-    ConfirmaParticipacaoComponent.prototype.ngOnInit = function () {
-        this.buscaEventosPendentes();
-    };
-    ConfirmaParticipacaoComponent.prototype.buscaEventosPendentes = function () {
-        var _this = this;
-        var loading = this.loading();
-        loading.present();
-        this.eventoService.buscaMeusEventosPendentes().subscribe(function (dados) {
-            _this.listaEventos = dados;
-            loading.dismiss();
-            console.log(dados);
-        }, function (erro) {
-            loading.dismiss();
-            console.log(erro);
-            _this.listaEventos = [];
-            _this.toastService.toast("Erro ao carregar a lista de eventos, tente novamente mais tarde!");
-        });
-    };
-    ConfirmaParticipacaoComponent.prototype.aceitarConvite = function (evento) {
-        var _this = this;
-        var loading = this.loading();
-        loading.present();
-        this.eventoService.aceitarConvite(evento).subscribe(function (dados) {
-            _this.listaEventos = _this.listaEventos.filter(function (x) { return x.id != evento.id; });
-            loading.dismiss();
-            _this.toastService.toast("Sua participacao foi confirmada no evento do " + evento.usuarioResponsavel.nome + "!");
-            console.log(dados);
-        }, function (erro) {
-            loading.dismiss();
-            console.log(erro);
-            _this.toastService.toast("Erro ao tentar aceitar o convite, tente novamente mais tarde!");
-        });
-    };
-    ConfirmaParticipacaoComponent.prototype.recusarConvite = function (evento) {
-        var _this = this;
-        var loading = this.loading();
-        loading.present();
-        this.eventoService.recusarConvite(evento).subscribe(function (dados) {
-            _this.listaEventos = _this.listaEventos.filter(function (x) { return x.id != evento.id; });
-            loading.dismiss();
-            _this.toastService.toast("O convite para o evento do " + evento.usuarioResponsavel.nome + "  foi recusado!");
-            console.log(dados);
-        }, function (erro) {
-            loading.dismiss();
-            console.log(erro);
-            _this.toastService.toast("Erro ao tentar recusar o convite, tente novamente mais tarde!");
-        });
-    };
-    ConfirmaParticipacaoComponent.prototype.loading = function () {
-        return this.loadingCtrl.create({
-            content: 'Aguarde...',
-            dismissOnPageChange: true
-        });
-    };
-    ConfirmaParticipacaoComponent.prototype.voltar = function () {
-        this.navCtrl.popToRoot();
-    };
-    ConfirmaParticipacaoComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'confirma-participacao',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirma-participacao/confirma-participacao.html"*/`<ion-header padding>\n\n  <ion-navbar hideBackButton="false">\n    <button button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n  </ion-navbar>\n\n</ion-header>\n\n<ion-content padding>\n\n  <div *ngIf="listaEventos?.length == 0">\n    <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>\n    <p>Aproveite seu dia!</p>\n    <button >\n      <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>\n      <div  class="label"dir="rtl"></div>\n    </button>\n  </div>\n\n  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">\n    <ion-card-content>\n      <ion-card-title>\n        {{ evento.descricao }}\n\n      </ion-card-title>\n      <ion-row>\n        <ion-col>\n          <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>\n        </ion-col>\n        <ion-col>\n          <p><strong>Local:</strong> {{evento.local.nome}}</p>\n        </ion-col>\n      </ion-row>\n      <ion-row>\n\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>\n          </span>\n        </ion-col>\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="alarm">{{ evento.horario }}</ion-icon>\n          </span>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col align-self-center>\n          <button ion-button icon-start clear medium (click)="recusarConvite(evento)">\n            <ion-icon name="close"></ion-icon>\n            <div>Recusar</div>\n          </button>\n        </ion-col>\n        <ion-col align-self-center>\n          <button ion-button icon-start clear medium (click)="aceitarConvite(evento)">\n            <ion-icon name="checkmark"></ion-icon>\n            <div>Confirmar</div>\n          </button>\n        </ion-col>\n      </ion-row>\n    </ion-card-content>\n  </ion-card>\n\n\n\n\n<ion-fab bottom left>\n\n  <button >\n    <ion-icon name="arrow-dropleft-circle" (click)="voltar()">Voltar</ion-icon>\n    <div  class="label"dir="rtl"></div>\n  </button>\n</ion-fab>\n\n\n</ion-content>\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/confirma-participacao/confirma-participacao.html"*/
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["o" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_3__services_toast_service__["a" /* ToastService */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* LoadingController */]])
-    ], ConfirmaParticipacaoComponent);
-    return ConfirmaParticipacaoComponent;
-}());
-
-//# sourceMappingURL=confirma-participacao.js.map
-
-/***/ }),
-
 /***/ 388:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return LogoutComponent; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_toast_service__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ngx_translate_core__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_ionic_angular__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__pages_login_login__ = __webpack_require__(177);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1670,38 +1856,38 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__angular_platform_browser__ = __webpack_require__(48);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(192);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(196);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(193);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(197);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__ionic_storage__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngx_translate_core__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ngx_translate_core__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__ngx_translate_http_loader__ = __webpack_require__(414);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9_ionic_selectable__ = __webpack_require__(455);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__mocks_providers_items__ = __webpack_require__(719);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__mocks_messageMocks__ = __webpack_require__(392);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__app_component__ = __webpack_require__(721);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_http_http__ = __webpack_require__(174);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_http_http__ = __webpack_require__(175);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__providers_util_util__ = __webpack_require__(47);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15_ionic_input_mask__ = __webpack_require__(722);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__ionic_native_geolocation__ = __webpack_require__(145);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_confirma_participacao_confirma_participacao__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__components_confirma_participacao_confirma_participacao__ = __webpack_require__(147);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__providers_user_user__ = __webpack_require__(143);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__services_login_service__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__services_toast_service__ = __webpack_require__(33);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__services_cidade_service__ = __webpack_require__(144);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_esporte_service__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_local_service__ = __webpack_require__(259);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_push__ = __webpack_require__(263);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_eventos_eventos__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_confirmacao_confirmacao__ = __webpack_require__(262);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_22__services_esporte_service__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_23__services_local_service__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_24__ionic_native_push__ = __webpack_require__(264);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_25__components_eventos_eventos__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_26__components_confirmacao_confirmacao__ = __webpack_require__(263);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_27__services_evento_service__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_usuario_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_28__services_usuario_service__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_29__components_evento_evento__ = __webpack_require__(146);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_perfil_perfil__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_30__components_perfil_perfil__ = __webpack_require__(387);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_31__components_logout_logout__ = __webpack_require__(388);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_32__components_maps_maps__ = __webpack_require__(724);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__components_criar_evento_criar_evento__ = __webpack_require__(258);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__ionic_native_contacts__ = __webpack_require__(261);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_33__components_criar_evento_criar_evento__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_34__ionic_native_contacts__ = __webpack_require__(262);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_35_ionic3_star_rating__ = __webpack_require__(725);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -1850,7 +2036,7 @@ var AppModule = (function () {
 /* unused harmony export UsuarioEvento */
 /* unused harmony export Avaliacao */
 /* unused harmony export EventoSituacao */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__local__ = __webpack_require__(260);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__local__ = __webpack_require__(261);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esporte__ = __webpack_require__(437);
 
 
@@ -1858,6 +2044,7 @@ var Evento = (function () {
     function Evento() {
         this.esporte = new __WEBPACK_IMPORTED_MODULE_1__esporte__["a" /* Esporte */]();
         this.local = new __WEBPACK_IMPORTED_MODULE_0__local__["a" /* Local */]();
+        this.descricao = '';
     }
     return Evento;
 }());
@@ -1915,7 +2102,7 @@ var Posicao = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(37);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_storage__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs_add_operator_do__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_service__ = __webpack_require__(32);
@@ -1959,8 +2146,6 @@ var EventoService = (function () {
     };
     EventoService.prototype.criarEvento = function (evento, convidados) {
         var dados = { evento: evento, convidados: convidados };
-        // console.log(dados);
-        console.log(JSON.stringify(dados));
         return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/", dados, { headers: this.headers });
     };
     EventoService.prototype.buscaMeusEventosPendentes = function () {
@@ -1975,6 +2160,21 @@ var EventoService = (function () {
     };
     EventoService.prototype.cancelarParticipacao = function (id, justificativa) {
         return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/cancelarParticipacao/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
+    };
+    EventoService.prototype.cancelarEvento = function (id, justificativa) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/cancelarevento/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
+    };
+    EventoService.prototype.aceitarParticipanteEvento = function (id) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/aceitarparticipante/" + id + "/", {}, { headers: this.headers });
+    };
+    EventoService.prototype.recusarParticipanteEvento = function (id, justificativa) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/recusarparticipante/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
+    };
+    EventoService.prototype.removerParticipanteEvento = function (id, justificativa) {
+        return this.http.put(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/removerparticipante/" + id + "/", { justificativa: justificativa }, { headers: this.headers });
+    };
+    EventoService.prototype.solicitarParticipacao = function (id, mensagem) {
+        return this.http.post(__WEBPACK_IMPORTED_MODULE_4__api_config__["a" /* API */] + "/api/evento/meus/solicitarparticipacao/" + id + "/", { mensagem: mensagem }, { headers: this.headers });
     };
     EventoService = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["A" /* Injectable */])(),
@@ -2037,21 +2237,139 @@ var Util = (function () {
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return API; });
 var API = 'http://localhost:8000';
-//export const API = 'http://apijogajunto.maickel.site';
+// export const API = 'http://apijogajunto.maickel.site';
 //# sourceMappingURL=api.config.js.map
 
 /***/ }),
 
-/***/ 66:
+/***/ 52:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventosComponent; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(46);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__evento_evento__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__criar_evento_criar_evento__ = __webpack_require__(259);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__confirma_participacao_confirma_participacao__ = __webpack_require__(147);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+
+
+
+
+
+
+/**
+ * Generated class for the EventosComponent component.
+ *
+ * See https://angular.io/api/core/Component for more info on Angular
+ * Components.
+ */
+var EventosComponent = (function () {
+    function EventosComponent(evento, usuarioService, navCtrl, viewCtrl, menuCtrl, loadingCtrl) {
+        this.evento = evento;
+        this.usuarioService = usuarioService;
+        this.navCtrl = navCtrl;
+        this.viewCtrl = viewCtrl;
+        this.menuCtrl = menuCtrl;
+        this.loadingCtrl = loadingCtrl;
+        this.menuCtrl.enable(true);
+    }
+    EventosComponent.prototype.loading = function () {
+        return this.loadingCtrl.create({
+            content: 'Aguarde...',
+            dismissOnPageChange: true
+        });
+    };
+    EventosComponent.prototype.ngOnInit = function () {
+        var _this = this;
+        this.evento.evento().subscribe(function (response) {
+            _this.listaEventos = response;
+            console.log(_this.listaEventos);
+        }, function (erro) {
+            console.log(erro);
+        });
+        this.evento.evento().subscribe(function (response) {
+            _this.listaEventos = response;
+        }, function (erro) {
+            console.log(erro);
+        });
+        this.evento.evento().subscribe(function (response) {
+            _this.listaEventos = response;
+        }, function (erro) {
+            console.log(erro);
+        });
+    };
+    EventosComponent.prototype.carregaEvento = function (idEvento) {
+        var param = { id: idEvento };
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__evento_evento__["a" /* EventoComponent */], param);
+    };
+    EventosComponent.prototype.ionViewCanEnter = function () {
+        var _this = this;
+        var loading = this.loading();
+        loading.present();
+        return new Promise(function (resolve, reject) {
+            _this.usuarioService.carregaUsuario().subscribe(function (response) {
+                // console.log(response);
+                _this.usuario = response;
+                if (_this.usuario.endereco == null) {
+                    _this.usuario.endereco = new __WEBPACK_IMPORTED_MODULE_4__models_endereco__["a" /* Endereco */]();
+                }
+                loading.dismiss();
+                resolve(response);
+            }, function (error) {
+                console.log("Erro ao Carregar Usuário: " + error);
+                loading.dismiss();
+            });
+        });
+    };
+    EventosComponent.prototype.criarNovoEvento = function () {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__criar_evento_criar_evento__["a" /* CriarEventoComponent */]);
+    };
+    EventosComponent.prototype.notificacoes = function () {
+        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_7__confirma_participacao_confirma_participacao__["a" /* ConfirmaParticipacaoComponent */]);
+    };
+    EventosComponent = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
+            selector: 'eventos',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/`<!-- Generated template for the EventosComponent component -->\n\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n    <ion-title center class="titleicon toolbar-background">\n      <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n    </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n  <div class="map-wrapper">\n    <maps #map>\n    </maps>\n  </div>\n\n\n  <ion-fab bottom right>\n    <button ion-fab><ion-icon name="menu"></ion-icon></button>\n    <ion-fab-list side="top">\n\n      <button ion-fab (click)="criarNovoEvento()">\n        <ion-icon name="add-circle"></ion-icon>\n        <div class="label"></div>\n      </button>\n\n      <button ion-fab>\n        <ion-icon name="calendar"></ion-icon>\n        <div  class="label"dir="rtl"></div>\n      </button>\n\n      <button ion-fab (click)="notificacoes()">\n        <ion-icon name="notifications"></ion-icon>\n        <div  class="label"dir="rtl"></div>\n      </button>\n\n    </ion-fab-list>\n  </ion-fab>\n</ion-content>\n\n\n\n\n\n\n<!-- <ion-content padding>\n<ion-card class="bg-branco" *ngFor="let evento of listaEventos">\n<ion-card-content>\n<ion-card-title>\n{{ evento.evento.descricao }}\n</ion-card-title>\n<ion-row>\n<ion-col>\n<span icon-start clear small>\n<ion-icon name="calendar">{{ evento.evento.dataRealizacao|date:\'dd/MM/yyyy\' }}</ion-icon>\n</span>\n</ion-col>\n<ion-col>\n<span icon-start clear small>\n<ion-icon name="alarm">{{ evento.evento.horario }}</ion-icon>\n</span>\n</ion-col>\n</ion-row>\n\n<ion-row>\n<ion-col align-self-center>\n<button ion-button icon-start clear medium (click)="carregaEvento(evento.evento.id)">\n<ion-icon name="stats"></ion-icon>\n<div>Detalhes</div>\n</button>\n</ion-col>\n</ion-row>\n</ion-card-content>\n</ion-card>\n</div>\n</ion-content> -->\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/
+        }),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
+            __WEBPACK_IMPORTED_MODULE_5__services__["b" /* UsuarioService */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["o" /* NavController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["t" /* ViewController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* MenuController */],
+            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* LoadingController */]])
+    ], EventosComponent);
+    return EventosComponent;
+}());
+
+//# sourceMappingURL=eventos.js.map
+
+/***/ }),
+
+/***/ 67:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return UsuarioService; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_common_http__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__ = __webpack_require__(85);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_add_operator_do__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_usuario__ = __webpack_require__(256);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__models_usuario__ = __webpack_require__(257);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__api_config__ = __webpack_require__(51);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__login_service__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__ionic_native_geolocation__ = __webpack_require__(145);
@@ -2268,19 +2586,19 @@ var Item = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_login_login__ = __webpack_require__(176);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pages_login_login__ = __webpack_require__(177);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__ = __webpack_require__(192);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(196);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngx_translate_core__ = __webpack_require__(70);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_splash_screen__ = __webpack_require__(193);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_status_bar__ = __webpack_require__(197);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ngx_translate_core__ = __webpack_require__(71);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_perfil_perfil__ = __webpack_require__(386);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_perfil_perfil__ = __webpack_require__(387);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_user_user__ = __webpack_require__(143);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirma_participacao_confirma_participacao__ = __webpack_require__(387);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_eventos_eventos__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_confirma_participacao_confirma_participacao__ = __webpack_require__(147);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_logout_logout__ = __webpack_require__(388);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_usuario_service__ = __webpack_require__(66);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__services_usuario_service__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__services__ = __webpack_require__(84);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__providers_util_util__ = __webpack_require__(47);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -2413,7 +2731,7 @@ var MyApp = (function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ionic_native_geolocation__ = __webpack_require__(145);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_rxjs_Observable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_rxjs_Observable__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_usuario_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__services_usuario_service__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(87);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_ionic_angular__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_util_util__ = __webpack_require__(47);
@@ -2444,7 +2762,6 @@ var MapsComponent = (function () {
         this.evento = evento;
         this.navCtrl = navCtrl;
         this.loadingCtrl = loadingCtrl;
-        console.log('Hello MapsComponent Component');
     }
     MapsComponent.prototype.loading = function () {
         return this.loadingCtrl.create({
@@ -2461,14 +2778,16 @@ var MapsComponent = (function () {
         });
         this.evento.eventosRegiao().subscribe(function (response) {
             _this.eventosRegiao = response;
-            console.log(_this.eventosRegiao);
+            // console.log(this.eventosRegiao);
             _this.addMarkers(_this.map);
         }, function (erro) {
-        }, function () { return console.log('Carregou Lista de Eventos da Região'); });
+            console.log("Erro ao buscar eventos na regiao");
+            console.log(erro);
+        });
     };
     MapsComponent.prototype.createMap = function (location) {
         if (location === void 0) { location = new google.maps.LatLng(40.712784, -74.005942); }
-        console.log('init location ' + location);
+        // console.log('init location ' + location)
         var mapOptions = {
             center: location,
             zoom: 15,
@@ -2498,9 +2817,9 @@ var MapsComponent = (function () {
                 .then(function (resp) {
                 var lat = resp.coords.latitude;
                 var lng = resp.coords.longitude;
-                console.log('lat ' + lat + ' == ' + 'long ' + lng);
+                // console.log('lat '+ lat +' == '+ 'long '+lng )
                 var location = new google.maps.LatLng(lat, lng);
-                console.log('current location ' + location);
+                // console.log('current location '+location)
                 observable.next(location);
                 _this.addMarker(location, _this.map);
             });
@@ -2527,7 +2846,7 @@ var MapsComponent = (function () {
                 if (_this.usuario.endereco == null) {
                     _this.usuario.endereco = new __WEBPACK_IMPORTED_MODULE_4__models_endereco__["a" /* Endereco */]();
                 }
-                console.log(_this.usuario);
+                // console.log(this.usuario);
                 loading.dismiss();
                 resolve(response);
             }, function (error) {
@@ -2537,7 +2856,7 @@ var MapsComponent = (function () {
         });
     };
     MapsComponent.prototype.addMarker = function (pos, map) {
-        console.log("Add Custom Marker");
+        // console.log("Add Custom Marker")
         var marker = new google.maps.Marker({
             map: map,
             animation: google.maps.Animation.DROP,
@@ -2546,7 +2865,6 @@ var MapsComponent = (function () {
         });
     };
     MapsComponent.prototype.addMarkers = function (map) {
-        console.log("Add Esportes Markers");
         var bounds = new google.maps.LatLngBounds();
         var markers = [];
         var marker;
@@ -2592,19 +2910,19 @@ var MapsComponent = (function () {
 
 /***/ }),
 
-/***/ 83:
+/***/ 84:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__cidade_service__ = __webpack_require__(144);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esporte_service__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esporte_service__ = __webpack_require__(86);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__evento_service__ = __webpack_require__(46);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__login_service__ = __webpack_require__(32);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "a", function() { return __WEBPACK_IMPORTED_MODULE_3__login_service__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__usuario_service__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__usuario_service__ = __webpack_require__(67);
 /* harmony namespace reexport (by used) */ __webpack_require__.d(__webpack_exports__, "b", function() { return __WEBPACK_IMPORTED_MODULE_4__usuario_service__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__toast_service__ = __webpack_require__(33);
 /* unused harmony namespace reexport */
@@ -2618,7 +2936,7 @@ var MapsComponent = (function () {
 
 /***/ }),
 
-/***/ 85:
+/***/ 86:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2661,121 +2979,6 @@ var EsporteService = (function () {
 }());
 
 //# sourceMappingURL=esporte.service.js.map
-
-/***/ }),
-
-/***/ 86:
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return EventosComponent; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__services_evento_service__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__evento_evento__ = __webpack_require__(146);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__models_endereco__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__services__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__criar_evento_criar_evento__ = __webpack_require__(258);
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-
-
-
-
-
-
-
-/**
- * Generated class for the EventosComponent component.
- *
- * See https://angular.io/api/core/Component for more info on Angular
- * Components.
- */
-var EventosComponent = (function () {
-    function EventosComponent(evento, usuarioService, navCtrl, viewCtrl, menuCtrl, loadingCtrl) {
-        this.evento = evento;
-        this.usuarioService = usuarioService;
-        this.navCtrl = navCtrl;
-        this.viewCtrl = viewCtrl;
-        this.menuCtrl = menuCtrl;
-        this.loadingCtrl = loadingCtrl;
-        this.menuCtrl.enable(true);
-    }
-    EventosComponent.prototype.loading = function () {
-        return this.loadingCtrl.create({
-            content: 'Aguarde...',
-            dismissOnPageChange: true
-        });
-    };
-    EventosComponent.prototype.ngOnInit = function () {
-        var _this = this;
-        this.evento.evento().subscribe(function (response) {
-            _this.listaEventos = response;
-            console.log(_this.listaEventos);
-        }, function (erro) {
-        }, function () { return console.log('Carregou Lista de Eventos do Usuário'); });
-        console.log("Entrando na tela de listagem de eventos");
-        this.evento.evento().subscribe(function (response) {
-            _this.listaEventos = response;
-            console.log(_this.listaEventos);
-        }, function (erro) {
-        }, function () { return console.log('Carregou Lista de Eventos'); });
-        console.log("Entrando na tela de listagem de eventos");
-        this.evento.evento().subscribe(function (response) {
-            _this.listaEventos = response;
-            console.log(_this.listaEventos);
-        }, function (erro) {
-        }, function () { return console.log('Carregou Lista de Eventos'); });
-    };
-    EventosComponent.prototype.carregaEvento = function (idEvento) {
-        var param = { id: idEvento };
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_3__evento_evento__["a" /* EventoComponent */], param);
-    };
-    EventosComponent.prototype.ionViewCanEnter = function () {
-        var _this = this;
-        var loading = this.loading();
-        loading.present();
-        return new Promise(function (resolve, reject) {
-            _this.usuarioService.carregaUsuario().subscribe(function (response) {
-                // console.log(response);
-                _this.usuario = response;
-                if (_this.usuario.endereco == null) {
-                    _this.usuario.endereco = new __WEBPACK_IMPORTED_MODULE_4__models_endereco__["a" /* Endereco */]();
-                }
-                // console.log(this.usuario);
-                loading.dismiss();
-                resolve(response);
-            }, function (error) {
-                console.log("Erro ao Carregar Usuário: " + error);
-                loading.dismiss();
-            });
-        });
-    };
-    EventosComponent.prototype.criarNovoEvento = function () {
-        this.navCtrl.push(__WEBPACK_IMPORTED_MODULE_6__criar_evento_criar_evento__["a" /* CriarEventoComponent */]);
-    };
-    EventosComponent = __decorate([
-        Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'eventos',template:/*ion-inline-start:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/`<!-- Generated template for the EventosComponent component -->\n\n<ion-header>\n  <ion-navbar hideBackButton="true">\n    <button ion-button icon-only menuToggle style="display: block !important;" color="primary">\n      <ion-icon name="menu"></ion-icon>\n    </button>\n\n      <ion-title center class="titleicon toolbar-background">\n        <img src="./assets/img/jogaJuntoLogo.png" style="display:inline-block" height="50px" />\n      </ion-title>\n  </ion-navbar>\n</ion-header>\n\n<ion-content>\n    <div class="map-wrapper">\n      <maps #map>\n      </maps>\n    </div>\n</ion-content>\n<div class="bottom">\n  <ion-fab bottom right>\n        <button (click)="criarNovoEvento()"><ion-icon name="md-share"></ion-icon></button>\n        <ion-fab-list side="top">\n\n          <button ion-fab >\n              <ion-icon name="logo-facebook"></ion-icon>\n              <div class="label">Facebook</div>\n          </button>\n\n          <button ion-fab>\n            <ion-icon name="logo-instagram"></ion-icon>\n            <div  class="label"dir="rtl">Instagram</div>\n          </button>\n\n          <button ion-fab >\n            <ion-icon name="logo-twitter"></ion-icon>\n            <div  class="label"dir="rtl">Twitter</div>\n          </button>\n\n          <button ion-fab >\n            <ion-icon name="logo-whatsapp"></ion-icon>\n            <div  class="label"dir="rtl">Whattsapp</div>\n          </button>\n\n      </ion-fab-list>\n  </ion-fab>\n\n<div>\n\n<!-- <ion-content padding>\n  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">\n    <ion-card-content>\n      <ion-card-title>\n          {{ evento.evento.descricao }}\n      </ion-card-title>\n      <ion-row>\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="calendar">{{ evento.evento.dataRealizacao|date:\'dd/MM/yyyy\' }}</ion-icon>\n          </span>\n        </ion-col>\n        <ion-col>\n          <span icon-start clear small>\n            <ion-icon name="alarm">{{ evento.evento.horario }}</ion-icon>\n          </span>\n        </ion-col>\n      </ion-row>\n\n      <ion-row>\n        <ion-col align-self-center>\n          <button ion-button icon-start clear medium (click)="carregaEvento(evento.evento.id)">\n            <ion-icon name="stats"></ion-icon>\n            <div>Detalhes</div>\n          </button>\n        </ion-col>\n      </ion-row>\n    </ion-card-content>\n  </ion-card>\n</div>\n</ion-content> -->\n`/*ion-inline-end:"/var/www/html/projeto-integrador-mobile/jogaJunto/src/components/eventos/eventos.html"*/
-        }),
-        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1__services_evento_service__["a" /* EventoService */],
-            __WEBPACK_IMPORTED_MODULE_5__services__["b" /* UsuarioService */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["o" /* NavController */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["t" /* ViewController */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["l" /* MenuController */],
-            __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["k" /* LoadingController */]])
-    ], EventosComponent);
-    return EventosComponent;
-}());
-
-//# sourceMappingURL=eventos.js.map
 
 /***/ }),
 
