@@ -18,10 +18,10 @@
       Esporte
     </ion-segment-button>
     <ion-segment-button value="2">
-      Dados
+      Local
     </ion-segment-button>
     <ion-segment-button [disabled]="podeAvancar()" value="3">
-      Local
+      Dados
     </ion-segment-button>
     <ion-segment-button [disabled]="!podeAvancar()" value="4">
       Convidados
@@ -30,30 +30,25 @@
 
 <ion-list [ngSwitch]="passo">
   <ion-list *ngSwitchCase="1">
-    <div class="helper"> Selecione um Esporte </div>
+    <div class="helper"><br/> O que você deseja jogar? </div>
     <ion-item *ngFor="let esporte of esportes" >
-      <ion-grid>
+      <ion-grid  class="vertical-align-content">
         <ion-row>
           <ion-col col-4>
             <ion-thumbnail item-start>
-              <img [src]="Util.pathAvatar(esporte.imagem)" style="padding: 5px">
+              <img [src]="Util.pathEsportes(esporte.imagem)" style="padding: 5px" width="32px" height="37px" (click)="selecionaEsporte(esporte)">
             </ion-thumbnail>
           </ion-col>
-          <ion-col col-4>
+          <ion-col col-8 (click)="selecionaEsporte(esporte)">
             <h2>{{esporte.nome}}</h2>
           </ion-col>
-          <ion-col col-4>
-            <button button (click)="selecionaEsporte(esporte)">
-              <ion-icon name="checkmark-circle">
-              </ion-icon></button>
-            </ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
     </ion-list>
 
     <ion-list *ngSwitchCase="2">
-      <div class="helper"> Escolha (ou crie) um Local </div>
+      <div class="helper"> <br/>Escolha (ou crie) um Local </div>
       <div [hidden]="evento.local.id != -1">
         <ion-item>
           <ion-label stacked>{{ 'Name' | translate }}</ion-label>
@@ -91,7 +86,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="3">
-      <div class="helper"> Preencha os dados do Evento </div>
+      <div class="helper"> <br/> Preencha os Dados do Evento </div><br/>
       <ion-item>
         <ion-label stacked>Descrição do Evento</ion-label>
         <ion-textarea placeholder=""
@@ -104,9 +99,10 @@
         min="{{ minData() | date:'yyyy-MM-dd' }}" max="{{ maxData() | date:'yyyy-MM-dd' }}"
         name="eventoData" [(ngModel)]="evento.dataRealizacao"></ion-datetime>
       </ion-item>
+
       <ion-item>
         <ion-label>Horario</ion-label>
-        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm"
+        <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm" minuteValues="0,15,30,45"
         placeholder="Selecione o horário" name="horario" [(ngModel)]="evento.horario"></ion-datetime>
       </ion-item>
 

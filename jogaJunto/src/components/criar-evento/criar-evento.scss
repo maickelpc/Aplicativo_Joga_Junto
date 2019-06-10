@@ -11,7 +11,7 @@ criar-evento {
   }
 
   ion-label {
-    color: color($colors, light);
+    color: color($colors, primary);
     text-align: center;
     margin: 0;
   }
@@ -24,18 +24,28 @@ criar-evento {
     background-color: #fff;
     border-radius: 500px;
     margin: 0 0 25px 0;
+    color: color($colors, primary);
   }
 
   .helper{
-    margin: 20px;
-    background: lightgray;
-    color: black;
-    font-weight: 400;
-    font-style: inherit;
+    text-align: center;
+    font-size: 14px;
+    float: left;
+    width: 100%;
+    height: 50px;
+    color: white;
+    background-image: linear-gradient(to right, color($colors, primary), color($colors, secondary));
   }
 
 
 }
 .picker-toolbar{
   background: white !important;
+}
+
+.vertical-align-content > *
+{
+     display: flex!important;
+     align-content: center!important;
+     align-items: center!important;
 }

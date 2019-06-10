@@ -49,7 +49,8 @@ export class CriarEventoComponent implements OnInit{
     loading.present();
 
     this.esporteService.buscaMeusEsportes().subscribe(
-      dados => this.esportes = dados,
+      dados => { this.esportes = dados;  
+        console.log(dados) },
       erro => {
         console.log(erro);
         this.toastService.toast("Erro ao buscar os esportes, tente novamente mais tarde!");
@@ -57,7 +58,6 @@ export class CriarEventoComponent implements OnInit{
       },
       () => loading.dismiss()
     )
-
     this.getContatos();
   }
 
@@ -114,6 +114,13 @@ export class CriarEventoComponent implements OnInit{
         // console.log(JSON.stringify(dados[1]));
       }
     )
+    // let convidados = `[{"_objectInstance":{"id":"67","rawId":"62","displayName":"A ... Pai ","name":{"familyName":"Pai","givenName":"A","formatted":"A Pai"},"nickname":null,"phoneNumbers":[{"id":"329","pref":false,"value":"045 9817-5105","type":"home"}],"emails":[{"id":"323","pref":false,"value":"maickelpc@gmail.com","type":"home"}],"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":[{"id":"330","pref":false,"type":"url","value":"content://com.android.contacts/contacts/67/photo"}],"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"74","rawId":"74","displayName":"A Leo Amigo Do Pai","name":{"familyName":"Pai","givenName":"A Leo Amigo","middleName":"Do","formatted":"A Leo Amigo Do Pai"},"nickname":null,"phoneNumbers":[{"id":"402","pref":false,"value":"554-4555","type":"mobile"}],"emails":[{"id":"404","pref":false,"value":"mandaproleo@gmail.com","type":"home"}],"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true}]`;
+    // let convidados2 = JSON.parse(convidados);
+
+    // this.meusContatos = convidados2.map(x=> {
+    //   x.checked = false;
+    //   return x;
+    // })
   }
 
   voltar(){
@@ -130,7 +137,7 @@ export class CriarEventoComponent implements OnInit{
 
   concluir(){
     //Lista de convidados do celular
-    // let convidados = this.meusContatos.filter(x => x.checked);
+    //let convidados = this.meusContatos.filter(x => x.checked);
 
 
     //LISTA PARA TESTES EM BROWSER
