@@ -20,6 +20,18 @@ export class LocalService{
     this.headers = this.headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
   }
 
+  confirmarRealizacao(id):Observable<any>{
+    return this.http.put<any>(
+      `${API}/api/meuslocais/confirmar-evento/${id}` ,{headers: this.headers});
+
+  }
+
+  cancelarRealizacao(id, justificativa):Observable<any>{
+    return this.http.put<any>(
+      `${API}/api/meuslocais/cancelar-evento/${id}`,{justificativa: justificativa} ,{headers: this.headers});
+
+  }
+
   buscaEventosMeuLocal():Observable<Evento[]>{
     return this.http.get<Evento[]>(
       `${API}/api/meuslocais/eventos`, {headers: this.headers});

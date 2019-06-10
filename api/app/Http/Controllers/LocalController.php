@@ -18,6 +18,53 @@ use DB;
 class LocalController extends Controller
 {
 
+  public function confirmarEvento($eventoId){
+
+ 
+
+  }
+
+
+  public function cancelarEvento($eventoId, Request $request){
+
+    try{
+      DB::beginTransaction();
+  
+        $evento = Evento::with( 'participantes')->with('local')->findOrFail($eventoId);
+        throw_if($evento->local->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pelo local pode cancelar o evento");
+        $dataEvento = $evento->dataRealizacao;
+        $horario = explode(':', $evento->horario);
+  
+        $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+        throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode ser cancelado");
+  
+  
+        $evento->dataCancelamento = Carbon::now();
+        $evento->justificativaCancelamento = $request->json()->get('justificativa');
+        $evento->save();
+  
+        $notControler = new NotificacaoController();
+  
+        foreach ($evento->participantes as $participante) {
+  
+          if($participante->dataCancelamento == null && $participante->dataExclusao == null){
+  
+            $notControler->notificarCancelamentoEventoPorLocal($participante, $evento);
+          }
+        }
+  
+  
+      DB::commit();
+      return response()->json('Evento cancelado com sucesso');
+    }catch(Exception $e){
+      DB::rollback();
+  
+     return response()->json('Erro ao tentar Cancelar o evento: ' . $e->getMessage(), 400);
+    }
+  
+    return response()->json('Erro', 400);
+  }
+
 
   public function eventosProximos(){
 
