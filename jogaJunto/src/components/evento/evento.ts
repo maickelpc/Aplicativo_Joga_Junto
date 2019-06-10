@@ -25,11 +25,14 @@ export class EventoComponent {
 
   public evento: Evento;
   public Util = Util;
+  seguimento = 'evento';
   cancelado: boolean = false;
   meuId: number;
   encerrado : boolean = false;
   euParticipo : boolean = false;
   euOrganizo : boolean = false;
+  search: string = '';
+  usuariosProximos = [];
   @ViewChild('map') mapRef: ElementRef;
 
   constructor(private eventoService: EventoService,
@@ -76,7 +79,7 @@ export class EventoComponent {
             data.setMinutes(parseInt(horas[1]));
 
             this.encerrado = (data < agora);
-            
+
 
             this.euOrganizo = this.evento.usuarioResponsavel.id == this.loginService.getUsuarioLogado().id;
             this.euParticipo = (this.evento.participantes.
@@ -456,6 +459,25 @@ export class EventoComponent {
 
         }
       )
+    }
+
+
+    buscarUsuariosProximos(){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.buscarUsuariosProximos(this.evento).subscribe(
+        dados => {
+          loading.dismiss();
+
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível buscar usuários, tente novamente mais tarde.")
+
+        }
+      )
+
     }
 
 

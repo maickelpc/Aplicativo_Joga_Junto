@@ -168,6 +168,28 @@ class EventoController extends Controller
   }
 
 
+  public function getProximosEventosPendentes($usuarioId=null){
+
+
+    if($usuarioId == null)
+      $usuarioId = Auth::user()->id;
+    
+      $eventosId = DB::table('usuario_evento')
+      ->join('eventos', 'eventos.id', '=', 'usuario_evento.evento_id')
+      ->where('usuario_evento.usuario_id',$usuarioId)
+      ->whereIn('usuario_evento.situacao', ['CONFIRMADO'])
+      ->where('usuario_evento.deleted_at', NULL)
+      ->where('usuario_evento.dataConfirmacao', '<>',NULL)
+      ->where('usuario_evento.dataExclusao', NULL)
+      ->where('eventos.dataRealizacao', '>=', Carbon::now())->select('eventos.id')->get()->map(function($dado){return ($dado->id);})->toArray();
+
+
+      return EventoResource::collection(
+        Evento::whereIn('id', $eventosId)->orderBy('dataRealizacao')->get()
+      );
+
+  }
+
 
   public function aceitarConvite($eventoId) {
     try{
@@ -417,6 +439,43 @@ public function cancelarEvento($eventoId, Request $request) {
 
        return EventoResource::collection(
           Evento::hydrate($results)
+       );
+    }
+
+
+    public function usuariosProximos($esporteId) {
+      $lat = Auth::user()->latitude;
+      $lng = Auth::user()->longitude;
+      
+      $results = DB::select(
+        "
+        SELECT u.*
+        FROM usuarios u
+        inner join usuario_posicao up on up.usuario_id = u.id
+        inner join posicao p on up.posicao_id = p.id
+        inner join esportes e on e.id = p.esporte_id
+        WHERE e.id = $esporteId
+        AND \"dataCancelamento\" IS NULL
+        GROUP BY u.id
+        HAVING (
+           6371 *
+           acos(cos(radians($lat)) *
+           cos(radians(CAST(l.latitude AS DOUBLE PRECISION))) *
+           cos(radians(CAST(l.longitude AS DOUBLE PRECISION)) -
+           radians($lng)) +
+           sin(radians($lat)) *
+           sin(radians(CAST(l.latitude AS DOUBLE PRECISION) )))
+        ) < 10
+        LIMIT 50;
+        "
+        );
+        //$results = collect($results)->map(function($dado){return ($dado->id);})->toArray();
+
+        //$results = Evento::with('participantes', 'participantes.usuario')->whereIn('id',$results)->get();
+
+
+       return UsuarioCollection::collection(
+          Usuario::hydrate($results)
        );
     }
 }
