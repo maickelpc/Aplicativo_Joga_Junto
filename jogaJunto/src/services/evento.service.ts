@@ -64,6 +64,13 @@ export class EventoService{
 
     }
 
+    buscaMeusProximosEventos(): Observable<Evento[]>{
+
+      return this.http.get<any>(`${API}/api/evento/meus/eventosProximos/`,  {headers: this.headers})
+      .map(x => x.data);
+
+    }
+
     aceitarConvite(evento: Evento):Observable<any>{
 
       return this.http.patch<any>(`${API}/api/evento/meus/aceitarconvite/${evento.id}/`, {}, {headers: this.headers})
@@ -111,6 +118,10 @@ export class EventoService{
 
       return this.http.post<any>(`${API}/api/evento/meus/avaliarparticipante/${id}`,{nota: nota, comentario: comentario},  {headers: this.headers})
 
+    }
+
+    buscarUsuariosProximos(evento): Observable<Usuario[]>{
+      return this.http.get<any>(`${API}/api/evento/meus/buscarusuarios/${evento.esporte_id}`,  {headers: this.headers})
     }
 
   }

@@ -1,0 +1,79 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Agenda</ion-title>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="voltar()">
+        <!-- <ion-icon name="arrow-back"></ion-icon> -->
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+
+
+</ion-header>
+
+<!-- <ion-content padding style="background-color: white;"> -->
+<ion-content padding>
+
+
+  <div *ngIf="listaEventos?.length == 0">
+    <p>Você não tem nenhum evento próximo...</p>
+  </div>
+
+  <ion-card *ngFor="let evento of listaEventos">
+    <ion-card-content>
+      <ion-row>
+        <div class="headerCard"><br/>
+          {{ evento.descricao }}
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>
+        </ion-col>
+        <ion-col>
+          <p><strong>Local:</strong> {{evento.local.nome}}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          <p><strong>Esporte: </strong> {{ evento.esporte.nome }} </p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+
+        <ion-col>
+          <span icon-start clear small>
+            <ion-icon name="calendar"></ion-icon>
+            <span>{{ evento.dataRealizacao }}</span>
+          </span>
+        </ion-col>
+        <ion-col>
+          <span icon-start clear small>
+            <ion-icon name="alarm"></ion-icon>
+            <span>{{ evento.horario }}</span>
+          </span>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col align-self-center col-12>
+          <button ion-button icon-start clear medium (click)="visualizar(evento)">
+            <ion-icon name="eye"></ion-icon>
+            <div>Ver Evento</div>
+          </button>
+        </ion-col>
+        <ion-col align-self-center col-12>
+          <button ion-button icon-start clear medium (click)="confirmarCancelarParticipacao(evento)">
+            <ion-icon name="close"></ion-icon>
+            <div>Cancelar participacao</div>
+          </button>
+        </ion-col>
+
+
+      </ion-row>
+    </ion-card-content>
+  </ion-card>
+
+
+</ion-content>

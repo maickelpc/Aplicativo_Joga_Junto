@@ -7,14 +7,15 @@
     </ion-buttons>
 
     <ion-title>
-      Visualizar Evento
+      {{(seguimento == 'evento') ? 'Visualizar Evento' : 'Buscar Participantes' }}
     </ion-title>
   </ion-navbar>
 
 </ion-header>
 
-<ion-content padding class="bg-branco">
 
+
+<ion-content padding class="bg-branco" *ngIf="seguimento == 'evento'">
   <ion-row>
     <ion-col col-5>
       <ion-card>
@@ -130,11 +131,20 @@
 
   </ion-fab>
 
-  <ion-fab bottom right *ngIf="euOrganizo && !encerrado" >
+  <ion-fab bottom left *ngIf="euOrganizo && !encerrado" >
 
     <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar Evento</div>
+    </button>
+
+  </ion-fab>
+
+  <ion-fab bottom right *ngIf="euOrganizo && !encerrado" >
+
+    <button (click)="seguimento = 'buscar'" [disabled]="(evento.dataCancelamento != null)">
+      <ion-icon name="search"></ion-icon>
+      <div class="label">Buscar Participantes</div>
     </button>
 
   </ion-fab>
@@ -154,4 +164,44 @@
     <div id="map" #map></div>
   </ion-row>
 
+</ion-content>
+
+
+<ion-content padding class="bg-branco" *ngIf="seguimento == 'buscar'">
+
+  <h5>Pesquisa</h5>
+
+  <ion-row>
+    <ion-col col-9>
+      <ion-input text-center type="text" name="search" [(ngModel)]="search"></ion-input>
+    </ion-col>
+    <ion-col col-3>
+      <button (click)="buscarUsuariosProximos()">Buscar</button>
+    </ion-col>
+  </ion-row>
+  <hr/>
+  <div *ngFor="let u of usuariosProximos">
+    <ion-row>
+      <ion-col col-8>
+        <p>{{u | json}} </p>
+      </ion-col>
+      <ion-col col-4>
+        <button *ngIf="!u.convidado" (click)="convidarUsuario(u)">Convidar</button>
+        <p *ngIf="u.convidado">Local Requisitado</p>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="usuariosProximos.length ==0">
+    <p>Nenhum item encontrado!</p>
+  </div>
+
+
+  <ion-fab bottom right  >
+
+    <button (click)="seguimento = 'evento'" >
+      <ion-icon name="arrow-back"></ion-icon>
+      <div class="label">Voltar</div>
+    </button>
+
+  </ion-fab>
 </ion-content>

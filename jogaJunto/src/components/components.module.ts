@@ -11,6 +11,7 @@ import { IonicSelectableModule } from  'ionic-selectable';
 import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-participacao';
 import { VisualizarPerfilComponent } from './visualizar-perfil/visualizar-perfil';
 import { LocalComponent } from './local/local';
+import { ProximosEventosComponent } from './proximos-eventos/proximos-eventos';
 
 
 @NgModule({
@@ -23,7 +24,8 @@ import { LocalComponent } from './local/local';
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
     VisualizarPerfilComponent,
-    LocalComponent],
+    LocalComponent,
+    ProximosEventosComponent],
   imports: [
     IonicPageModule,
 		IonicSelectableModule
@@ -37,7 +39,8 @@ import { LocalComponent } from './local/local';
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
     VisualizarPerfilComponent,
-    LocalComponent],
+    LocalComponent,
+    ProximosEventosComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
 	    EventoComponent,

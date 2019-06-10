@@ -116,6 +116,7 @@ Route::group([
     Route::delete('/evento/{id}', 'EventoController@destroy')->name('evento.delete');
   
     Route::get('/evento/meus/eventosPendentes/{id?}', 'EventoController@getEventosPendentes');
+    Route::get('/evento/meus/eventosProximos/{id?}', 'EventoController@getProximosEventosPendentes');
     Route::patch('/evento/meus/aceitarconvite/{eventoId}', 'EventoController@aceitarConvite');
     Route::delete('/evento/meus/recusarconvite/{eventoId}', 'EventoController@recusarConvite');
     Route::put('/evento/meus/cancelarParticipacao/{eventoId}', 'EventoController@cancelarParticipacao');
@@ -123,7 +124,7 @@ Route::group([
     Route::put('/evento/meus/aceitarparticipante/{id}', 'EventoController@aceitarParticipante');
     Route::put('/evento/meus/recusarparticipante/{id}', 'EventoController@recusarParticipante');
     Route::put('/evento/meus/removerparticipante/{id}', 'EventoController@removerParticipante');
-
+    Route::get('/evento/meus/buscarusuarios/{id}', 'EventoController@usuariosProximos');
     Route::post('/evento/meus/solicitarparticipacao/{id}', 'UsuarioEventoController@solicitarParticipacao');
     Route::post('/evento/meus/avaliarparticipante/{id}', 'UsuarioEventoController@avaliarParticipante');
     

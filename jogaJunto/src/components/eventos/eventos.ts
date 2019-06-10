@@ -9,6 +9,7 @@ import { Endereco } from '../../models/endereco';
 import { UsuarioService } from '../../services';
 import {CriarEventoComponent} from "../criar-evento/criar-evento";
 import {ConfirmaParticipacaoComponent} from '../confirma-participacao/confirma-participacao'
+import { ProximosEventosComponent } from '../proximos-eventos/proximos-eventos';
 /**
  * Generated class for the EventosComponent component.
  *
@@ -103,5 +104,8 @@ export class EventosComponent implements OnInit{
     this.navCtrl.push(ConfirmaParticipacaoComponent);
   }
 
+  agenda(){
+    this.navCtrl.push(ProximosEventosComponent);
+  }
 
 }
