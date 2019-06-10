@@ -23,11 +23,17 @@ export class UsuarioService{
 
     }
 
-    carregaUsuario(): Observable<any> {
+    carregaUsuario(idUsuario): Observable<any> {
       let headers = new HttpHeaders();
+      let id;
+      if (idUsuario > 0) {
+        id = idUsuario;
+      } else {
+        id = this.login.getUsuarioLogado().id;
+      }
       headers = headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
       return this.http.get<any>(
-        `${API}/api/usuario/`+this.login.getUsuarioLogado().id,
+        `${API}/api/usuario/`+id,
         {headers: headers}).map(x => x.data);
     }
 

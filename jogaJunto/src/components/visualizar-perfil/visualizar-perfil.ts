@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { NavController, ViewController, LoadingController } from 'ionic-angular';
-import { UsuarioService } from '../../services';
+import { NavController, ViewController, LoadingController, NavParams } from 'ionic-angular';
+import { UsuarioService, EsporteService } from '../../services';
 import { Usuario } from '../../models/usuario';
 import { Util } from '../../providers/util/util';
 import { Endereco } from '../../models/endereco';
@@ -34,10 +34,14 @@ export class VisualizarPerfilComponent implements OnInit {
 
   public usuario: Usuario;
   public Util = Util;
+  public esportes = [];
+  public esportesUsuario = [];
 
   constructor(public navCtrl: NavController,
     public viewCtrl: ViewController,
+    public navParams: NavParams,
     private usuarioService: UsuarioService,
+    private esporteService: EsporteService,
     private loadingCtrl: LoadingController
     ) {
     console.log('Hello VisualizarPerfilComponent Component');
@@ -48,13 +52,14 @@ export class VisualizarPerfilComponent implements OnInit {
     loading.present();
       return new Promise((resolve, reject) =>{
 
-          this.usuarioService.carregaUsuario().subscribe(
+          this.usuarioService.carregaUsuario(this.navParams.get('id')).subscribe(
             response =>{
                console.log(response);
               this.usuario = response;
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
+              this.buscaEsportes();
               loading.dismiss();
               resolve(response);
             },
@@ -73,4 +78,22 @@ export class VisualizarPerfilComponent implements OnInit {
   voltar() {
     this.navCtrl.setRoot(EventosComponent);
   }
+
+  filtraEsportePorId(id):boolean{
+    if (this.usuario.posicoes.map(x => x.esporte_id).indexOf(id) >= 0 )
+      return true;
+    else
+      return false;
+  }
+
+  buscaEsportes(){
+    this.esporteService.buscaTodasEsportes().subscribe(
+      dados => {
+        this.esportes = dados.data;
+        this.esportesUsuario = this.esportes.filter(value => this.filtraEsportePorId(value.id));
+        this.esportes = this.esportes.filter(value => !this.filtraEsportePorId(value.id));
+      }
+    )
+  }
+  
 }

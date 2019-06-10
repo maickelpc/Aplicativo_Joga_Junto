@@ -210,25 +210,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
     )
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   public loading() {
     return this.loadingCtrl.create({
       content: 'Aguarde...',

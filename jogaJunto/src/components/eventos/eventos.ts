@@ -76,7 +76,7 @@ export class EventosComponent implements OnInit{
     loading.present();
       return new Promise((resolve, reject) =>{
 
-          this.usuarioService.carregaUsuario().subscribe(
+          this.usuarioService.carregaUsuario(0).subscribe(
             response =>{
               // console.log(response);
               this.usuario = response;

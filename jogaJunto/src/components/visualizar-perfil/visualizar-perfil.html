@@ -53,35 +53,15 @@
   <div id="mensagem">
     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquet urna in orci cursus, vitae dignissim felis tincidunt. Nullam vehicula sem ante, at facilisis metus consequat eu. Nulla finibus porta maximus. Nunc vitae nulla lobortis, elementum nibh nec, ultrices enim. Nunc aliquam mauris nunc, nec efficitur mauris posuere sit amet. </p>
   </div>
+  <ion-list id="esportes" no-lines>
+    <ion-item *ngFor="let e of esportesUsuario" center>
+        <img [src]="Util.pathEsportes(e.imagem)" width="20px"> {{ e.nome }}
+    </ion-item>
+  </ion-list>
 
-  <div id="esportes">
-    <ul>
-      <li>
-        <ion-icon name="football"></ion-icon> Futebol
-      </li>
-      <li>
-        <ion-icon name="baseball"></ion-icon> Vôlei
-      </li>
-      <li>
-        <ion-icon name="basketball"></ion-icon> Basquete
-      </li>
-    </ul>
-  </div>
-
-  <div id="posicoes">
-    <ul>
-      <li>
-        <ion-icon name="star"></ion-icon> Atacante
-      </li>
-      <li>
-        <ion-icon name="star-outline"></ion-icon> Defesa
-      </li>
-    </ul>
-  </div>
-
-  <ion-row style="display: inline-block">
-    <ion-col col-12>
-      <button ion-button (click)="editarPerfil()" round center>
+  <ion-row>
+    <ion-col col-12 style="text-align: center;">
+      <button ion-button (click)="editarPerfil()" full>
         <ion-icon name="edit"></ion-icon> Editar meu Perfil
       </button>
     </ion-col>

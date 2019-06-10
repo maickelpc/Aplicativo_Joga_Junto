@@ -72,15 +72,11 @@ visualizar-perfil {
 
     #esportes {
         width: 100%;
-        float: left;
+        // float: left;
     }
 
-    #esportes ul {
-        list-style: none;
-    }
-
-    #esportes ul li {
-        font-size: 16px;
+    #esportes > * {
+        text-align: center;
     }
 
     #posicoes {
@@ -100,9 +96,4 @@ visualizar-perfil {
         background-image: linear-gradient(to right, color($colors, primary), color($colors, secondary))
     }
 
-    button {
-        margin-bottom: 3px;
-        left: auto;
-        right: auto;
-    }
 }
