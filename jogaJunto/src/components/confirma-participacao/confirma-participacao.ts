@@ -124,14 +124,14 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       inputs: [{ name: 'justificativa', type:'text', label: 'Justificativa'}],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Voltar',
           role: 'cancel',
           handler: data => {
             // console.log('Cancel clicked');
           }
         },
         {
-          text: 'Confirmar',
+          text: 'Cancelar',
           handler: data => {
             console.log(data);
             this.cancelarRealizacao(evento, data.justificativa);
@@ -151,7 +151,7 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       dados => {
         loading.dismiss();
         this.toastService.toast("Evento Cancelado!");
-        this.listaEventosLocal.filter(x => x.id != evento.id);
+        this.listaEventosLocal = this.listaEventosLocal.filter(x => x.id != evento.id);
 
       },
       erro => {
@@ -170,7 +170,7 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       // inputs: [{ name: 'justificativa', type:'text', label: 'Justificativa'}],
       buttons: [
         {
-          text: 'Cancel',
+          text: 'Voltar',
           role: 'cancel',
           handler: data => {
             // console.log('Cancel clicked');
@@ -199,7 +199,7 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       dados => {
         loading.dismiss();
         this.toastService.toast("Evento Confirmado!");
-        this.listaEventosLocal.filter(x => x.id != evento.id);
+        evento.confirmado = true;
 
       },
       erro => {

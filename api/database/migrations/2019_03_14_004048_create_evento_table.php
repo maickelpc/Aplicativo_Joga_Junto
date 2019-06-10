@@ -23,6 +23,7 @@ class CreateEventoTable extends Migration
             $table->string('descricao')->nullable();
             $table->integer('vagas')->unsigned();
             $table->boolean('publico')->default(true);
+            $table->boolean('confirmado')->default(false);
             $table->decimal('valorCusto', 5, 2);
             $table->dateTime('dataCancelamento')->nullable();
             $table->string('justificativaCancelamento')->nullable();

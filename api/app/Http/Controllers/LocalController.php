@@ -20,7 +20,35 @@ class LocalController extends Controller
 
   public function confirmarEvento($eventoId){
 
- 
+    try{
+      DB::beginTransaction();
+  
+        $evento = Evento::with( 'participantes')->with('local')->findOrFail($eventoId);
+        throw_if($evento->local->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pelo local pode confirmar o evento");
+        $dataEvento = $evento->dataRealizacao;
+        $horario = explode(':', $evento->horario);
+  
+        $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+        throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode ser confirmado");
+  
+  
+        $evento->confirmado = true;
+        $evento->save();
+  
+        $notControler = new NotificacaoController();
+  
+   
+        $notControler->notificarConfirmacaoEventoPorLocal($evento);
+  
+        
+  
+      DB::commit();
+      return response()->json('Evento confirmado com sucesso');
+    }catch(Exception $e){
+      DB::rollback();
+  
+     return response()->json('Erro ao tentar confirmar o evento: ' . $e->getMessage(), 400);
+    }
 
   }
 

@@ -22,7 +22,7 @@ export class LocalService{
 
   confirmarRealizacao(id):Observable<any>{
     return this.http.put<any>(
-      `${API}/api/meuslocais/confirmar-evento/${id}` ,{headers: this.headers});
+      `${API}/api/meuslocais/confirmar-evento/${id}` ,{},{headers: this.headers});
 
   }
 

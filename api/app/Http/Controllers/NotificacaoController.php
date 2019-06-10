@@ -148,6 +148,32 @@ public function notificarAceiteParticipacao($usuarioEvento, $evento){
 }
 
 
+
+public function notificarConfirmacaoEventoPorLocal($evento){
+
+  $notificacao = new Notificacao();
+  $esporte = $evento->esporte->nome;
+  $local = $evento->local->nome;
+  $usuario = $evento->usuarioResponsavel;
+  $dataHora = $evento->dataRealizacao->format('d/m/Y') . ' às ' . $evento->horario . 'h';
+  $notificacao->usuario_id = $evento->usuarioResponsavel_id;
+  $notificacao->usuario_envio_id =Auth::user()->id;
+  $notificacao->titulo = "$local confirmou sua partida de $esporte";
+  $notificacao->mensagem =
+  "Olá $usuario->nome, informamos que a sua partida de $esporte em $dataHora, foi confirmada pelo Administrador do $local.";
+  $notificacao->save();
+
+
+  try{
+    // TODO: Criar um JOB para executar independente
+    Mail::to($usuario->email)
+    ->send( new SendNotificacao($notificacao));
+  }catch(Exception $ex){
+    //throw new Exception("Não foi possível validar o seu email!");
+  }
+}
+
+
 public function notificarCancelamentoEventoPorLocal($usuarioEvento, $evento){
 
   $notificacao = new Notificacao();

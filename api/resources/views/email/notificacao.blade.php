@@ -13,7 +13,7 @@
     <body>
       <!-- Begin page content -->
        <main role="main" class="container">
-         <h3 class="mt-5">{{$notificacao->mensagem}} !!!</h3>
+         <h3 class="mt-5">{{$notificacao->mensagem}} </h3>
        </main>
     </body>
 

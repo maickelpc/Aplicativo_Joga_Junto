@@ -15,6 +15,7 @@ class Evento {
   local : Local
   usuarioResponsavel : Usuario
   esporte : Esporte
+  confirmado: boolean
 
   participantes: UsuarioEvento[]
   constructor(){

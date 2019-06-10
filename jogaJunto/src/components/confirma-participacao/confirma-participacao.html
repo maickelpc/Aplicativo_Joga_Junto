@@ -119,9 +119,13 @@
                 </button>
               </ion-col>
               <ion-col align-self-center col-6>
-                <button ion-button icon-start clear medium (click)="confirmarRealizar(evento)">
+                <button ion-button icon-start clear medium (click)="confirmarRealizar(evento)" *ngIf="!evento.confirmado">
                   <ion-icon name="checkmark"></ion-icon>
                   <div>Confirmar</div>
+                </button>
+                <button ion-button icon-start clear medium disabled *ngIf="evento.confirmado">
+                  <ion-icon name="checkmark"></ion-icon>
+                  <div>Confirmado</div>
                 </button>
               </ion-col>
             </ion-row>
