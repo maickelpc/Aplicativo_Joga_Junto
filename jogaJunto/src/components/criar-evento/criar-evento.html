@@ -135,8 +135,8 @@
           <ion-col col-4>{{contato.displayName}}</ion-col>
           <ion-col col-4>
             <button (click)="checkContato(contato)">
-              <ion-icon name="checkmark-circle" *ngIf="!contato.checked"></ion-icon>
-              <ion-icon name="close-circle" *ngIf="contato.checked"></ion-icon>
+              <ion-icon name="checkmark-circle" *ngIf="!contato.checked">Convidar</ion-icon>
+              <ion-icon name="close-circle" *ngIf="contato.checked">Remover</ion-icon>
 
             </button>
           </ion-col>

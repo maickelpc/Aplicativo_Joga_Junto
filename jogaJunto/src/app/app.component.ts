@@ -15,7 +15,7 @@ import { UsuarioService} from '../services/usuario.service'
 import { LoginService } from '../services';
 import { Util } from '../providers/util/util';
 import { Usuario } from '../models/usuario';
-
+import { LocalComponent} from '../components/local/local';
 
 @Component({
   templateUrl: 'main.html'
@@ -59,6 +59,7 @@ export class MyApp {
                     {title:'Home', component: EventosComponent},
                     {title:'Perfil', component: PerfilComponent},
                     {title:'Convites', component: ConfirmaParticipacaoComponent},
+                    {title:'Locais', component: LocalComponent},
                     {icon: 'log-out', title:'Sair', component: LogoutComponent},
 
                     ];

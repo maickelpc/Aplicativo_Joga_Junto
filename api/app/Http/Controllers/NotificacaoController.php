@@ -24,7 +24,28 @@ class NotificacaoController extends Controller
     return NotificacaoResource::collection(Notificacao::paginate());
   }
 
+  public function notificarAdmRequisicaoPropriedade($local){
+
+    
+    $usuario = Auth::user();
+
+    $notificacao = new Notificacao();
+    $notificacao->usuario_id = $usuario->id;
+    $notificacao->usuario_envio_id = $usuario->id;
+
+    $notificacao->titulo = "$usuario->nome está requisitanto um local";
+    $notificacao->mensagem =
+    "Olá Administrador, o $usuario->nome está requisitando a propriedade do local $local->nome, código: $local->id";
+    $notificacao->save();
+    
   
+      Mail::to('maickelpc@gmail.com')->to('mandaproleo@gmail.com')->cc($usuario->email)
+            ->send( new SendNotificacao($notificacao));
+  }
+
+
+  
+
 
   public function notificarPedidoParticipacao($participante, $evento){
 
@@ -46,7 +67,7 @@ class NotificacaoController extends Controller
   
     try{
       // TODO: Criar um JOB para executar independente
-      Mail::to("maickelpc@gmail.com") //Mail::to($usuario->email)
+      Mail::to($usuario->email)
       ->send( new SendNotificacao($notificacao));
     }catch(Exception $ex){
       //throw new Exception("Não foi possível validar o seu email!");

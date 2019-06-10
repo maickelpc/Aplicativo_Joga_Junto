@@ -47,10 +47,14 @@ export class EventoService{
       {headers: headers}).map(x => x.data);
     }
 
-    criarEvento(evento: Evento, convidados: any): Observable<Evento> {
+    criarEvento(evento: Evento, convidados: any): Observable<any> {
 
       let dados = {evento: evento, convidados: convidados};
-      return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: this.headers});
+
+      // console.log("DADOS DO EVENTO");
+      // console.log(JSON.stringify(dados));
+      // console.log("__________*******************_______________");
+      return this.http.post<any>( `${API}/api/evento`, dados,  {headers: this.headers});
     }
 
     buscaMeusEventosPendentes(): Observable<Evento[]>{

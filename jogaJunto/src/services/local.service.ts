@@ -19,6 +19,45 @@ export class LocalService{
     this.headers = this.headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
   }
 
+  atualizarGps(id, lat, long): Observable<any>{
+    return this.http.patch<any>(
+      `${API}/api/local/${id}`, {latitude: lat, longitude: long},
+      {headers: this.headers});
+
+  }
+
+  atualizar(local): Observable<any>{
+    console.log(JSON.stringify( local ));
+
+    return this.http.put<any>(
+      `${API}/api/local/${local.id}`, local,
+      {headers: this.headers});
+
+  }
+
+  requisitarLocal(id): Observable<any>{
+
+    return this.http.get<Local[]>(
+      `${API}/api/localrequisitar/${id}`,
+      {headers: this.headers});
+
+  }
+
+  buscarLocaisSemConfirmacao(nome, cidade): Observable<Local[]>{
+
+    return this.http.get<Local[]>(
+      `${API}/api/localsemconfirmacao?local=${nome}&cidade=${cidade}`,
+      {headers: this.headers});
+
+  }
+
+    buscaMeusLocais(): Observable<Local[]>{
+
+      return this.http.get<Local[]>(
+        `${API}/api/meuslocais`,
+        {headers: this.headers});
+
+    }
 
     buscaLocalPorEsporte(esporte: Esporte, nome:string): Observable<Local[]>{
       if (nome != null)

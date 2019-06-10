@@ -10,8 +10,8 @@ use Illuminate\Http\Request;
 use Validator;
 use App\Endereco;
 use App\Esporte;
-Use Exception;
-Use DB;
+use Exception;
+use DB;
 
 class LocalController extends Controller
 {
@@ -114,6 +114,78 @@ class LocalController extends Controller
   }
 
   
+  public function meusLocais()
+  {
+    try{
+      DB::beginTransaction();
+      $locais = Local::with('endereco', 'endereco.cidade','esportes')->where('valido', true)->where('usuarioResponsavel_id', Auth::user()->id)->get();
+
+      return response()->json($locais);
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json('Erro: ' . $ex->getMessage());
+    }
+    
+  }
+
+
+  public function requisitarPropriedade($localId, Request $request)
+  {
+    try{
+      DB::beginTransaction();
+      $local = Local::where('valido', false)->where('id', $localId)->firstOrFail();
+
+      $local->usuarioResponsavel_id = Auth::user()->id;
+      $local->save();
+
+      $notControler = new NotificacaoController();
+      $notControler->notificarAdmRequisicaoPropriedade($local);
+
+      DB::commit();
+
+      return response()->json('Ok');
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json('Erro: ' . $ex->getMessage());
+    }
+    
+  }
+
+  public function localSemConfirmacao(Request $request)
+  {
+    
+    $nome = $request->get('local');
+    throw_if($nome == null, Exception::class, 'É Necessário informar o nome do local');
+
+    $buscaCidadeNome = true;
+    $cidade = $request->get('cidade');
+    
+    if($cidade == null){
+      $cidade = Auth::user()->endereco->cidade_id;
+      $buscaCidadeNome = false;
+    }
+    
+    
+    $locaisId = DB::table('locais')
+    ->join('enderecos', 'enderecos.id', '=', 'locais.endereco_id')
+    ->join('cidades', 'cidades.id', '=', 'enderecos.cidade_id')
+    ->join('local_esporte', 'locais.id', '=', 'local_esporte.local_id');
+  
+    $locaisId = $locaisId->where('locais.valido', false);
+    if($buscaCidadeNome)
+      $locaisId = $locaisId->where('cidades.nome', 'ilike', '%'.$cidade.'%');
+    else
+      $locaisId = $locaisId->where('cidades.id', $cidade);
+    
+    $locaisId = $locaisId->where('locais.nome', 'ilike', '%'.$nome.'%');
+    $locaisId = $locaisId->select('locais.id')->get();
+    $locaisId = $locaisId->map(function($dado){return ($dado->id);})->toArray();
+    
+    $locais = Local::with(['endereco','endereco.cidade'])->whereIn('id', $locaisId)->orderBy('nome')->get();
+    
+    return response()->json($locais);
+  }
+  
 
   /**
   * Show the form for editing the specified resource.
@@ -158,6 +230,9 @@ class LocalController extends Controller
       $local->comoChegar = $dados->get('comoChegar');
       $local->save();
 
+      $esportes = collect($dados->get('esportes'));
+      $esportes = $esportes->map(function($x){ return $x["id"];})->toArray();
+      $local->esportes()->sync($esportes);
 
       if(count($dados->get('endereco')) > 0){
         if($dados->get('endereco')['id'] > 0){
@@ -183,7 +258,28 @@ class LocalController extends Controller
       return response()->json(new LocalResource($local), 200);
     }catch(Exception $ex){
       DB::rollback();
-      return response()->json(new LocalResource($local), 400);
+      return response()->json($ex->getMessage(), 400);
+    }
+  }
+
+  public function atualizaPosicao(Request $request, $id)
+  {
+    $dados = $request->json();
+
+    
+    try{
+      $local =  Local::findOrFail($id);
+      DB::beginTransaction();
+
+      $local->latitude = $dados->get('latitude');
+      $local->longitude = $dados->get('longitude');
+      $local->save();
+
+      DB::commit();
+      return response()->json(new LocalResource($local), 200);
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json($ex->getMessage(), 400);
     }
   }
 
