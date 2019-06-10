@@ -9,7 +9,8 @@ import { Util } from "../../providers/util/util";
 import { IonicSelectableComponent } from 'ionic-selectable';
 import { ToastService } from '../../services/toast.service'
 import { LoadingController ,ViewController, NavController } from 'ionic-angular';
-import { EventosComponent} from '../eventos/eventos'
+import { EventosComponent} from '../eventos/eventos';
+import { VisualizarPerfilComponent } from '../visualizar-perfil/visualizar-perfil';
 
 import { NavParams,  AlertController} from "ionic-angular";
 
@@ -33,6 +34,8 @@ export class PerfilComponent implements OnInit{
 
   public esportes = [];
   public esportesUsuario = [];
+
+  public rootpage: any = VisualizarPerfilComponent;
 
 
   cidadeChange(event: {component: IonicSelectableComponent, value: number }) {
@@ -171,7 +174,7 @@ export class PerfilComponent implements OnInit{
 
           this.usuarioService.carregaUsuario().subscribe(
             response =>{
-              // console.log(response);
+               console.log(response);
               this.usuario = response;
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
@@ -190,7 +193,7 @@ export class PerfilComponent implements OnInit{
   }
 
   voltar(){
-    this.navCtrl.setRoot(EventosComponent);
+    this.navCtrl.setRoot(VisualizarPerfilComponent);
     // this.viewCtrl.dismiss().then()
   }
 

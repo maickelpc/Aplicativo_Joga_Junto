@@ -1,17 +1,13 @@
 confirma-participacao {
   .content {
-    background-color: color($colors, primary);
+    background-color: white;
   }
   .item {
-    background-color: color($colors, primary);
-  }
-
-  .bg-branco {
     background-color: white;
   }
 
   ion-label {
-    color: color($colors, light);
+    color: color($colors, primary);
     text-align: center;
     margin: 0;
   }

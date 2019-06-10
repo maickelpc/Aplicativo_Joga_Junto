@@ -3,18 +3,15 @@ perfil {
     height: 300px;
   }
   .content {
-    background-color: color($colors, primary);
+    background-color: white;
+    color: #333;
   }
   .item {
-    background-color: color($colors, primary);
-  }
-
-  .bg-branco {
     background-color: white;
   }
 
   ion-label {
-    color: color($colors, light);
+    color: color($colors, primary);
     text-align: center;
     margin: 0;
   }
@@ -26,7 +23,7 @@ perfil {
   ion-input {
     background-color: #fff;
     border-radius: 500px;
-    margin: 0 0 25px 0;
+    margin: 0 0 0 0;
   }
 
   ion-segment {
@@ -35,5 +32,13 @@ perfil {
 
   ion-item-divider{
     background-color: #fff;
+    border-bottom: none;
+  }
+
+  ion-item {
+    border-bottom: none;
+  }
+  .item-md.item-block .item-inner {
+    border-bottom: none;
   }
 }

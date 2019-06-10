@@ -19,5 +19,5 @@ LIMIT 20;
 UPDATE eventos SET "dataRealizacao" = '2019-06-05' WHERE id = 7;
 SELECT password from usuarios where username = 'leozao';
 
-update esportes set "imagem" = 'basketball.png' WHERE nome = 'Basquete';
+update esportes set "imagem" = 'soccer.png' WHERE nome = 'Futebol de Salão';
 

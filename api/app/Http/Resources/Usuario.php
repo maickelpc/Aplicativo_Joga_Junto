@@ -26,6 +26,7 @@ class Usuario extends JsonResource
           'telefone' => $this->telefone,
           'latitude' => $this->latitude,
           'longitude' => $this->longitude,
+          'imagem' => $this->imagem,
           'email_verified_at' => $this->email_verified_at,
           'endereco' => Endereco::with(['cidade', 'cidade.estado'])->find($this->endereco_id),
           'posicoes' => $this->posicoes,

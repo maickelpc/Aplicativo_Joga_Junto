@@ -15,6 +15,7 @@ import { UsuarioService} from '../services/usuario.service'
 import { LoginService } from '../services';
 import { Util } from '../providers/util/util';
 import { Usuario } from '../models/usuario';
+import { VisualizarPerfilComponent } from '../components/visualizar-perfil/visualizar-perfil';
 
 
 @Component({
@@ -56,9 +57,9 @@ export class MyApp {
 
     events.subscribe('user:loggedin',()=>{
       this.pages = [
-                    {title:'Home', component: EventosComponent},
-                    {title:'Perfil', component: PerfilComponent},
-                    {title:'Convites', component: ConfirmaParticipacaoComponent},
+                    {title:'Home', component: EventosComponent, icon: 'home'},
+                    {title:'Perfil', component: VisualizarPerfilComponent, icon: 'contact'},
+                    {title:'Convites', component: ConfirmaParticipacaoComponent, icon: 'mail'},
                     {icon: 'log-out', title:'Sair', component: LogoutComponent},
 
                     ];

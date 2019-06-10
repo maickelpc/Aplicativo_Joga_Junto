@@ -1,0 +1,90 @@
+<!-- Generated template for the VisualizarPerfilComponent component -->
+<ion-header>
+  <ion-navbar>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+
+    <ion-title>
+      Visualizar Perfil
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content *ngIf="!isLoading">
+
+  <div text-center style="background-color: white">
+    <ion-avatar>
+      <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)">
+    </ion-avatar>
+    <ion-item-divider text-center>
+      <!-- <ion-icon name="information-circle"></ion-icon> -->
+      <div color="darkgrey">
+        <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>
+      </div>
+      <div *ngIf="usuario.endereco.cep !== null" color="darkgrey">
+        <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>
+      </div>
+      <ionic3-star-rating
+        activeIcon = "star"
+        defaultIcon = "star-outline"
+        size = "small"
+        activeColor = "darkgoldenrod"
+        defaultColor = "#f4f4f4"
+        readonly="true"
+        [rating]="usuario.score">
+      </ionic3-star-rating>
+    </ion-item-divider>
+  </div>
+
+  <div id="jogosAvaliacoesEventos">
+      <ul>
+        <li style="border-right: 1px solid #ccc" text-center>122<br/><span>Jogos</span></li>
+        <li text-center>170<br/><span>Avaliações</span></li>
+        <li style="border-left: 1px solid #ccc" text-center>44<br/><span>Eventos Criados</span></li>
+      </ul>
+  </div>
+
+  <div id="sobreMim">
+      <h3>Sobre Mim</h3>
+  </div>
+
+  <div id="mensagem">
+    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquet urna in orci cursus, vitae dignissim felis tincidunt. Nullam vehicula sem ante, at facilisis metus consequat eu. Nulla finibus porta maximus. Nunc vitae nulla lobortis, elementum nibh nec, ultrices enim. Nunc aliquam mauris nunc, nec efficitur mauris posuere sit amet. </p>
+  </div>
+
+  <div id="esportes">
+    <ul>
+      <li>
+        <ion-icon name="football"></ion-icon> Futebol
+      </li>
+      <li>
+        <ion-icon name="baseball"></ion-icon> Vôlei
+      </li>
+      <li>
+        <ion-icon name="basketball"></ion-icon> Basquete
+      </li>
+    </ul>
+  </div>
+
+  <div id="posicoes">
+    <ul>
+      <li>
+        <ion-icon name="star"></ion-icon> Atacante
+      </li>
+      <li>
+        <ion-icon name="star-outline"></ion-icon> Defesa
+      </li>
+    </ul>
+  </div>
+
+  <ion-row style="display: inline-block">
+    <ion-col col-12>
+      <button ion-button (click)="editarPerfil()" round center>
+        <ion-icon name="edit"></ion-icon> Editar meu Perfil
+      </button>
+    </ion-col>
+  </ion-row>
+
+</ion-content>

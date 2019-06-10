@@ -3,10 +3,7 @@
   <ion-navbar>
     <ion-title>Meu Perfil</ion-title>
     <ion-buttons left>
-    <button ion-button icon-only (click)="voltar()">
-      <ion-icon name="arrow-back"></ion-icon>
-    </button>
-
+      <button ion-button icon-only (click)="viewCtrl.dismiss()"></button>
     </ion-buttons>
     <ion-buttons end>
       <button (click)="salvar()" ion-button icon-only >
@@ -20,7 +17,7 @@
 
 <ion-content padding-top *ngIf="!isLoading">
   <form >
-    <div padding>
+    <div>
       <ion-segment [(ngModel)]="aba" name="abas">
         <ion-segment-button value="dados">
           {{'Data' | translate}}
@@ -34,15 +31,14 @@
       </ion-segment>
     </div>
 
-    <div [ngSwitch]="aba">
-      <ion-list *ngSwitchCase="'dados'">
+    <div [ngSwitch]="aba" padding-top>
+      <ion-list *ngSwitchCase="'dados'" lines="none">
 
         <div text-center style="background-color: white">
-
           <ion-avatar>
-            <img id="my-avatar" [src]="Util.pathAvatar('usuario.imagem')">
+            <img id="my-avatar" [src]="Util.pathAvatar(usuario.imagem)">
           </ion-avatar>
-          <ion-item-divider  text-center>
+          <ion-item-divider text-center>
             <!-- <ion-icon name="information-circle"></ion-icon> -->
             <div color="secondary">
               <h1>{{usuario.nome}} {{usuario.sobrenome}}</h1>
@@ -50,11 +46,20 @@
             <div *ngIf="usuario.endereco !== null" color="secondary">
               <h3>{{usuario.endereco.cidade.nome}}/{{usuario.endereco.cidade.estado.sigla}}</h3>
             </div>
+            <ionic3-star-rating
+              activeIcon = "star"
+              defaultIcon = "star-outline"
+              size = "small"
+              activeColor = "darkgoldenrod"
+              defaultColor = "#f4f4f4"
+              readonly="true"
+              [rating]="usuario.score">
+            </ionic3-star-rating>
           </ion-item-divider>
         </div>
 
 
-        <ion-item-divider color="light" text-center>
+        <ion-item-divider color="dark-light" text-center>
           <h1>{{'About me' | translate}}</h1>
           <ion-item>
             <ion-textarea placeholder="Fale um pouco sobre você."
@@ -62,13 +67,13 @@
           </ion-item>
         </ion-item-divider >
 
-        <ion-item>
-          <ion-label stacked>{{ 'Username' | translate }}</ion-label>
+        <ion-item no-lines lines="none">
+          <ion-label stacked>{{ 'Firstname' | translate }}</ion-label>
           <ion-input text-center type="text" [(ngModel)]="usuario.nome" name="username"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label stacked>{{ 'Fullname' | translate }}</ion-label>
+          <ion-label stacked>{{ 'Lastname' | translate }}</ion-label>
           <ion-input text-center type="text" [(ngModel)]="usuario.sobrenome" name="fullname"></ion-input>
         </ion-item>
 
@@ -83,7 +88,7 @@
         </ion-item>
       </ion-list>
 
-      <ion-list *ngSwitchCase="'endereco'">
+      <ion-list *ngSwitchCase="'endereco'" no-lines>
         <ion-item-divider color="light" text-center>
           <h1>{{'Address' | translate}}</h1>
         </ion-item-divider >
@@ -127,13 +132,13 @@
       </ion-item>
     </ion-list>
 
-    <ion-list *ngSwitchCase="'esporte'">
+    <ion-list *ngSwitchCase="'esporte'" no-lines>
 
       <ion-item-divider color="light" text-center>
         <h1>{{'My Sports' | translate}}</h1>
       </ion-item-divider >
 
-      <ion-list>
+      <ion-list no-lines>
         <ion-item *ngFor="let esporte of esportesUsuario; let i= index">
           <ion-label>{{esporte.nome}}</ion-label>
           <ion-select multiple="true" (ionChange)="atualizaPosicoes($event,esporte.id)"

@@ -21,11 +21,15 @@
   height: 100px;
   margin: auto;
   border-radius: 50%;
-  border: 2px dotted #cccccc;
+  border: 2px solid #cccccc;
 }
 
 .menu-header {
   background-color: #741b75;
+}
+
+.gradiente {
+  background-image: linear-gradient(to right, color($colors, primary), color($colors, secondary))
 }
 
 .menu-header ion-row ion-col h4,

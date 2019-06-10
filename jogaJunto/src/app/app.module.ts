@@ -36,6 +36,8 @@ import { MapsComponent } from '../components/maps/maps';
 import { CriarEventoComponent} from '../components/criar-evento/criar-evento'
 import { Contacts } from '@ionic-native/contacts';
 import { StarRatingModule } from 'ionic3-star-rating';
+import { VisualizarPerfilComponent } from '../components/visualizar-perfil/visualizar-perfil';
+
 
 
 // The translate loader needs to know where to load i18n files
@@ -55,7 +57,8 @@ export function createTranslateLoader(http: HttpClient) {
     LogoutComponent,
     MapsComponent,
     CriarEventoComponent,
-    ConfirmaParticipacaoComponent
+    ConfirmaParticipacaoComponent,
+    VisualizarPerfilComponent
   ],
   exports: [
     EventosComponent,
@@ -65,7 +68,8 @@ export function createTranslateLoader(http: HttpClient) {
     LogoutComponent,
     MapsComponent,
     CriarEventoComponent,
-    ConfirmaParticipacaoComponent
+    ConfirmaParticipacaoComponent,
+    VisualizarPerfilComponent
   ],
   imports: [
     IonicSelectableModule,
@@ -93,7 +97,8 @@ export function createTranslateLoader(http: HttpClient) {
     LogoutComponent,
     MapsComponent,
     CriarEventoComponent,
-    ConfirmaParticipacaoComponent
+    ConfirmaParticipacaoComponent,
+    VisualizarPerfilComponent
   ],
   providers: [
     Push,

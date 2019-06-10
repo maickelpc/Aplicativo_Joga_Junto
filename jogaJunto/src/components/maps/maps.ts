@@ -92,9 +92,7 @@ export class MapsComponent implements OnInit {
       .then(resp => {
         let lat = resp.coords.latitude;
         let lng = resp.coords.longitude;
-        // console.log('lat '+ lat +' == '+ 'long '+lng )
         let location = new google.maps.LatLng(lat, lng);
-        // console.log('current location '+location)
         observable.next(location);
 
         this.addMarker(location, this.map);
@@ -114,6 +112,7 @@ export class MapsComponent implements OnInit {
   }
 
   ionViewCanEnter() {
+    console.log('canenter');
     let loading = this.loading();
     loading.present();
       return new Promise((resolve, reject) =>{
@@ -125,7 +124,11 @@ export class MapsComponent implements OnInit {
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
-
+              
+              let lat = this.usuario.latitude;
+              let lng = this.usuario.longitude;
+              let location = new google.maps.LatLng(lat, lng);
+              this.addMarker(location, this.map);
 
               // console.log(this.usuario);
               loading.dismiss();
@@ -142,12 +145,15 @@ export class MapsComponent implements OnInit {
   addMarker(pos, map) {
     // console.log("Add Custom Marker")
 
+    var bounds = new google.maps.LatLngBounds();
     var marker = new google.maps.Marker({
       map: map,
       animation: google.maps.Animation.DROP,
       position: pos,
       icon: Util.pathIcon('male-2.png')
     });
+    bounds.extend(marker.getPosition());
+    map.fitBounds(bounds);
   }
 
   addMarkers(map) {

@@ -9,6 +9,7 @@ import { MapsComponent } from './maps/maps';
 import { CriarEventoComponent } from './criar-evento/criar-evento';
 import { IonicSelectableModule } from  'ionic-selectable';
 import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-participacao';
+import { VisualizarPerfilComponent } from './visualizar-perfil/visualizar-perfil';
 
 
 @NgModule({
@@ -19,7 +20,8 @@ import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-
     LogoutComponent,
     MapsComponent,
     CriarEventoComponent,
-    ConfirmaParticipacaoComponent],
+    ConfirmaParticipacaoComponent,
+    VisualizarPerfilComponent],
   imports: [
     IonicPageModule,
 		IonicSelectableModule
@@ -31,7 +33,8 @@ import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-
     LogoutComponent,
     MapsComponent,
     CriarEventoComponent,
-    ConfirmaParticipacaoComponent],
+    ConfirmaParticipacaoComponent,
+    VisualizarPerfilComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
 	    EventoComponent,
