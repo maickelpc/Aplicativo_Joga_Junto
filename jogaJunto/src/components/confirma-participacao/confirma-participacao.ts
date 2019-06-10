@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {EventoService} from "../../services/evento.service";
+import {LocalService} from "../../services/local.service";
 import {Evento} from "../../models/evento"
 import {Esporte} from "../../models/esporte"
 import {Local} from "../../models/local"
@@ -22,7 +23,9 @@ import {EventosComponent} from '../eventos/eventos'
 export class ConfirmaParticipacaoComponent implements OnInit{
 
   listaEventos: Evento[];
-
+  listaEventosLocal: Evento[];
+  passo : string = 'convites';
+  possuiLocal = false;
 
   constructor(
 
@@ -30,13 +33,34 @@ export class ConfirmaParticipacaoComponent implements OnInit{
     public navCtrl: NavController,
     private toastService: ToastService,
     private loadingCtrl: LoadingController,
+    private localService: LocalService
   ) {  }
 
 
   ngOnInit( ){
     this.buscaEventosPendentes();
+    this.buscaMeusLocais();
   }
 
+  buscaMeusLocais(){
+
+    // let loading = this.loading();
+    // loading.present();
+    this.localService.buscaEventosMeuLocal().subscribe(
+      dados => {
+        this.listaEventosLocal = dados ;
+        this.possuiLocal = true;
+        // loading.dismiss();
+      },
+      erro =>{
+        // loading.dismiss();
+        console.log(erro);
+        this.listaEventosLocal = [];
+        this.possuiLocal = false;
+        this.toastService.toast("Erro ao carregar a lista de locais, Caso você seja administrador de algum local, verifique sua conexão com a internet  e tente novamente!");
+      }
+    )
+  }
 
   buscaEventosPendentes(){
 
@@ -46,7 +70,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       dados => {
         this.listaEventos = dados;
         loading.dismiss();
-        console.log(dados);
       },
       erro =>{
         loading.dismiss();
@@ -93,6 +116,33 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       }
     )
   }
+
+
+
+  confirmaCancelarRealizacao(evento){
+    console.log(evento);
+  }
+
+  confirmaRealizacao(evento){
+    console.log(evento);
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -75,8 +75,8 @@ export class EventoComponent {
             data.setHours(parseInt(horas[0]));
             data.setMinutes(parseInt(horas[1]));
 
-            // this.encerrado = (data < agora);
-            this.encerrado = true;
+            this.encerrado = (data < agora);
+            
 
             this.euOrganizo = this.evento.usuarioResponsavel.id == this.loginService.getUsuarioLogado().id;
             this.euParticipo = (this.evento.participantes.

@@ -60,7 +60,7 @@ export class MyApp {
       this.pages = [
                     {title:'Home', component: EventosComponent, icon: 'home'},
                     {title:'Perfil', component: VisualizarPerfilComponent, icon: 'contact'},
-                    {title:'Convites', component: ConfirmaParticipacaoComponent, icon: 'mail'},
+                    {title:'Notificações', component: ConfirmaParticipacaoComponent, icon: 'mail'},
                     {title:'Locais', component: LocalComponent, icon: 'pin'},
                     {icon: 'log-out', title:'Sair', component: LogoutComponent},
 

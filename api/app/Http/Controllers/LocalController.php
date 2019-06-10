@@ -9,12 +9,39 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
 use App\Endereco;
+use App\Evento;
 use App\Esporte;
+use Carbon\Carbon;
 use Exception;
 use DB;
 
 class LocalController extends Controller
 {
+
+
+  public function eventosProximos(){
+
+    try{
+      DB::beginTransaction();
+      $idMeusLocais = Local::where('usuarioResponsavel_id', Auth::user()->id)->where('valido',true)->select('id')->get()->map(function($x){ return $x->id;})->toArray();
+
+      $eventos = null;
+      if(count($idMeusLocais) > 0){
+        $eventos = Evento::with('usuarioResponsavel')->with( 'esporte')->with('local')
+        ->whereIn('local_id', $idMeusLocais)
+        ->where('dataCancelamento', null)
+        ->where('dataRealizacao', '>=' , Carbon::now())->get();
+      }
+
+      return response()->json($eventos, 200);
+
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json($ex->getMessage(), 400);
+    }
+
+  }
+
   /**
   * Display a listing of the resource.
   *
