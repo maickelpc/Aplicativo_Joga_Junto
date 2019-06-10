@@ -123,6 +123,7 @@ Route::group([
     Route::put('/evento/meus/removerparticipante/{id}', 'EventoController@removerParticipante');
 
     Route::post('/evento/meus/solicitarparticipacao/{id}', 'UsuarioEventoController@solicitarParticipacao');
+    Route::post('/evento/meus/avaliarparticipante/{id}', 'UsuarioEventoController@avaliarParticipante');
     
     
 });

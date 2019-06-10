@@ -65,7 +65,7 @@ export class MyApp {
                     ];
                     this.menuCtrl.enable(true);
                     this.usuario = loginService.getUsuarioLogado();
-                    console.log(this.usuario);
+                    // console.log(this.usuario);
 
     });
 

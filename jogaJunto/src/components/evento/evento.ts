@@ -26,6 +26,7 @@ export class EventoComponent {
   public evento: Evento;
   public Util = Util;
   cancelado: boolean = false;
+  meuId: number;
   encerrado : boolean = false;
   euParticipo : boolean = false;
   euOrganizo : boolean = false;
@@ -39,7 +40,7 @@ export class EventoComponent {
     private toastService: ToastService,
     private loadingCtrl: LoadingController,
   ) {
-
+    this.meuId = this.loginService.getUsuarioLogado().id;
   }
 
   ionViewDidLoad() {
@@ -47,6 +48,7 @@ export class EventoComponent {
   }
 
 
+  comentario: string = '';
   participantesConfirmados = [];
   participantesPendentes = [];
   solicitacoesPendentes = [];
@@ -73,7 +75,8 @@ export class EventoComponent {
             data.setHours(parseInt(horas[0]));
             data.setMinutes(parseInt(horas[1]));
 
-            this.encerrado = (data < agora);
+            // this.encerrado = (data < agora);
+            this.encerrado = true;
 
             this.euOrganizo = this.evento.usuarioResponsavel.id == this.loginService.getUsuarioLogado().id;
             this.euParticipo = (this.evento.participantes.
@@ -121,6 +124,71 @@ export class EventoComponent {
       });
     }
 
+    jaAvaliei(avaliacoes):boolean{
+      let avaliei = avaliacoes.filter(x => x.usuarioAvaliador_id == this.meuId);
+
+      return avaliei.length > 0;
+    }
+
+
+    confirmarAvaliacao(usuarioEvento) {
+      let alert = this.alertCtrl.create({
+        title: 'Avaliar '+ usuarioEvento.usuario.nome,
+        inputs: [
+          // { name: 'nota', type:'number',label: 'Nota',min: '1' , max:'5' , placeholder: 'Nota (1..5)'},
+          { name: 'nota', type: 'radio', value: '5', label:'5 estrelas', checked: true},
+          { name: 'nota', type: 'radio', value: '4', label:'4 estrelas'},
+          { name: 'nota', type: 'radio', value: '3', label:'3 estrelas'},
+          { name: 'nota', type: 'radio', value: '2', label:'2 estrelas'},
+          { name: 'nota', type: 'radio', value: '1', label:'1 estrelas'},
+
+          // { name: 'comentario', type:'text', label: 'Comentário'},
+
+
+        ],
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: data => {
+              // console.log('Cancel clicked');
+            }
+          },
+          {
+            text: 'Confirmar',
+            handler: data => {
+              console.log(data);
+              this.avaliar(usuarioEvento, data, usuarioEvento.comentario);
+
+            }
+          }
+        ]
+      });
+      alert.present();
+    }
+
+
+    avaliar(usuarioEvento, nota, comentario){
+      let loading = this.loading();
+      loading.present();
+      this.eventoService.avaliarUsuario(usuarioEvento.id, nota, comentario).subscribe(
+        dados => {
+          loading.dismiss();
+          this.toastService.toast("Avaliação Registrada!");
+          this.comentario = '';
+          usuarioEvento.avaliacoes.push({usuarioAvaliado: usuarioEvento.id, usuarioAvaliador_id :this.meuId ,texto: comentario, score: nota});
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível Registrar a avaliação, tente novamente")
+
+        }
+      )
+    }
+
+
+
     confirmarCancelarEvento() {
       let alert = this.alertCtrl.create({
         title: 'Confirmação de cancelamento do evento',
@@ -163,6 +231,8 @@ export class EventoComponent {
         }
       )
     }
+
+
 
 
     confirmarCancelarParticipacao() {

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Evento;
 use App\Usuario;
 use App\Local;
+use App\Avaliacao;
 use App\Endereco;
 use DB;
 use Carbon\Carbon;
@@ -25,6 +26,43 @@ use App\Notificacao;
 
 class UsuarioEventoController extends Controller
 {
+
+    public function avaliarParticipante($usuarioEventoId, Request $request){
+      try{
+        $dados = $request->json();
+        DB::beginTransaction();
+        $usuarioEvento = UsuarioEvento::with('avaliacoes')->findOrFail($usuarioEventoId);
+        $evento = Evento::with('participantes')->find($usuarioEvento->evento_id);
+        $dataEvento = $evento->dataRealizacao;
+        $horario = explode(':', $evento->horario);
+        $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+        throw_if(Carbon::now() < $dataEvento, Exception::class ,"Evento ainda não foi encerrado");
+
+        
+        $participo = $evento->participantes->where('usuario_id',Auth::user()->id)->whereNotIn('situacao', ['PENDENTE','REMOVIDO','CANCELADO','FALTOU']);
+        
+        throw_if($participo->count() == 0, Exception::class, "Você Não participa do evento");
+    
+        $avaliacao = new Avaliacao();
+        $avaliacao->usuarioAvaliado_id =$usuarioEvento->id;
+        $avaliacao->usuarioAvaliador_id =Auth::user()->id;
+        $avaliacao->score = $dados->get('nota');
+        $avaliacao->texto = $dados->get('comentario');
+        
+        $avaliacao->save();
+
+       
+  
+        DB::commit();
+        return response()->json('Ok');
+      return response()->json($participante);
+    }catch(Exception $e){
+      DB::rollback();
+  
+     return response()->json('Erro ao tentar registrar a Avaliacao: ' . $e->getMessage(), 400);
+    }
+
+    }
 
     public function solicitarParticipacao($eventoId, Request $request) {
         try{

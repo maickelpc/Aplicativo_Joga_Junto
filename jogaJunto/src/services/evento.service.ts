@@ -107,4 +107,10 @@ export class EventoService{
       return this.http.post<any>(`${API}/api/evento/meus/solicitarparticipacao/${id}/`,{mensagem: mensagem},  {headers: this.headers})
     }
 
+    avaliarUsuario(id, nota, comentario): Observable<any>{
+
+      return this.http.post<any>(`${API}/api/evento/meus/avaliarparticipante/${id}`,{nota: nota, comentario: comentario},  {headers: this.headers})
+
+    }
+
   }

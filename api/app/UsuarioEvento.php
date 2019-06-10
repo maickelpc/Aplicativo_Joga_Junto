@@ -30,4 +30,9 @@ class UsuarioEvento extends Model
     public function evento(){
       return $this->belongsTo('App\Evento', 'evento_id');
     }
+
+    public function avaliacoes(){
+      return $this->hasMany('App\Avaliacao', 'usuarioAvaliado_id');
+    }
+
 }

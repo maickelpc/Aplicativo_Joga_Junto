@@ -22,8 +22,12 @@ class CreateAvaliacaoTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            $table->foreign('usuarioAvaliado_id')->references('id')->on('usuarios');
             $table->foreign('usuarioAvaliador_id')->references('id')->on('usuarios');
+
+            //$table->foreign('usuarioAvaliado_id')->references('id')->on('usuarios');
+            $table->foreign('usuarioAvaliado_id')->references('id')->on('usuario_evento');
+            
+            $table->unique('usuarioAvaliado_id','usuarioAvaliador_id');
         });
     }
 

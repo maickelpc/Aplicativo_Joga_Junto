@@ -10,9 +10,15 @@
       Visualizar Evento
     </ion-title>
   </ion-navbar>
+
 </ion-header>
 
 <ion-content padding class="bg-branco">
+  <ion-label>Encerrado</ion-label>
+  <ion-checkbox [(ngModel)]="encerrado"></ion-checkbox>
+  <button (click)="encerrado = true">ENCERRAR</button>
+  {{evento.id}}
+
   <ion-row>
     <ion-col col-5>
       <ion-card>
@@ -90,16 +96,25 @@
 
   <ion-row>
     <ion-col col-6>
-      <h4>Confirmados</h4>
+      <h4>{{(encerrado) ? 'Avaliar' : 'Confirmados'}}</h4>
       <div *ngFor="let p of participantesConfirmados" style="color: teal">
-        <p>{{ p.usuario.nome }}
+        <hr/>
+        <h6>{{ p.usuario.nome }}</h6>
           <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
           <ion-icon name="close"></ion-icon>
-        </button></p>
+        </button>
+        <ion-row *ngIf="encerrado && p.usuario_id != meuId && !jaAvaliei(p.avaliacoes)">
+          <ion-label stacked>Comentar e Avaliar</ion-label>
+          <ion-input [(ngModel)]="p.comentario"></ion-input>
+          <button (click)="confirmarAvaliacao(p)" >Avaliar</button>
+
+        </ion-row>
+
+        <p *ngFor="let avaliacao of p.avaliacoes"> - Nota: {{avaliacao.score}} - {{avaliacao.texto}}. <br>por {{avaliacao.usuario_avaliador.nome}}</p>
       </div>
     </ion-col>
 
-    <ion-col col-6 *ngIf="euParticipo">
+    <ion-col col-6 *ngIf="euParticipo && !encerrado">
       <h4>Pendentes</h4>
       <div *ngFor="let p of participantesPendentes" style="color: teal">
         <p>{{ p.usuario.nome }}
@@ -110,7 +125,7 @@
     </ion-col>
   </ion-row>
 
-  <ion-fab bottom right *ngIf="!euParticipo" >
+  <ion-fab bottom right *ngIf="!euParticipo && !encerrado" >
 
     <button (click)="confirmarSolicitarParticipacao(evento)" [disabled]="(!evento.publico || minhaSolicitacaoPendente != null)">
       <ion-icon name="add-circle"></ion-icon>
@@ -119,7 +134,7 @@
 
   </ion-fab>
 
-  <ion-fab bottom right *ngIf="euOrganizo" >
+  <ion-fab bottom right *ngIf="euOrganizo && !encerrado" >
 
     <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>
@@ -128,7 +143,7 @@
 
   </ion-fab>
 
-  <ion-fab bottom right *ngIf="!euOrganizo && euParticipo">
+  <ion-fab bottom right *ngIf="!euOrganizo && euParticipo && !encerrado">
 
     <button (click)="confirmarCancelarParticipacao()" [disabled]="(evento.dataCancelamento != null)">
       <ion-icon name="close"></ion-icon>

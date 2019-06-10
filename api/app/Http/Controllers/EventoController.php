@@ -44,7 +44,8 @@ class EventoController extends Controller
   }
 
   public function show($id) {
-      return new EventoResource(Evento::with('participantes', 'participantes.usuario')->find($id));
+
+      return new EventoResource(Evento::with('participantes', 'participantes.avaliacoes', 'participantes.avaliacoes.usuarioAvaliador','participantes.usuario')->find($id));
   }
 
   /**

@@ -13,7 +13,7 @@ export class UserProvider {
   private _user:User = new User();
 
   constructor() {
-    console.log('Hello UserProvider Provider');
+    // console.log('Hello UserProvider Provider');
   }
 
 
