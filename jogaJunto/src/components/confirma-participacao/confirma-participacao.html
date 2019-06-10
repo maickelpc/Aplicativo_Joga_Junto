@@ -30,12 +30,13 @@
 
         </div>
 
-        <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
+        <ion-card *ngFor="let evento of listaEventos">
           <ion-card-content>
-            <ion-card-title>
+            <ion-row>
+            <div class="headerCard"><br/>
               {{ evento.descricao }}
-
-            </ion-card-title>
+            </div>
+          </ion-row>
             <ion-row>
               <ion-col>
                 <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>
@@ -48,12 +49,14 @@
 
               <ion-col>
                 <span icon-start clear small>
-                  <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>
+                  <ion-icon name="calendar"></ion-icon>
+                  <span>{{ evento.dataRealizacao }}</span>
                 </span>
               </ion-col>
               <ion-col>
                 <span icon-start clear small>
-                  <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
+                  <ion-icon name="alarm"></ion-icon>
+                  <span>{{ evento.horario }}</span>
                 </span>
               </ion-col>
             </ion-row>
@@ -79,10 +82,11 @@
       <ion-list *ngIf="passo == 'locais'" >
         <ion-card class="bg-branco" *ngFor="let evento of listaEventosLocal">
           <ion-card-content>
-            <ion-card-title>
-              <span>Descrição:</span>
-              {{ evento.descricao }}
-            </ion-card-title>
+              <ion-row>
+                  <div class="headerCard"><br/>
+                    {{ evento.descricao }}
+                  </div>
+                </ion-row>
             <ion-row>
               <ion-col>
                 <p><strong>Organizador:</strong> {{evento.usuario_responsavel.nome}}</p>
@@ -95,12 +99,14 @@
 
               <ion-col>
                 <span icon-start clear small>
-                  <ion-icon name="calendar">{{ evento.dataRealizacao | date:'dd/MM/yyyy' }}</ion-icon>
+                  <ion-icon name="calendar"></ion-icon>
+                  {{ evento.dataRealizacao | date:'dd/MM/yyyy' }}
                 </span>
               </ion-col>
               <ion-col>
                 <span icon-start clear small>
-                  <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
+                  <ion-icon name="alarm"></ion-icon>
+                  {{ evento.horario }}
                 </span>
               </ion-col>
             </ion-row>
