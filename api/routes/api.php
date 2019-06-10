@@ -79,8 +79,13 @@ Route::group([
     Route::post('/local', 'LocalController@store')->name('local.store');
     Route::get('/local/{id}', 'LocalController@show')->name('local.show');
     Route::put('/local/{id}', 'LocalController@update')->name('local.update');
+    Route::patch('/local/{id}', 'LocalController@atualizaPosicao');
     Route::delete('/local/{id}', 'LocalController@destroy')->name('local.delete');
     Route::get('/local/esporte/{esporte_id}', 'LocalController@localPorEsporte')->name('local.porEsporte');
+    Route::get('/localsemconfirmacao', 'LocalController@localSemConfirmacao');
+    Route::get('/localrequisitar/{localId}', 'LocalController@requisitarPropriedade');
+    Route::get('/meuslocais', 'LocalController@meusLocais');
+    
 
     Route::get('/notificacao', 'NotificacaoController@index')->name('notificacao.all');
     Route::post('/notificacao', 'NotificacaoController@store')->name('notificacao.store');
@@ -118,6 +123,7 @@ Route::group([
     Route::put('/evento/meus/removerparticipante/{id}', 'EventoController@removerParticipante');
 
     Route::post('/evento/meus/solicitarparticipacao/{id}', 'UsuarioEventoController@solicitarParticipacao');
+    Route::post('/evento/meus/avaliarparticipante/{id}', 'UsuarioEventoController@avaliarParticipante');
     
     
 });

@@ -17,6 +17,7 @@ import { Util } from '../providers/util/util';
 import { Usuario } from '../models/usuario';
 import { VisualizarPerfilComponent } from '../components/visualizar-perfil/visualizar-perfil';
 
+import { LocalComponent} from '../components/local/local';
 
 @Component({
   templateUrl: 'main.html'
@@ -59,13 +60,13 @@ export class MyApp {
       this.pages = [
                     {title:'Home', component: EventosComponent, icon: 'home'},
                     {title:'Perfil', component: VisualizarPerfilComponent, icon: 'contact'},
-                    {title:'Convites', component: ConfirmaParticipacaoComponent, icon: 'mail'},
+                    {title:'Locais', component: LocalComponent, icon: 'pin'},
                     {icon: 'log-out', title:'Sair', component: LogoutComponent},
 
                     ];
                     this.menuCtrl.enable(true);
                     this.usuario = loginService.getUsuarioLogado();
-                    console.log(this.usuario);
+                    // console.log(this.usuario);
 
     });
 

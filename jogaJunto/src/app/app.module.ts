@@ -39,6 +39,7 @@ import { StarRatingModule } from 'ionic3-star-rating';
 import { VisualizarPerfilComponent } from '../components/visualizar-perfil/visualizar-perfil';
 
 
+import { LocalComponent} from '../components/local/local'
 
 // The translate loader needs to know where to load i18n files
 // in Ionic's static asset pipeline.
@@ -58,7 +59,8 @@ export function createTranslateLoader(http: HttpClient) {
     MapsComponent,
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
-    VisualizarPerfilComponent
+    VisualizarPerfilComponent,
+    LocalComponent
   ],
   exports: [
     EventosComponent,
@@ -69,7 +71,8 @@ export function createTranslateLoader(http: HttpClient) {
     MapsComponent,
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
-    VisualizarPerfilComponent
+    VisualizarPerfilComponent,
+    LocalComponent
   ],
   imports: [
     IonicSelectableModule,
@@ -98,7 +101,8 @@ export function createTranslateLoader(http: HttpClient) {
     MapsComponent,
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
-    VisualizarPerfilComponent
+    VisualizarPerfilComponent,
+    LocalComponent
   ],
   providers: [
     Push,

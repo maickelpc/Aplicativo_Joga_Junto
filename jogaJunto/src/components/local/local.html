@@ -1,0 +1,151 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>Meus Locais</ion-title>
+    <ion-buttons left>
+      <button ion-button icon-only (click)="voltar()">
+        <ion-icon name="arrow-back"></ion-icon>
+      </button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <div padding>
+    <ion-segment [(ngModel)]="aba" name="abas" [hidden]="aba == 'editar'">
+      <ion-segment-button value="locais">
+        Meus Locais
+      </ion-segment-button>
+      <ion-segment-button value="requisitar" [hidden]="aba == 'editar'">
+        Requisitar
+      </ion-segment-button>
+      <!-- <ion-segment-button value="editar" [hidden]="aba != 'editar'">
+        Edição
+      </ion-segment-button> -->
+    </ion-segment>
+  </div>
+
+  <div [ngSwitch]="aba">
+    <ion-list *ngSwitchCase="'locais'">
+      <h4>Meus Locais</h4>
+      <div *ngFor="let l of meusLocais" style="color: teal">
+        <ion-row>
+          <ion-col col-8>
+            <p>{{ l.nome }} / {{ l.endereco.bairro }}</p>
+          </ion-col>
+          <ion-col col-4>
+            <button (click)="gerenciar(l.id)"> Gerenciar</button>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="meusLocais.length == 0" style="color: teal">
+        <h5>Você não possui nenhum local</h5>
+        <button (click)="aba = 'requisitar'" > Requisitar um local</button>
+      </div>
+    </ion-list>
+    <ion-list *ngSwitchCase="'requisitar'">
+      <h5>Pesquisa</h5>
+
+      <ion-row>
+        <ion-col col-9>
+          <ion-input text-center type="text" name="search" [(ngModel)]="search"></ion-input>
+        </ion-col>
+        <ion-col col-3>
+          <button (click)="buscarLocaisSemConfirmacao()" [disabled]="search.length < 3">Buscar</button>
+        </ion-col>
+      </ion-row>
+      <hr/>
+      <div *ngFor="let lo of buscaLocais">
+        <ion-row>
+          <ion-col col-8>
+            <p>{{lo.nome}}</p>
+            <p>{{lo.endereco.logradouro}}</p>
+            <p>{{lo.endereco.bairro}} /{{lo.endereco.cidade.nome}} </p>
+          </ion-col>
+          <ion-col col-4>
+            <button *ngIf="lo.usuarioResponsavel_id != meuId" (click)="confirmarRequisitar(lo)">Requisitar</button>
+            <p *ngIf="lo.usuarioResponsavel_id == meuId">Local Requisitado</p>
+          </ion-col>
+        </ion-row>
+      </div>
+      <div *ngIf="buscaLocais.length ==0 && search.length > 0">
+        <p>Nenhum item encontrado!</p>
+      </div>
+
+    </ion-list>
+    <ion-list *ngSwitchCase="'editar'">
+      <ion-row>
+        <ion-col col-6>
+            <button (click)="naoSalvar()">Voltar</button>
+        </ion-col>
+        <ion-col col-6>
+            <button (click)="salvar()">Salvar</button>
+        </ion-col>
+      </ion-row>
+      <hr/>
+      <ion-list>
+        <ion-item>
+          <ion-label stacked>Nome: </ion-label>
+          <ion-input text-center type="text" [(ngModel)]="local.nome" name="nome"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>Descricao: </ion-label>
+          <ion-input text-center type="text" [(ngModel)]="local.descricao" name="descricao" ></ion-input>
+        </ion-item>
+
+        <ion-item >
+          <ion-label>Esportes</ion-label>
+          <ion-select multiple="true" (ionChange)="atualizaEsportes($event)"
+          cancelText="Voltar" okText="Ok!" name="esportesSelecionados">
+          <ion-option *ngFor="let esporte of esportes" [value]="esporte"
+          [selected]="possuiEsporte(esporte.id)">{{esporte.nome}}</ion-option>
+          </ion-select>
+        </ion-item>
+
+        <ion-item>
+          <ion-label stacked>Como Chegar: </ion-label>
+          <ion-input text-center type="text" [(ngModel)]="local.comoChegar" name="comoChegar"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>Horario atendimento </ion-label>
+          <ion-input text-center type="text" [(ngModel)]="local.horarioAtendimento" name="horario" ></ion-input>
+        </ion-item>
+        <!-- <ion-item>
+          <ion-label stacked>CEP: </ion-label>
+          <ion-input text-center type="text" [(ngModel)]="local.endereco.cep" name="cep" ></ion-input>
+        </ion-item> -->
+        <ion-item>
+          <ion-label stacked>{{ 'address' | translate }}</ion-label>
+          <ion-input text-center type="email" [(ngModel)]="local.endereco.logradouro"  name="logradouro"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>{{ 'Number' | translate }}</ion-label>
+          <ion-input text-center type="email" [(ngModel)]="local.endereco.numero"  name="numero"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>{{ 'Neighborhood' | translate }}</ion-label>
+          <ion-input text-center type="email" [(ngModel)]="local.endereco.bairro"  name="bairro"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label stacked>{{ 'Complement' | translate }}</ion-label>
+          <ion-input text-center type="email" [(ngModel)]="local.endereco.complemento"  name="complemento"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <button (click)="atualizarGps()">Atualizar Coordenadas</button>
+        </ion-item>
+
+      </ion-list>
+      <ion-row>
+        <ion-col col-6>
+            <button (click)="naoSalvar()">Voltar</button>
+        </ion-col>
+        <ion-col col-6>
+            <button (click)="salvar()">Salvar</button>
+        </ion-col>
+      </ion-row>
+    </ion-list>
+  </div>
+
+</ion-content>

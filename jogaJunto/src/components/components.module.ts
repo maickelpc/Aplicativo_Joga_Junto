@@ -10,6 +10,7 @@ import { CriarEventoComponent } from './criar-evento/criar-evento';
 import { IonicSelectableModule } from  'ionic-selectable';
 import { ConfirmaParticipacaoComponent } from './confirma-participacao/confirma-participacao';
 import { VisualizarPerfilComponent } from './visualizar-perfil/visualizar-perfil';
+import { LocalComponent } from './local/local';
 
 
 @NgModule({
@@ -21,7 +22,8 @@ import { VisualizarPerfilComponent } from './visualizar-perfil/visualizar-perfil
     MapsComponent,
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
-    VisualizarPerfilComponent],
+    VisualizarPerfilComponent,
+    LocalComponent],
   imports: [
     IonicPageModule,
 		IonicSelectableModule
@@ -34,7 +36,8 @@ import { VisualizarPerfilComponent } from './visualizar-perfil/visualizar-perfil
     MapsComponent,
     CriarEventoComponent,
     ConfirmaParticipacaoComponent,
-    VisualizarPerfilComponent],
+    VisualizarPerfilComponent,
+    LocalComponent],
 		entryComponents:[EventosComponent,
 	    ConfirmacaoComponent,
 	    EventoComponent,

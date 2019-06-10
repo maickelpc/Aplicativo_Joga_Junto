@@ -42,7 +42,7 @@ export class EventosComponent implements OnInit{
     this.evento.evento().subscribe(
       response =>{
           this.listaEventos = response;
-          console.log(this.listaEventos);
+          // console.log(this.listaEventos);
       },
         erro=>{
           console.log(erro);

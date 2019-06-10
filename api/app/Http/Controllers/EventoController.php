@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Evento;
+use App\Esporte;
 use App\Usuario;
 use App\UsuarioEvento;
 use App\Local;
@@ -43,7 +44,8 @@ class EventoController extends Controller
   }
 
   public function show($id) {
-      return new EventoResource(Evento::with('participantes', 'participantes.usuario')->find($id));
+
+      return new EventoResource(Evento::with('participantes', 'participantes.avaliacoes', 'participantes.avaliacoes.usuarioAvaliador','participantes.usuario')->find($id));
   }
 
   /**
@@ -76,7 +78,12 @@ class EventoController extends Controller
         $local->nome=$eventoDados->local->nome;
         $local->usuarioResponsavel_id = Auth::user()->id;
         $local->valido = false;
+        $local->latitude = Auth::user()->latitude;
+        $local->longitude = Auth::user()->longitude;
         $local->save();
+
+        $esporte = Esporte::find($eventoDados->esporte->id);
+        $local->esportes()->attach($esporte);
 
         $localId = $local->id;
 
@@ -107,7 +114,8 @@ class EventoController extends Controller
       foreach($convidados as $convidado){
         if($convidado->_objectInstance->emails != null){
           foreach ($convidado->_objectInstance->emails as $email) {
-            array_push($emails, $email->value);
+            if($email->value != Auth::user()->email)
+              array_push($emails, $email->value);
           }
         }
       }

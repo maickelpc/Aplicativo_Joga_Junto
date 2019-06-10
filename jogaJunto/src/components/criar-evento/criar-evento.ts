@@ -100,8 +100,18 @@ export class CriarEventoComponent implements OnInit{
           x.checked = false;
           return x;
         });
+        this.meusContatos = this.meusContatos.sort(function (a, b) {
+          if (a.displayName > b.displayName) {
+            return 1;
+          }
+          if (a.displayName < b.displayName) {
+            return -1;
+          }
+          // a must be equal to b
+          return 0;
+        });
         this.temContatos = true;
-        console.log(JSON.stringify(dados[1]));
+        // console.log(JSON.stringify(dados[1]));
       }
     )
   }
@@ -122,10 +132,11 @@ export class CriarEventoComponent implements OnInit{
     //Lista de convidados do celular
     // let convidados = this.meusContatos.filter(x => x.checked);
 
-    //LISTA PARA TESTES EM BROWSER
-    let convidados = `[{"_objectInstance":{"id":"3","rawId":"1","displayName":"Daniel","name":{"givenName":"Daniel","formatted":"Daniel "},"nickname":null,"phoneNumbers":[{"id":"5","pref":false,"value":"41 9774-3774","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"4","rawId":"6","displayName":"Tia Keyla","name":{"familyName":"Keyla","givenName":"Tia","formatted":"Tia Keyla"},"nickname":null,"phoneNumbers":[{"id":"30","pref":false,"value":"+55 41 9620-2901","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"7","rawId":"23","displayName":"Caroline","name":{"givenName":"Caroline","formatted":"Caroline "},"nickname":null,"phoneNumbers":[{"id":"115","pref":false,"value":"+55 45 9842-1001","type":"mobile"}],"emails":null,"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true}]`;
 
+    //LISTA PARA TESTES EM BROWSER
+    let convidados = `[{"_objectInstance":{"id":"67","rawId":"62","displayName":"A ... Pai ","name":{"familyName":"Pai","givenName":"A","formatted":"A Pai"},"nickname":null,"phoneNumbers":[{"id":"329","pref":false,"value":"045 9817-5105","type":"home"}],"emails":[{"id":"323","pref":false,"value":"maickelpc@gmail.com","type":"home"}],"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":[{"id":"330","pref":false,"type":"url","value":"content://com.android.contacts/contacts/67/photo"}],"categories":null,"urls":null},"checked":true},{"_objectInstance":{"id":"74","rawId":"74","displayName":"A Leo Amigo Do Pai","name":{"familyName":"Pai","givenName":"A Leo Amigo","middleName":"Do","formatted":"A Leo Amigo Do Pai"},"nickname":null,"phoneNumbers":[{"id":"402","pref":false,"value":"554-4555","type":"mobile"}],"emails":[{"id":"404","pref":false,"value":"mandaproleo@gmail.com","type":"home"}],"addresses":null,"ims":null,"organizations":null,"birthday":null,"note":null,"photos":null,"categories":null,"urls":null},"checked":true}]`;
     convidados = JSON.parse(convidados);
+
 
 
     let loading = this.loading();
@@ -134,14 +145,13 @@ export class CriarEventoComponent implements OnInit{
     this.eventoService.criarEvento(this.evento, convidados).subscribe(
       dados => {
         loading.dismiss();
-        console.log(dados);
         this.toastService.toast("Evento criado com sucesso!");
         this.viewCtrl.dismiss();
       },
       erro => {
         loading.dismiss();
-        console.log(erro);
-        this.toastService.toast("Erro ao criar o evento: "+erro);
+        console.log(JSON.stringify(erro));
+        this.toastService.toast("Erro ao criar o evento: "+erro.data);
       }
 
     );

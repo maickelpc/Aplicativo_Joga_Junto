@@ -47,10 +47,14 @@ export class EventoService{
       {headers: headers}).map(x => x.data);
     }
 
-    criarEvento(evento: Evento, convidados: any): Observable<Evento> {
+    criarEvento(evento: Evento, convidados: any): Observable<any> {
 
       let dados = {evento: evento, convidados: convidados};
-      return this.http.post<Evento>( `${API}/api/evento/`, dados,  {headers: this.headers});
+
+      // console.log("DADOS DO EVENTO");
+      // console.log(JSON.stringify(dados));
+      // console.log("__________*******************_______________");
+      return this.http.post<any>( `${API}/api/evento`, dados,  {headers: this.headers});
     }
 
     buscaMeusEventosPendentes(): Observable<Evento[]>{
@@ -101,6 +105,12 @@ export class EventoService{
     solicitarParticipacao(id: number, mensagem: string): Observable<UsuarioEvento>{
 
       return this.http.post<any>(`${API}/api/evento/meus/solicitarparticipacao/${id}/`,{mensagem: mensagem},  {headers: this.headers})
+    }
+
+    avaliarUsuario(id, nota, comentario): Observable<any>{
+
+      return this.http.post<any>(`${API}/api/evento/meus/avaliarparticipante/${id}`,{nota: nota, comentario: comentario},  {headers: this.headers})
+
     }
 
   }
