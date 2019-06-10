@@ -38,10 +38,12 @@ export class CriarEventoComponent implements OnInit{
     private localService: LocalService,
     private contacts: Contacts) {  }
 
+
   ngOnInit(){
     this.local = new Local();
     this.local.id = -1;
     this.passo = 1;
+
 
 
 
@@ -52,6 +54,7 @@ export class CriarEventoComponent implements OnInit{
       dados => { this.esportes = dados;  
         console.log(dados) },
       erro => {
+
         console.log(erro);
         this.toastService.toast("Erro ao buscar os esportes, tente novamente mais tarde!");
         loading.dismiss();

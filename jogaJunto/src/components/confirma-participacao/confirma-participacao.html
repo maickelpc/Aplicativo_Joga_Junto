@@ -1,80 +1,129 @@
 <ion-header>
 
   <ion-navbar>
-    <ion-title>Meus Convites</ion-title>
+    <ion-title>Notificações</ion-title>
     <ion-buttons left>
-    <button ion-button icon-only (click)="voltar()">
-      <!-- <ion-icon name="arrow-back"></ion-icon> -->
-    </button>
+      <button ion-button icon-only (click)="voltar()">
+        <!-- <ion-icon name="arrow-back"></ion-icon> -->
+      </button>
     </ion-buttons>
   </ion-navbar>
 
 
 </ion-header>
 
-<ion-content padding style="background-color: white;">
+<!-- <ion-content padding style="background-color: white;"> -->
+  <ion-content padding>
+    <ion-segment [(ngModel)]="passo" name="passoA">
+      <ion-segment-button value="convites">
+        Convites
+      </ion-segment-button>
+      <ion-segment-button value="locais" [hidden]="!possuiLocal">
+        Locais
+      </ion-segment-button>
+    </ion-segment>
 
-  <div *ngIf="listaEventos?.length == 0">
-    <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>
-    <p>Aproveite seu dia!</p>
+      <ion-list *ngIf="passo == 'convites'">
+        <div *ngIf="listaEventos?.length == 0">
+          <p>Pronto, no momento não tem mais nenhuma solicitação pendente...</p>
+          <p>Aproveite seu dia!</p>
 
-  </div>
+        </div>
 
-  <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
-    <ion-card-content>
-      <ion-card-title>
-        {{ evento.descricao }}
+        <ion-card class="bg-branco" *ngFor="let evento of listaEventos">
+          <ion-card-content>
+            <ion-card-title>
+              {{ evento.descricao }}
 
-      </ion-card-title>
-      <ion-row>
-        <ion-col>
-          <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>
-        </ion-col>
-        <ion-col>
-          <p><strong>Local:</strong> {{evento.local.nome}}</p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
+            </ion-card-title>
+            <ion-row>
+              <ion-col>
+                <p><strong>Organizador:</strong> {{evento.usuarioResponsavel.nome}}</p>
+              </ion-col>
+              <ion-col>
+                <p><strong>Local:</strong> {{evento.local.nome}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
 
-        <ion-col>
-          <span icon-start clear small>
-            <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>
-          </span>
-        </ion-col>
-        <ion-col>
-          <span icon-start clear small>
-            <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
-          </span>
-        </ion-col>
-      </ion-row>
+              <ion-col>
+                <span icon-start clear small>
+                  <ion-icon name="calendar">{{ evento.dataRealizacao }}</ion-icon>
+                </span>
+              </ion-col>
+              <ion-col>
+                <span icon-start clear small>
+                  <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
+                </span>
+              </ion-col>
+            </ion-row>
 
-      <ion-row>
-        <ion-col align-self-center>
-          <button ion-button icon-start clear medium (click)="recusarConvite(evento)">
-            <ion-icon name="close"></ion-icon>
-            <div>Recusar</div>
-          </button>
-        </ion-col>
-        <ion-col align-self-center>
-          <button ion-button icon-start clear medium (click)="aceitarConvite(evento)">
-            <ion-icon name="checkmark"></ion-icon>
-            <div>Confirmar</div>
-          </button>
-        </ion-col>
-      </ion-row>
-    </ion-card-content>
-  </ion-card>
+            <ion-row>
+              <ion-col align-self-center>
+                <button ion-button icon-start clear medium (click)="recusarConvite(evento)">
+                  <ion-icon name="close"></ion-icon>
+                  <div>Recusar</div>
+                </button>
+              </ion-col>
+              <ion-col align-self-center>
+                <button ion-button icon-start clear medium (click)="aceitarConvite(evento)">
+                  <ion-icon name="checkmark"></ion-icon>
+                  <div>Confirmar</div>
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
+
+      <ion-list *ngIf="passo == 'locais'" >
+        <ion-card class="bg-branco" *ngFor="let evento of listaEventosLocal">
+          <ion-card-content>
+            <ion-card-title>
+              <span>Descrição:</span>
+              {{ evento.descricao }}
+            </ion-card-title>
+            <ion-row>
+              <ion-col>
+                <p><strong>Organizador:</strong> {{evento.usuario_responsavel.nome}}</p>
+              </ion-col>
+              <ion-col>
+                <p><strong>Local:</strong> {{evento.local.nome}}</p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+
+              <ion-col>
+                <span icon-start clear small>
+                  <ion-icon name="calendar">{{ evento.dataRealizacao | date:'dd/MM/yyyy' }}</ion-icon>
+                </span>
+              </ion-col>
+              <ion-col>
+                <span icon-start clear small>
+                  <ion-icon name="alarm">{{ evento.horario }}</ion-icon>
+                </span>
+              </ion-col>
+            </ion-row>
+
+            <ion-row>
+              <ion-col align-self-center col-6>
+                <button ion-button icon-start clear medium (click)="confirmaCancelarRealizacao(evento)">
+                  <ion-icon name="close"></ion-icon>
+                  <div>Cancelar</div>
+                </button>
+              </ion-col>
+              <ion-col align-self-center col-6>
+                <button ion-button icon-start clear medium (click)="confirmarRealizar(evento)">
+                  <ion-icon name="checkmark"></ion-icon>
+                  <div>Confirmar</div>
+                </button>
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+      </ion-list>
 
 
-
-
-<!-- <ion-fab bottom left>
-
-  <button >
-    <ion-icon name="arrow-back" (click)="voltar()">Voltar</ion-icon>
-    <div  class="label"dir="rtl"></div>
-  </button>
-</ion-fab> -->
 
 
 </ion-content>

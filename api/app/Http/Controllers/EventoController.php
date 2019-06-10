@@ -119,6 +119,7 @@ class EventoController extends Controller
           }
         }
       }
+
       $usuariosConvidados = Usuario::whereIn('email', $emails)->get();
 
       foreach ($usuariosConvidados as $usuarioconvidado) {
@@ -129,6 +130,10 @@ class EventoController extends Controller
         // dd($participante);
         $notControler->notificarConvite($usuarioconvidado, $evento);
 
+      }
+
+      if($evento->local->valido){
+        //Notificar proprietario do Local
       }
 
       DB::commit();
@@ -352,6 +357,10 @@ public function cancelarEvento($eventoId, Request $request) {
       $evento->save();
 
       $notControler = new NotificacaoController();
+
+      if($evento->local->valido){
+        // Notificar ao responsavel pelo local
+      }
 
       foreach ($evento->participantes as $participante) {
 

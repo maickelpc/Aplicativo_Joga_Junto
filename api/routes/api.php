@@ -85,7 +85,9 @@ Route::group([
     Route::get('/localsemconfirmacao', 'LocalController@localSemConfirmacao');
     Route::get('/localrequisitar/{localId}', 'LocalController@requisitarPropriedade');
     Route::get('/meuslocais', 'LocalController@meusLocais');
-    
+    Route::get('/meuslocais/eventos', 'LocalController@eventosProximos');
+    Route::put('/meuslocais/confirmar-evento/{id}', 'LocalController@confirmarEvento');
+    Route::put('/meuslocais/cancelar-evento/{id}', 'LocalController@cancelarEvento');    
 
     Route::get('/notificacao', 'NotificacaoController@index')->name('notificacao.all');
     Route::post('/notificacao', 'NotificacaoController@store')->name('notificacao.store');

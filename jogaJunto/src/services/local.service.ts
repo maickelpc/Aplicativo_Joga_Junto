@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable'
 
 import { Local } from '../models/local'
 import { Esporte } from '../models/esporte'
+import { Evento } from '../models/evento'
 
 import { API } from './api.config'
 import {LoginService} from "./login.service";
@@ -17,6 +18,24 @@ export class LocalService{
 
   constructor(private http:HttpClient, private login:LoginService){
     this.headers = this.headers.append('Authorization', 'Bearer '+this.login.getUsuarioLogado().token);
+  }
+
+  confirmarRealizacao(id):Observable<any>{
+    return this.http.put<any>(
+      `${API}/api/meuslocais/confirmar-evento/${id}` ,{headers: this.headers});
+
+  }
+
+  cancelarRealizacao(id, justificativa):Observable<any>{
+    return this.http.put<any>(
+      `${API}/api/meuslocais/cancelar-evento/${id}`,{justificativa: justificativa} ,{headers: this.headers});
+
+  }
+
+  buscaEventosMeuLocal():Observable<Evento[]>{
+    return this.http.get<Evento[]>(
+      `${API}/api/meuslocais/eventos`, {headers: this.headers});
+
   }
 
   atualizarGps(id, lat, long): Observable<any>{

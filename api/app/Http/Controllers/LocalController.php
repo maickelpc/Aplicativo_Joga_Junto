@@ -9,12 +9,86 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Validator;
 use App\Endereco;
+use App\Evento;
 use App\Esporte;
+use Carbon\Carbon;
 use Exception;
 use DB;
 
 class LocalController extends Controller
 {
+
+  public function confirmarEvento($eventoId){
+
+ 
+
+  }
+
+
+  public function cancelarEvento($eventoId, Request $request){
+
+    try{
+      DB::beginTransaction();
+  
+        $evento = Evento::with( 'participantes')->with('local')->findOrFail($eventoId);
+        throw_if($evento->local->usuarioResponsavel_id != Auth::user()->id, Exception::class ,"Somente usuário responsável pelo local pode cancelar o evento");
+        $dataEvento = $evento->dataRealizacao;
+        $horario = explode(':', $evento->horario);
+  
+        $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+        throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode ser cancelado");
+  
+  
+        $evento->dataCancelamento = Carbon::now();
+        $evento->justificativaCancelamento = $request->json()->get('justificativa');
+        $evento->save();
+  
+        $notControler = new NotificacaoController();
+  
+        foreach ($evento->participantes as $participante) {
+  
+          if($participante->dataCancelamento == null && $participante->dataExclusao == null){
+  
+            $notControler->notificarCancelamentoEventoPorLocal($participante, $evento);
+          }
+        }
+  
+  
+      DB::commit();
+      return response()->json('Evento cancelado com sucesso');
+    }catch(Exception $e){
+      DB::rollback();
+  
+     return response()->json('Erro ao tentar Cancelar o evento: ' . $e->getMessage(), 400);
+    }
+  
+    return response()->json('Erro', 400);
+  }
+
+
+  public function eventosProximos(){
+
+    try{
+      DB::beginTransaction();
+      $idMeusLocais = Local::where('usuarioResponsavel_id', Auth::user()->id)->where('valido',true)->select('id')->get()->map(function($x){ return $x->id;})->toArray();
+
+      $eventos = null;
+      if(count($idMeusLocais) > 0){
+        $eventos = Evento::with('usuarioResponsavel')->with( 'esporte')->with('local')
+        ->whereIn('local_id', $idMeusLocais)
+        ->where('dataCancelamento', null)
+        ->where('dataRealizacao', '>=' , Carbon::now())->get();
+      }
+
+      return response()->json($eventos, 200);
+
+    }catch(Exception $ex){
+      DB::rollback();
+      return response()->json($ex->getMessage(), 400);
+    }
+
+  }
+
   /**
   * Display a listing of the resource.
   *

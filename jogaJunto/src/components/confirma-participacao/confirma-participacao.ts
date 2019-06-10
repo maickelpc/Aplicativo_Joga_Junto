@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {EventoService} from "../../services/evento.service";
+import {LocalService} from "../../services/local.service";
 import {Evento} from "../../models/evento"
 import {Esporte} from "../../models/esporte"
 import {Local} from "../../models/local"
-import {NavController, NavParams, ViewController} from "ionic-angular"
+import { LoadingController, NavController, NavParams, ViewController, AlertController} from "ionic-angular"
 import { ToastService } from '../../services/toast.service'
-import { LoadingController } from 'ionic-angular'
 import { Util } from "../../providers/util/util";
 
 import {EventosComponent} from '../eventos/eventos'
@@ -22,21 +22,45 @@ import {EventosComponent} from '../eventos/eventos'
 export class ConfirmaParticipacaoComponent implements OnInit{
 
   listaEventos: Evento[];
-
+  listaEventosLocal: Evento[];
+  passo : string = 'convites';
+  possuiLocal = false;
 
   constructor(
 
     private eventoService: EventoService,
     public navCtrl: NavController,
+    public alertCtrl: AlertController,
     private toastService: ToastService,
     private loadingCtrl: LoadingController,
+    private localService: LocalService
   ) {  }
 
 
   ngOnInit( ){
     this.buscaEventosPendentes();
+    this.buscaMeusLocais();
   }
 
+  buscaMeusLocais(){
+
+    // let loading = this.loading();
+    // loading.present();
+    this.localService.buscaEventosMeuLocal().subscribe(
+      dados => {
+        this.listaEventosLocal = dados ;
+        this.possuiLocal = true;
+        // loading.dismiss();
+      },
+      erro =>{
+        // loading.dismiss();
+        console.log(erro);
+        this.listaEventosLocal = [];
+        this.possuiLocal = false;
+        this.toastService.toast("Erro ao carregar a lista de locais, Caso você seja administrador de algum local, verifique sua conexão com a internet  e tente novamente!");
+      }
+    )
+  }
 
   buscaEventosPendentes(){
 
@@ -46,7 +70,6 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       dados => {
         this.listaEventos = dados;
         loading.dismiss();
-        console.log(dados);
       },
       erro =>{
         loading.dismiss();
@@ -93,6 +116,116 @@ export class ConfirmaParticipacaoComponent implements OnInit{
       }
     )
   }
+
+
+  confirmaCancelarRealizacao(evento) {
+    let alert = this.alertCtrl.create({
+      title: 'Cancelar: '+ evento.descricao,
+      inputs: [{ name: 'justificativa', type:'text', label: 'Justificativa'}],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Confirmar',
+          handler: data => {
+            console.log(data);
+            this.cancelarRealizacao(evento, data.justificativa);
+
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+  cancelarRealizacao(evento, justificativa){
+    let loading = this.loading();
+    loading.present();
+
+    this.localService.cancelarRealizacao(evento.id, justificativa).subscribe(
+      dados => {
+        loading.dismiss();
+        this.toastService.toast("Evento Cancelado!");
+        this.listaEventosLocal.filter(x => x.id != evento.id);
+
+      },
+      erro => {
+        loading.dismiss();
+        console.log(erro);
+        this.toastService.toast("Erro ao cancelar o evento, tente novamente mais tarde!");
+      }
+    )
+
+  }
+
+
+  confirmarRealizar(evento) {
+    let alert = this.alertCtrl.create({
+      title: 'Confirmar: '+ evento.descricao,
+      // inputs: [{ name: 'justificativa', type:'text', label: 'Justificativa'}],
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: data => {
+            // console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Confirmar',
+          handler: data => {
+            console.log(data);
+            this.aprovarRealizacao(evento);
+
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
+
+
+
+  aprovarRealizacao(evento){
+    let loading = this.loading();
+    loading.present();
+
+    this.localService.confirmarRealizacao(evento.id).subscribe(
+      dados => {
+        loading.dismiss();
+        this.toastService.toast("Evento Confirmado!");
+        this.listaEventosLocal.filter(x => x.id != evento.id);
+
+      },
+      erro => {
+        loading.dismiss();
+        console.log(erro);
+        this.toastService.toast("Erro ao confirmar o evento, tente novamente mais tarde!");
+      }
+    )
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
