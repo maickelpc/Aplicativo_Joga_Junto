@@ -30,13 +30,13 @@
 
 <ion-list [ngSwitch]="passo">
   <ion-list *ngSwitchCase="1">
-    <div class="helper"> Selecione um esporte </div>
+    <div class="helper"> Selecione um Esporte </div>
     <ion-item *ngFor="let esporte of esportes" >
       <ion-grid>
         <ion-row>
           <ion-col col-4>
             <ion-thumbnail item-start>
-              <img [src]="Util.pathAvatar('avatar5.jpg')" style="padding: 5px">
+              <img [src]="Util.pathAvatar(esporte.imagem)" style="padding: 5px">
             </ion-thumbnail>
           </ion-col>
           <ion-col col-4>
@@ -53,7 +53,7 @@
     </ion-list>
 
     <ion-list *ngSwitchCase="2">
-      <div class="helper"> Escolha (ou crie) um local </div>
+      <div class="helper"> Escolha (ou crie) um Local </div>
       <div [hidden]="evento.local.id != -1">
         <ion-item>
           <ion-label stacked>{{ 'Name' | translate }}</ion-label>
