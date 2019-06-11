@@ -22,7 +22,7 @@ export class VisualizarPerfilComponent implements OnInit {
   ngOnInit(): void {
 
   }
-
+  meuPerfil = 0;
   public rootPage: any = EventosComponent;
 
   public loading() {
@@ -45,31 +45,37 @@ export class VisualizarPerfilComponent implements OnInit {
     private loadingCtrl: LoadingController,
     private loginService : LoginService
     ) {
-
-    this.usuario = new Usuario() }
+    console.log('Hello VisualizarPerfilComponent Component');
+  }
 
   ionViewCanEnter() {
-    console.log("Entrou no perfil do usuario");
     let loading = this.loading();
     loading.present();
+      return new Promise((resolve, reject) =>{
 
           this.usuarioService.carregaUsuario(this.navParams.get('id')).subscribe(
             response =>{
-              loading.dismiss();
+               // console.log(response);
               this.usuario = response;
+              if(this.usuario.id == this.loginService.getUsuarioLogado().id){
+                this.meuPerfil = 1;
+              }else{
+                this.meuPerfil = 2;
+              }
+
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
               this.buscaEsportes();
-
-
+              loading.dismiss();
+              resolve(response);
             },
             error=>{
               console.log("Erro ao Carregar Usuário: "+error);
               loading.dismiss();
             });
 
-
+      })
   }
 
   editarPerfil() {
