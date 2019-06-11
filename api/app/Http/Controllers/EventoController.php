@@ -476,7 +476,7 @@ public function cancelarEvento($eventoId, Request $request) {
            radians($lng)) +
            sin(radians($lat)) *
            sin(radians(CAST(u.latitude AS DOUBLE PRECISION) )))
-        ) < 10
+        ) < 20
         LIMIT 50;
         "
         );

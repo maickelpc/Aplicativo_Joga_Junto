@@ -55,6 +55,12 @@ class Endereco{
 
   constructor(){
     this.cidade = new Cidade();
+    this.logradouro = '';
+    this.bairro = '';
+    this.numero = '';
+    this.cep = '';
+    this.complemento = '';
+    this.referencia = '';
   }
 
 }

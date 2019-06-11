@@ -6,9 +6,11 @@ import {EsporteService} from "../../services/esporte.service";
 import {Evento} from "../../models/evento";
 import {Esporte} from "../../models/esporte";
 import {Usuario} from "../../models/usuario";
-import { NavParams, ViewController, AlertController} from "ionic-angular";
+import { NavParams, ViewController, AlertController, NavController} from "ionic-angular";
 import { ToastService } from '../../services/toast.service'
 import { LoadingController } from 'ionic-angular'
+import { VisualizarPerfilComponent } from '../visualizar-perfil/visualizar-perfil'
+
 declare var google: any;
 
 /**
@@ -40,6 +42,7 @@ export class EventoComponent {
     public navParams: NavParams,
     private loginService: LoginService,
     public alertCtrl: AlertController,
+    public navCtrl: NavController,
     private toastService: ToastService,
     private loadingCtrl: LoadingController,
   ) {
@@ -509,7 +512,18 @@ export class EventoComponent {
 
     }
 
+    buscarnovos(){
+      this.seguimento = 'buscar';
+      console.log("Clicou");
 
+    }
+
+
+    visualizarPerfil(id){
+      console.log("ID DO USUARIO");
+      console.log(id);
+      this.navCtrl.push(VisualizarPerfilComponent, id);
+    }
 
 
     public loading() {

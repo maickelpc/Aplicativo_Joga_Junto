@@ -27,7 +27,8 @@ class Usuario {
   token: string
 
   constructor(){
-    this.dataNascimento = new Date()
+    this.dataNascimento = new Date();
+    this.endereco = new Endereco();
   }
 }
 

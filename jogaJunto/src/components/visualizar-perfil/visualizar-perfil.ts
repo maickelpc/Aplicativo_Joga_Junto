@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavController, ViewController, LoadingController, NavParams } from 'ionic-angular';
-import { UsuarioService, EsporteService } from '../../services';
+import { UsuarioService, EsporteService, LoginService } from '../../services';
 import { Usuario } from '../../models/usuario';
 import { Util } from '../../providers/util/util';
 import { Endereco } from '../../models/endereco';
@@ -42,33 +42,34 @@ export class VisualizarPerfilComponent implements OnInit {
     public navParams: NavParams,
     private usuarioService: UsuarioService,
     private esporteService: EsporteService,
-    private loadingCtrl: LoadingController
+    private loadingCtrl: LoadingController,
+    private loginService : LoginService
     ) {
-    console.log('Hello VisualizarPerfilComponent Component');
-  }
+
+    this.usuario = new Usuario() }
 
   ionViewCanEnter() {
+    console.log("Entrou no perfil do usuario");
     let loading = this.loading();
     loading.present();
-      return new Promise((resolve, reject) =>{
 
           this.usuarioService.carregaUsuario(this.navParams.get('id')).subscribe(
             response =>{
-               console.log(response);
+              loading.dismiss();
               this.usuario = response;
               if(this.usuario.endereco == null){
                 this.usuario.endereco = new Endereco();
               }
               this.buscaEsportes();
-              loading.dismiss();
-              resolve(response);
+
+
             },
             error=>{
               console.log("Erro ao Carregar Usuário: "+error);
               loading.dismiss();
             });
 
-      })
+
   }
 
   editarPerfil() {
@@ -95,5 +96,5 @@ export class VisualizarPerfilComponent implements OnInit {
       }
     )
   }
-  
+
 }

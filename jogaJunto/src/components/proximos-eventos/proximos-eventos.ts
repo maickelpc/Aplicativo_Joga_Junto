@@ -35,7 +35,7 @@ export class ProximosEventosComponent implements OnInit{
     private localService: LocalService
   ) {  }
 
-  ngOnInit(){
+  ionViewCanEnter(){
     let loading = this.loading();
     loading.present();
 
@@ -50,6 +50,10 @@ export class ProximosEventosComponent implements OnInit{
           this.toastService.toast("Erro ao buscar seus eventos, verifique sua internet e tente novamente.");
       }
     )
+  }
+
+  ngOnInit(){
+
 
 
 

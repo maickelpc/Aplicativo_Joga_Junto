@@ -51,7 +51,7 @@
   </div>
 
   <div id="mensagem">
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla aliquet urna in orci cursus, vitae dignissim felis tincidunt. Nullam vehicula sem ante, at facilisis metus consequat eu. Nulla finibus porta maximus. Nunc vitae nulla lobortis, elementum nibh nec, ultrices enim. Nunc aliquam mauris nunc, nec efficitur mauris posuere sit amet. </p>
+    <p>{{usuario.descricao}}. </p>
   </div>
   <ion-list id="esportes" no-lines>
     <ion-item *ngFor="let e of esportesUsuario" center>
@@ -59,12 +59,18 @@
     </ion-item>
   </ion-list>
 
-  <ion-row>
+  <ion-row *ngIf="usuario.id == this.loginService.getUsuarioLogado().id">
     <ion-col col-12 style="text-align: center;">
       <button ion-button (click)="editarPerfil()" full>
         <ion-icon name="edit"></ion-icon> Editar meu Perfil
       </button>
     </ion-col>
   </ion-row>
-
+  <ion-row *ngIf="usuario.id != this.loginService.getUsuarioLogado().id">
+    <ion-col col-12 style="text-align: center;">
+      <button ion-button full>
+        <ion-icon name="edit"></ion-icon> Denunciar
+      </button>
+    </ion-col>
+  </ion-row>
 </ion-content>

@@ -13,6 +13,45 @@
 
 </ion-header>
 
+<ion-content padding class="bg-branco" *ngIf="seguimento == 'buscar'">
+
+  <h5>Pesquisa</h5>
+
+  <ion-row>
+    <!-- <ion-col col-9>
+      <ion-input text-center type="text" name="search" [(ngModel)]="search"></ion-input>
+    </ion-col> -->
+    <ion-col col-12>
+      <button ion-button full (click)="buscarUsuariosProximos()">Buscar</button>
+    </ion-col>
+  </ion-row>
+  <hr/>
+  <div *ngFor="let u of usuariosProximos">
+    <ion-row>
+      <ion-col col-8>
+        <a (click)="visualizarPerfil(u.id)">
+        <p>{{u.nome}} {{u.sobrenome}} </p></a>
+      </ion-col>
+      <ion-col col-4>
+        <button *ngIf="!u.convidado" (click)="convidarUsuario(u)">Convidar</button>
+        <p *ngIf="u.convidado">Local Requisitado</p>
+      </ion-col>
+    </ion-row>
+  </div>
+  <div *ngIf="usuariosProximos.length ==0">
+    <p>Nenhum item encontrado!</p>
+  </div>
+
+
+  <ion-fab bottom right  >
+
+    <button ion-button full (click)="voltarEvento()" >
+      <ion-icon name="arrow-back"></ion-icon>
+      <div class="label">Voltar para o Evento</div>
+    </button>
+
+  </ion-fab>
+</ion-content>
 
 
 <ion-content padding class="bg-branco" *ngIf="seguimento == 'evento'">
@@ -98,8 +137,9 @@
       <div *ngFor="let p of participantesConfirmados">
         <hr/>
         <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
-        <span class="nomeusuario">{{ p.usuario.nome }}</span>
-          <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
+        <a (click)="visualizarPerfil(p.usuario.id)">
+        <span class="nomeusuario">{{ p.usuario.nome }}</span></a>
+          <button *ngIf="euOrganizo && !encerrado && !cancelado && p.usuario.id != meuId" (click)="confirmarRemoverParticipanteEvento(p)">
           <ion-icon name="close"></ion-icon>
         </button>
         <ion-row *ngIf="encerrado && p.usuario_id != meuId && !jaAvaliei(p.avaliacoes)">
@@ -140,7 +180,7 @@
     </button>
 
 
-    <button (click)="seguimento = 'buscar'" [disabled]="(evento.dataCancelamento != null)" ion-button full  bottom *ngIf="euOrganizo && !encerrado">
+    <button (click)="buscarnovos()" [disabled]="(evento.dataCancelamento != null)" ion-button full  bottom *ngIf="euOrganizo && !encerrado">
       <ion-icon name="search"></ion-icon>
       <div class="label">Buscar Participantes</div>
     </button>
@@ -152,43 +192,3 @@
     </button>
   </ion-col>
   </ion-row>
-
-
-<ion-content padding class="bg-branco" *ngIf="seguimento == 'buscar'">
-
-  <h5>Pesquisa</h5>
-
-  <ion-row>
-    <ion-col col-9>
-      <ion-input text-center type="text" name="search" [(ngModel)]="search"></ion-input>
-    </ion-col>
-    <ion-col col-3>
-      <button (click)="buscarUsuariosProximos()">Buscar</button>
-    </ion-col>
-  </ion-row>
-  <hr/>
-  <div *ngFor="let u of usuariosProximos">
-    <ion-row>
-      <ion-col col-8>
-        <p>{{u.nome}} {{u.sobrenome}} </p>
-      </ion-col>
-      <ion-col col-4>
-        <button *ngIf="!u.convidado" (click)="convidarUsuario(u)">Convidar</button>
-        <p *ngIf="u.convidado">Local Requisitado</p>
-      </ion-col>
-    </ion-row>
-  </div>
-  <div *ngIf="usuariosProximos.length ==0">
-    <p>Nenhum item encontrado!</p>
-  </div>
-
-
-  <ion-fab bottom right  >
-
-    <button (click)="voltarEvento()" >
-      <ion-icon name="arrow-back"></ion-icon>
-      <div class="label">Voltar para o Evento</div>
-    </button>
-
-  </ion-fab>
-</ion-content>

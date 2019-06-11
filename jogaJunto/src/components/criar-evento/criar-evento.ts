@@ -51,7 +51,7 @@ export class CriarEventoComponent implements OnInit{
     loading.present();
 
     this.esporteService.buscaMeusEsportes().subscribe(
-      dados => { this.esportes = dados;  
+      dados => { this.esportes = dados;
         console.log(dados) },
       erro => {
 
@@ -140,7 +140,7 @@ export class CriarEventoComponent implements OnInit{
 
   concluir(){
     //Lista de convidados do celular
-    //let convidados = this.meusContatos.filter(x => x.checked);
+    // let convidados = this.meusContatos.filter(x => x.checked);
 
 
     //LISTA PARA TESTES EM BROWSER
