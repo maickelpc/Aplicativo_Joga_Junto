@@ -28,4 +28,14 @@ evento {
     border-radius: 500px;
     margin: 0 0 25px 0;
   }
+
+  ion-fab {
+    width: 100%;
+    float: left;
+  }
+
+  ion-button {
+    float: left;
+    width: 100%;
+  }
 }
