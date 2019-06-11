@@ -19,10 +19,10 @@
   <ion-row>
     <ion-col col-5>
       <ion-card>
-        <img [src]="Util.pathImg(evento.local.imagem)"/>
+        <img [src]="Util.pathLocal(evento.local.imagem)"/>
         <ion-card-content style="background-color: white">
           <p>
-            {{ evento.local.descricao }}
+            {{ evento.local.nome }}
           </p>
         </ion-card-content>
       </ion-card>
@@ -32,7 +32,7 @@
       <p>{{ evento.esporte.nome }} </p>
       <p>
         <span icon-start clear small>
-          <ion-icon name="calendar"> {{ evento.dataRealizacao }}</ion-icon>{{ evento.horario }}
+          <ion-icon name="calendar"></ion-icon>{{ evento.dataRealizacao }} - {{ evento.horario }}
         </span>
       </p>
       <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>
@@ -53,7 +53,7 @@
   <div *ngIf="minhaSolicitacaoPendente != null">
 
     <h4>Participação Solicitada</h4>
-    <ion-row style="color: teal">
+    <ion-row>
       <ion-col col-8>
         <p>{{ minhaSolicitacaoPendente.dataConfirmacao | date }}</p>
       </ion-col>
@@ -73,9 +73,10 @@
   <div *ngIf="euOrganizo && !encerrado && !cancelado && solicitacoesPendentes.length > 0">
 
     <h4>Solicitações pendentes</h4>
-    <ion-row *ngFor="let p of solicitacoesPendentes" style="color: teal">
+    <ion-row *ngFor="let p of solicitacoesPendentes">
       <ion-col col-8>
-        <p>{{ p.usuario.nome }}</p>
+        <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
+        <span class="nomeusuario">{{ p.usuario.nome }}</span>
       </ion-col>
       <ion-col col-2>
         <button (click)="confirmarAceitarParticipanteEvento(p)">
@@ -94,9 +95,10 @@
   <ion-row>
     <ion-col col-6>
       <h4>{{(encerrado) ? 'Avaliar' : 'Confirmados'}}</h4>
-      <div *ngFor="let p of participantesConfirmados" style="color: teal">
+      <div *ngFor="let p of participantesConfirmados">
         <hr/>
-        <h6>{{ p.usuario.nome }}</h6>
+        <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
+        <span class="nomeusuario">{{ p.usuario.nome }}</span>
           <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
           <ion-icon name="close"></ion-icon>
         </button>
@@ -113,8 +115,10 @@
 
     <ion-col col-6 *ngIf="euParticipo && !encerrado">
       <h4>Pendentes</h4>
-      <div *ngFor="let p of participantesPendentes" style="color: teal">
-        <p>{{ p.usuario.nome }}
+      <div *ngFor="let p of participantesPendentes">
+        <p>
+            <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
+            <span class="nomeusuario">{{ p.usuario.nome }}</span>
           <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
         <ion-icon name="close"></ion-icon>
       </button></p>
@@ -122,49 +126,32 @@
     </ion-col>
   </ion-row>
 
-  <ion-fab bottom right *ngIf="!euParticipo && !encerrado" >
-
-    <button (click)="confirmarSolicitarParticipacao(evento)" [disabled]="(!evento.publico || minhaSolicitacaoPendente != null)">
+  <ion-row>
+    <ion-col>
+    <button (click)="confirmarSolicitarParticipacao(evento)" [disabled]="(!evento.publico || minhaSolicitacaoPendente != null)" ion-button full bottom *ngIf="!euParticipo && !encerrado">
       <ion-icon name="add-circle"></ion-icon>
       <div class="label">Solicitar Participação</div>
     </button>
 
-  </ion-fab>
 
-  <ion-fab bottom left *ngIf="euOrganizo && !encerrado" >
-
-    <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)">
+    <button (click)="confirmarCancelarEvento()" [disabled]="(evento.dataCancelamento != null)" ion-button  bottom full *ngIf="euOrganizo && !encerrado">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar Evento</div>
     </button>
 
-  </ion-fab>
 
-  <ion-fab bottom right *ngIf="euOrganizo && !encerrado" >
-
-    <button (click)="seguimento = 'buscar'" [disabled]="(evento.dataCancelamento != null)">
+    <button (click)="seguimento = 'buscar'" [disabled]="(evento.dataCancelamento != null)" ion-button full  bottom *ngIf="euOrganizo && !encerrado">
       <ion-icon name="search"></ion-icon>
       <div class="label">Buscar Participantes</div>
     </button>
 
-  </ion-fab>
 
-  <ion-fab bottom right *ngIf="!euOrganizo && euParticipo && !encerrado">
-
-    <button (click)="confirmarCancelarParticipacao()" [disabled]="(evento.dataCancelamento != null)">
+    <button (click)="confirmarCancelarParticipacao()" [disabled]="(evento.dataCancelamento != null)" ion-button full bottom *ngIf="!euOrganizo && euParticipo && !encerrado">
       <ion-icon name="close"></ion-icon>
       <div class="label">Cancelar participação</div>
     </button>
-
-
-  </ion-fab>
-
-
-  <ion-row padding>
-    <div id="map" #map></div>
+  </ion-col>
   </ion-row>
-
-</ion-content>
 
 
 <ion-content padding class="bg-branco" *ngIf="seguimento == 'buscar'">

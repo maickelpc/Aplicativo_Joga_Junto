@@ -27,4 +27,8 @@ export class Util {
     return './assets/esportesAvatar/' + name;
   }
 
+  static pathLocal(name:string):string {
+    return './assets/local/' + name;
+  }
+
 }
