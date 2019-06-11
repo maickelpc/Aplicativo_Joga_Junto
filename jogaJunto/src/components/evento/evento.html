@@ -183,7 +183,7 @@
   <div *ngFor="let u of usuariosProximos">
     <ion-row>
       <ion-col col-8>
-        <p>{{u | json}} </p>
+        <p>{{u.nome}} {{u.sobrenome}} </p>
       </ion-col>
       <ion-col col-4>
         <button *ngIf="!u.convidado" (click)="convidarUsuario(u)">Convidar</button>
@@ -198,9 +198,9 @@
 
   <ion-fab bottom right  >
 
-    <button (click)="seguimento = 'evento'" >
+    <button (click)="voltarEvento()" >
       <ion-icon name="arrow-back"></ion-icon>
-      <div class="label">Voltar</div>
+      <div class="label">Voltar para o Evento</div>
     </button>
 
   </ion-fab>

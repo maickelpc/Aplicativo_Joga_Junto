@@ -121,7 +121,11 @@ export class EventoService{
     }
 
     buscarUsuariosProximos(evento): Observable<Usuario[]>{
-      return this.http.get<any>(`${API}/api/evento/meus/buscarusuarios/${evento.esporte_id}`,  {headers: this.headers})
+      return this.http.get<any>(`${API}/api/evento/meus/buscarusuarios/${evento.id}`,  {headers: this.headers}).map(x => x.data);
+    }
+
+    convidarParticipante(evento, participante): Observable<any>{
+      return this.http.post<any>(`${API}/api/evento/meus/convidar/${evento.id}`, {participanteId : participante.id}, {headers: this.headers})
     }
 
   }

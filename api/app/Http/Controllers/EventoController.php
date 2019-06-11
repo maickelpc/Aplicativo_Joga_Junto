@@ -15,6 +15,7 @@ use Exception;
 
 use App\Http\Resources\UsuarioEvento as UsuarioEventoResource;
 use App\Http\Resources\Evento as EventoResource;
+use App\Http\Resources\Usuario as UsuarioResource;
 use App\Http\Controllers\NotificacaoController;
 use App\Notificacao;
 use Illuminate\Http\Request;
@@ -80,6 +81,7 @@ class EventoController extends Controller
         $local->valido = false;
         $local->latitude = Auth::user()->latitude;
         $local->longitude = Auth::user()->longitude;
+        $local->imagem = 'default.png';
         $local->save();
 
         $esporte = Esporte::find($eventoDados->esporte->id);
@@ -443,7 +445,15 @@ public function cancelarEvento($eventoId, Request $request) {
     }
 
 
-    public function usuariosProximos($esporteId) {
+    public function usuariosProximos($eventoId) {
+
+      $evento = Evento::with('participantes')->find($eventoId);
+      $esporteId = $evento->esporte_id;
+
+      $idsExclusao = $evento->participantes->map(function($x){ return $x->usuario_id; })->toArray();
+//      $ids = implode(",",$idsExclusao);
+
+      $meuId = Auth::user()->id;
       $lat = Auth::user()->latitude;
       $lng = Auth::user()->longitude;
       
@@ -452,19 +462,20 @@ public function cancelarEvento($eventoId, Request $request) {
         SELECT u.*
         FROM usuarios u
         inner join usuario_posicao up on up.usuario_id = u.id
-        inner join posicao p on up.posicao_id = p.id
+        inner join posicoes p on up.posicao_id = p.id
         inner join esportes e on e.id = p.esporte_id
-        WHERE e.id = $esporteId
-        AND \"dataCancelamento\" IS NULL
+        WHERE e.id = $esporteId 
+        AND u.id <> $meuId
+
         GROUP BY u.id
         HAVING (
            6371 *
            acos(cos(radians($lat)) *
-           cos(radians(CAST(l.latitude AS DOUBLE PRECISION))) *
-           cos(radians(CAST(l.longitude AS DOUBLE PRECISION)) -
+           cos(radians(CAST(u.latitude AS DOUBLE PRECISION))) *
+           cos(radians(CAST(u.longitude AS DOUBLE PRECISION)) -
            radians($lng)) +
            sin(radians($lat)) *
-           sin(radians(CAST(l.latitude AS DOUBLE PRECISION) )))
+           sin(radians(CAST(u.latitude AS DOUBLE PRECISION) )))
         ) < 10
         LIMIT 50;
         "
@@ -474,8 +485,8 @@ public function cancelarEvento($eventoId, Request $request) {
         //$results = Evento::with('participantes', 'participantes.usuario')->whereIn('id',$results)->get();
 
 
-       return UsuarioCollection::collection(
-          Usuario::hydrate($results)
+       return UsuarioResource::collection(
+          Usuario::hydrate($results)->whereNotIn('id', $idsExclusao)
        );
     }
 }

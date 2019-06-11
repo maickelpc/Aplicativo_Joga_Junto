@@ -125,6 +125,8 @@ Route::group([
     Route::put('/evento/meus/recusarparticipante/{id}', 'EventoController@recusarParticipante');
     Route::put('/evento/meus/removerparticipante/{id}', 'EventoController@removerParticipante');
     Route::get('/evento/meus/buscarusuarios/{id}', 'EventoController@usuariosProximos');
+    Route::post('/evento/meus/convidar/{id}', 'UsuarioEventoController@convidarParticipante');
+    
     Route::post('/evento/meus/solicitarparticipacao/{id}', 'UsuarioEventoController@solicitarParticipacao');
     Route::post('/evento/meus/avaliarparticipante/{id}', 'UsuarioEventoController@avaliarParticipante');
     

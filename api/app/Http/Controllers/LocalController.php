@@ -173,6 +173,7 @@ class LocalController extends Controller
       $local->valido = $dados->get('valido');
       $local->comoChegar = $dados->get('comoChegar');
       $local->endereco_id = $endereco->id;
+      $local->imagem = 'default.png';
       $local->save();
       DB::commit();
       return response()->json(new LocalResource($local), 201);

@@ -105,5 +105,37 @@ class UsuarioEventoController extends Controller
          return response()->json('Erro ao tentar registrar o pedido: ' . $e->getMessage(), 400);
         }
       }
+
+      public function convidarParticipante($eventoId, Request $request) {
+        try{
+            DB::beginTransaction();
+            $evento = Evento::with('usuarioResponsavel')->findOrFail($eventoId);
+            $dataEvento = $evento->dataRealizacao;
+            $horario = explode(':', $evento->horario);
+            $dataEvento->setTime($horario[0], $horario[1], $horario[2]);
+            throw_if(Carbon::now() > $dataEvento, Exception::class ,"Evento encerrado não pode convidar participantes");
+            
+            $participanteId = $request->json()->get('participanteId');
+            $participante = new UsuarioEvento();
+
+            $participante->usuario_id =  $participanteId;
+            $participante->evento_id =  $eventoId;
+            $participante->situacao =  "PENDENTE";
+            $participante->save();
+      
+            $notControler = new NotificacaoController();
+      
+            
+            $notControler->notificarConviteEvento($participante, $evento);
+
+      
+            DB::commit();
+          return response()->json($participante);
+        }catch(Exception $e){
+          DB::rollback();
+      
+         return response()->json('Erro ao tentar registrar o pedido: ' . $e->getMessage(), 400);
+        }
+      }
   
 }

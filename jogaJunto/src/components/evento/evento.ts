@@ -465,8 +465,10 @@ export class EventoComponent {
     buscarUsuariosProximos(){
       let loading = this.loading();
       loading.present();
+      console.log(this.evento);
       this.eventoService.buscarUsuariosProximos(this.evento).subscribe(
         dados => {
+          this.usuariosProximos = dados;
           loading.dismiss();
 
         },
@@ -477,6 +479,33 @@ export class EventoComponent {
 
         }
       )
+    }
+
+    voltarEvento(){
+      this.seguimento = 'evento';
+      this.ionViewCanEnter();
+
+    }
+
+    convidarUsuario(usuario){
+      let loading = this.loading();
+      loading.present();
+      console.log(this.evento);
+      this.eventoService.convidarParticipante( this.evento, usuario).subscribe(
+        dados => {
+          this.toastService.toast("Convite enviado para " + usuario.nome);
+          loading.dismiss();
+          this.usuariosProximos = this.usuariosProximos.filter(x => x.id != usuario.id);
+
+        },
+        erro => {
+          loading.dismiss();
+          console.log(erro);
+          this.toastService.toast("Não foi possível buscar usuários, tente novamente mais tarde.")
+
+        }
+      )
+
 
     }
 

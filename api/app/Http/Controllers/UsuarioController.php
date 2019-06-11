@@ -140,6 +140,7 @@ class UsuarioController extends Controller
       $usuario->telefone = $dados->get('telefone');
       $usuario->latitude = $dados->get('latitude');
       $usuario->longitude = $dados->get('longitude');
+      $usuario->imagem = 'default.png';
 
       $usuario->save();
 
