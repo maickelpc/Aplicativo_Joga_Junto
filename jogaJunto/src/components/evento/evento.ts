@@ -520,9 +520,8 @@ export class EventoComponent {
 
 
     visualizarPerfil(id){
-      console.log("ID DO USUARIO");
-      console.log(id);
-      this.navCtrl.push(VisualizarPerfilComponent, id);
+      let params = {id: id};
+      this.navCtrl.push(VisualizarPerfilComponent, params);
     }
 
 

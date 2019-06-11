@@ -23,15 +23,13 @@ import { LocalComponent} from '../components/local/local';
   templateUrl: 'main.html'
 })
 export class MyApp {
-  rootPage = 'LoginPage';
+  rootPage = 'EventosComponent';
 
   @ViewChild(Nav) nav: Nav;
   public Util = Util;
   public usuario: Usuario;
 
   pages: any[] = [
-    { icon: 'contacts', title: 'Friends', component: 'ListFriendsPage' },
-    { icon: 'contact', title: 'My Profile', component: 'MyProfilePage' },
     { icon: 'log-out', title: 'Logout', component: 'LoginPage' },
 
   ];
@@ -58,7 +56,6 @@ export class MyApp {
 
     events.subscribe('user:loggedin',()=>{
       this.pages = [
-                    {title:'Home', component: EventosComponent, icon: 'home'},
                     {title:'Perfil', component: VisualizarPerfilComponent, icon: 'contact'},
                     {title:'Notificações', component: ConfirmaParticipacaoComponent, icon: 'notifications'},
                     {title:'Locais', component: LocalComponent, icon: 'pin'},
