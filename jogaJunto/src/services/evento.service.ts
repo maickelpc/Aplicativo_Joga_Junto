@@ -59,59 +59,59 @@ export class EventoService{
 
     buscaMeusEventosPendentes(): Observable<Evento[]>{
 
-      return this.http.get<any>(`${API}/api/evento/meus/eventosPendentes/`,  {headers: this.headers})
+      return this.http.get<any>(`${API}/api/evento/meus/eventosPendentes`,  {headers: this.headers})
       .map(x => x.data);
 
     }
 
     buscaMeusProximosEventos(): Observable<Evento[]>{
 
-      return this.http.get<any>(`${API}/api/evento/meus/eventosProximos/`,  {headers: this.headers})
+      return this.http.get<any>(`${API}/api/evento/meus/eventosProximos`,  {headers: this.headers})
       .map(x => x.data);
 
     }
 
     aceitarConvite(evento: Evento):Observable<any>{
 
-      return this.http.patch<any>(`${API}/api/evento/meus/aceitarconvite/${evento.id}/`, {}, {headers: this.headers})
+      return this.http.patch<any>(`${API}/api/evento/meus/aceitarconvite/${evento.id}`, {}, {headers: this.headers})
 
     }
 
     recusarConvite(evento: Evento):Observable<any>{
 
-      return this.http.delete<any>(`${API}/api/evento/meus/recusarconvite/${evento.id}/`,  {headers: this.headers})
+      return this.http.delete<any>(`${API}/api/evento/meus/recusarconvite/${evento.id}`,  {headers: this.headers})
 
     }
 
     cancelarParticipacao(id: number, justificativa: string): Observable<any>{
 
-      return this.http.put<any>(`${API}/api/evento/meus/cancelarParticipacao/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+      return this.http.put<any>(`${API}/api/evento/meus/cancelarParticipacao/${id}`,{justificativa: justificativa},  {headers: this.headers})
     }
 
     cancelarEvento(id: number, justificativa: string): Observable<any>{
 
-      return this.http.put<any>(`${API}/api/evento/meus/cancelarevento/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+      return this.http.put<any>(`${API}/api/evento/meus/cancelarevento/${id}`,{justificativa: justificativa},  {headers: this.headers})
     }
 
 
     aceitarParticipanteEvento(id: number): Observable<any>{
 
-      return this.http.put<any>(`${API}/api/evento/meus/aceitarparticipante/${id}/`,{},  {headers: this.headers})
+      return this.http.put<any>(`${API}/api/evento/meus/aceitarparticipante/${id}`,{},  {headers: this.headers})
     }
 
     recusarParticipanteEvento(id: number, justificativa: string): Observable<any>{
 
-      return this.http.put<any>(`${API}/api/evento/meus/recusarparticipante/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+      return this.http.put<any>(`${API}/api/evento/meus/recusarparticipante/${id}`,{justificativa: justificativa},  {headers: this.headers})
     }
 
     removerParticipanteEvento(id: number, justificativa: string): Observable<any>{
 
-      return this.http.put<any>(`${API}/api/evento/meus/removerparticipante/${id}/`,{justificativa: justificativa},  {headers: this.headers})
+      return this.http.put<any>(`${API}/api/evento/meus/removerparticipante/${id}`,{justificativa: justificativa},  {headers: this.headers})
     }
 
     solicitarParticipacao(id: number, mensagem: string): Observable<UsuarioEvento>{
 
-      return this.http.post<any>(`${API}/api/evento/meus/solicitarparticipacao/${id}/`,{mensagem: mensagem},  {headers: this.headers})
+      return this.http.post<any>(`${API}/api/evento/meus/solicitarparticipacao/${id}`,{mensagem: mensagem},  {headers: this.headers})
     }
 
     avaliarUsuario(id, nota, comentario): Observable<any>{

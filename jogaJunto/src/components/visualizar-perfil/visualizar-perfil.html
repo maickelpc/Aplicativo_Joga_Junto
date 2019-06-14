@@ -37,6 +37,20 @@
       </ionic3-star-rating>
     </ion-item-divider>
   </div>
+  <ion-row *ngIf="meuPerfil == 1">
+    <ion-col col-12 style="text-align: center;">
+      <button ion-button full outline (click)="editarPerfil()">
+        <ion-icon name="edit"></ion-icon> Editar meu Perfil
+      </button>
+    </ion-col>
+  </ion-row>
+  <ion-row *ngIf="meuPerfil == 2 ">
+    <ion-col col-12 style="text-align: center;">
+      <button ion-button full>
+        <ion-icon name="edit"></ion-icon> Denunciar
+      </button>
+    </ion-col>
+  </ion-row>
 
   <div id="jogosAvaliacoesEventos">
       <ul>
@@ -53,24 +67,15 @@
   <div id="mensagem">
     <p>{{usuario.descricao}}. </p>
   </div>
-  <ion-list id="esportes" no-lines>
-    <ion-item *ngFor="let e of esportesUsuario" center>
-        <img [src]="Util.pathEsportes(e.imagem)" width="20px"> {{ e.nome }}
-    </ion-item>
-  </ion-list>
 
-  <ion-row *ngIf="meuPerfil == 1">
-    <ion-col col-12 style="text-align: center;">
-      <button ion-button (click)="editarPerfil()" full>
-        <ion-icon name="edit"></ion-icon> Editar meu Perfil
-      </button>
-    </ion-col>
-  </ion-row>
-  <ion-row *ngIf="meuPerfil == 2 ">
-    <ion-col col-12 style="text-align: center;">
-      <button ion-button full>
-        <ion-icon name="edit"></ion-icon> Denunciar
-      </button>
-    </ion-col>
-  </ion-row>
+  <div *ngIf="esportesUsuario.length > 0">
+    <ion-list id="esportes" no-lines>
+      <ion-item *ngFor="let e of esportesUsuario" center>
+          <img [src]="Util.pathEsportes(e.imagem)" width="20px"> {{ e.nome }}
+      </ion-item>
+    </ion-list>
+  </div>
+
+
+
 </ion-content>

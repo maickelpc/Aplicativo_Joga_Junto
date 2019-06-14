@@ -123,7 +123,7 @@ export class LoginService{
         let headers = new HttpHeaders();
         headers = headers.append('Authorization', 'Bearer '+this.getUsuarioLogado().token);
         return this.http.get<any>(
-          `${API}/api/usuario/reenviar/`,
+          `${API}/api/usuario/reenviar`,
           {headers: headers});
         }
 

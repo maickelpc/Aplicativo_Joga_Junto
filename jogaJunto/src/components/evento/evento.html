@@ -73,8 +73,8 @@
         <span icon-start clear small>
           <ion-icon name="calendar"></ion-icon>{{ evento.dataRealizacao }} - {{ evento.horario }}
         </span>
-      </p>
-      <p>Organizador: {{evento.usuarioResponsavel.nome}}</p>
+      </p><a (click)="visualizarPerfil(evento.usuarioResponsavel.id)">
+      <p>Organizador: {{evento.usuarioResponsavel.nome}}</p></a>
     </ion-col>
   </ion-row>
 
@@ -115,7 +115,8 @@
     <ion-row *ngFor="let p of solicitacoesPendentes">
       <ion-col col-8>
         <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
-        <span class="nomeusuario">{{ p.usuario.nome }}</span>
+        <a (click)="visualizarPerfil(p.usuario.id)">
+          <span class="nomeusuario">{{ p.usuario.nome }}</span></a>
       </ion-col>
       <ion-col col-2>
         <button (click)="confirmarAceitarParticipanteEvento(p)">
@@ -158,7 +159,8 @@
       <div *ngFor="let p of participantesPendentes">
         <p>
             <img [src]="Util.pathAvatar(p.usuario.imagem)" class="avatar-sm" />
-            <span class="nomeusuario">{{ p.usuario.nome }}</span>
+            <a (click)="visualizarPerfil(p.usuario.id)">
+            <span class="nomeusuario">{{ p.usuario.nome }}</span></a>
           <button *ngIf="euOrganizo && !encerrado && !cancelado" (click)="confirmarRemoverParticipanteEvento(p)">
         <ion-icon name="close"></ion-icon>
       </button></p>

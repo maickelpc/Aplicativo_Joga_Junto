@@ -52,6 +52,7 @@ export class VisualizarPerfilComponent implements OnInit {
     let loading = this.loading();
     loading.present();
       return new Promise((resolve, reject) =>{
+          let iduser = this.navParams.get('id');
 
           this.usuarioService.carregaUsuario(this.navParams.get('id')).subscribe(
             response =>{
@@ -70,8 +71,9 @@ export class VisualizarPerfilComponent implements OnInit {
               loading.dismiss();
               resolve(response);
             },
-            error=>{
-              console.log("Erro ao Carregar Usuário: "+error);
+            error => {
+              let x = JSON.stringify(error);
+              console.log("Erro ao Carregar Usuário: "+ x);
               loading.dismiss();
             });
 
