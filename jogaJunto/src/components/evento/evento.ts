@@ -520,9 +520,14 @@ export class EventoComponent {
 
 
     visualizarPerfil(id){
+<<<<<<< HEAD
 
       let parametro = {id: id};
       this.navCtrl.push(VisualizarPerfilComponent , parametro);
+=======
+      let params = {id: id};
+      this.navCtrl.push(VisualizarPerfilComponent, params);
+>>>>>>> b15daf8d9038f507e77b2db03f646d91b50d154e
     }
 
 

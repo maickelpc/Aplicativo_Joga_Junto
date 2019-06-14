@@ -111,8 +111,8 @@ export class MapsComponent implements OnInit {
     })
   }
 
-  ionViewCanEnter() {
-    console.log('canenter');
+  ionViewWillEnter() {
+    console.log('willenter');
     let loading = this.loading();
     loading.present();
       return new Promise((resolve, reject) =>{
@@ -129,7 +129,7 @@ export class MapsComponent implements OnInit {
               let lng = this.usuario.longitude;
               let location = new google.maps.LatLng(lat, lng);
               this.addMarker(location, this.map);
-
+              this.centerLocation(location);
               // console.log(this.usuario);
               loading.dismiss();
               resolve(response);
@@ -185,7 +185,7 @@ export class MapsComponent implements OnInit {
   }
 
   carregaEvento(idEvento):void {
-    let param = { id: idEvento };
-    this.navCtrl.push(EventoComponent, param);
-}
+      let param = { id: idEvento };
+      this.navCtrl.push(EventoComponent, param);
+  }
 }
