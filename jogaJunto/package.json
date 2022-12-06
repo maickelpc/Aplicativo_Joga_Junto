@@ -33,7 +33,7 @@
     "@ngx-translate/core": "8.0.0",
     "@ngx-translate/http-loader": "^2.0.0",
     "cordova-android": "7.1.4",
-    "cordova-browser": "5.0.4",
+    "cordova-browser": "6.0.0",
     "cordova-plugin-app-preferences": "file:../../cordova-plugins/me.apla.cordova.app-preferences",
     "cordova-plugin-contacts": "file:../../cordova-plugins/cordova-plugin-contacts",
     "cordova-plugin-device": "2.0.2",
